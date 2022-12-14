@@ -50,8 +50,8 @@
     <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
   </group>
   
-  <node name="marker_server" pkg="EXPROBLAB_Assignment2" type="marker_server" />
+  <node name="marker_server" pkg="EXPROBLAB_Assignment2" type="marker_server"/>
 
-  <node name="rosbot_spawn" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"	args="-urdf -model rosbot -param robot_description -x -6.0 -y 11.0 -z 0.1"/>
+  <node name="rosbot_spawn" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"	args="-urdf -model rosbot -param robot_description -x -6.0 -y 11.0 -z 0.2"/>
 
 </launch>

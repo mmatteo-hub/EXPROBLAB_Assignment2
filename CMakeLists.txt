@@ -10,7 +10,9 @@ project(EXPROBLAB_Assignment2)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  OpenCV
   message_generation
+  aruco
 )
 
 ## System dependencies are found with CMake's conventions
@@ -102,6 +104,7 @@ catkin_package(
 #  LIBRARIES EXPROBLAB_Assignment2
 #  CATKIN_DEPENDS roscpp rospy
 #  DEPENDS system_lib
+  DEPENDS OpenCV
 )
 
 ###########
@@ -113,6 +116,7 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -129,6 +133,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
  add_executable(marker_server src/marker_server.cpp)
+ add_executable(detect_marker src/detect_marker.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -142,7 +147,9 @@ add_dependencies(marker_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPO
 
 ## Specify libraries to link a library or executable target against
  target_link_libraries(marker_server
+   ${EXPROBLAB_Assignment2}_node
    ${catkin_LIBRARIES}
+   ${OpenCV_LIBRARIES}
  )
 
 #############

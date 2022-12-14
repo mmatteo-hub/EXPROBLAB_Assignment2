@@ -88,10 +88,6 @@ bool markerCallback(EXPROBLAB_Assignment2::RoomInformation::Request &req, EXPROB
 	return true;
 }	
 
-
-
-
-
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "EXPROBLAB_Assignment2");
