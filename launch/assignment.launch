@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <launch>
-	
-	  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="model" default="$(find EXPROBLAB_Assignment2)/urdf/rosbot.xacro" />
   <arg name="paused" default="false"/>
   <arg name="use_sim_time" default="true"/>
   <arg name="extra_gazebo_args" default=""/>
@@ -19,10 +20,14 @@
   <arg name="respawn_gazebo" default="false"/>
   <arg name="use_clock_frequency" default="false"/>
   <arg name="pub_clock_frequency" default="100"/>
-  <arg name="model" default="$(find EXPROBLAB_Assignment2)/urdf/m2wr_arm2.xacro" />
 
-  <!-- set use_sim_time flag -->
-  <param name="/use_sim_time" value="$(arg use_sim_time)"/>
+  <!-- value for the robot scale -->
+  <arg name="scale_rbt" value="3"/>
+
+  <!-- We resume the logic in empty_world.launch -->
+   <!--<include file="$(find gazebo_ros)/launch/empty_world.launch"> 
+    <arg name="paused" value="false"/>
+  </include>-->
 
   <!-- set command arguments -->
   <arg unless="$(arg paused)" name="command_arg1" value=""/>
@@ -53,28 +58,36 @@
   <arg name="pitch" default="0.0"/>
   <arg name="yaw" default="3.14"/>
   <arg name="output" default="log"/>
-
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+	
+  <!-- Start Rviz -->  
+  <!--<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" ></node>-->
+  <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
 
   <!-- start gazebo client -->
   <group if="$(arg gui)">
     <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
   </group>
-  
-  <node name="marker_server" pkg="EXPROBLAB_Assignment2" type="marker_server"/>
+
+  <!--<node name="marker_server" pkg="EXPROBLAB_Assignment2" type="marker_server" output="screen" launch-prefix="xterm -e"/>-->
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
-  <node name="model_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="$(arg output)" 
+  <node name="model_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="$(arg output)"
     args="-urdf -model rosbot -param robot_description -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
 
-  <rosparam file="$(find EXPROBLAB_Assignment2)/config/motors_config_m2wr.yaml" command="load" ns="/m2wr"/>
+  <rosparam file="$(find EXPROBLAB_Assignment2)/config/motors_config.yaml" command="load" ns="/arm"/>
 
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="--namespace=/m2wr
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="--namespace=/arm
     joint_state_controller
-    joint1_position_controller
-    joint2_position_controller
-    joint3_position_controller
+    yb_arm_joint_1_position_controller
+    yb_arm_joint_2_position_controller
+    yb_arm_joint_3_position_controller
+    yb_arm_joint_4_position_controller
+    yb_arm_joint_5_position_controller
     --shutdown-timeout 3">
   </node>
 
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <remap from="joint_states" to="arm/joint_states"/>
+  </node>
+	
 </launch>
