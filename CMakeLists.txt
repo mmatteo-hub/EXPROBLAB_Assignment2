@@ -13,6 +13,10 @@ find_package(catkin REQUIRED COMPONENTS
   OpenCV
   message_generation
   aruco
+  urdf
+  controller_manager
+  joint_state_controller
+  robot_state_publisher
 )
 
 ## System dependencies are found with CMake's conventions
@@ -146,11 +150,15 @@ include_directories(
 add_dependencies(marker_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(marker_server
-   ${EXPROBLAB_Assignment2}_node
+target_link_libraries(marker_server
    ${catkin_LIBRARIES}
    ${OpenCV_LIBRARIES}
- )
+)
+
+target_link_libraries(detect_marker
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBRARIES}
+)
 
 #############
 ## Install ##

@@ -19,7 +19,7 @@
   <arg name="respawn_gazebo" default="false"/>
   <arg name="use_clock_frequency" default="false"/>
   <arg name="pub_clock_frequency" default="100"/>
-  <arg name="model" default="$(find EXPROBLAB_Assignment2)/urdf/rosbot.xacro" />
+  <arg name="model" default="$(find EXPROBLAB_Assignment2)/urdf/m2wr_arm2.xacro" />
 
   <!-- set use_sim_time flag -->
   <param name="/use_sim_time" value="$(arg use_sim_time)"/>
@@ -41,8 +41,19 @@
   <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" output="screen"
     args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) $(arg extra_gazebo_args) $(arg world_name)" />
 
-  <!-- load robot description -->
+  <!-- Load the URDF into the ROS Parameter Server -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)"/>
+
+  <!-- Coordinates to spawn model -->
+  <arg name="x" default="-6.0"/>
+  <arg name="y" default="11.0"/>
+  <!--<arg name="z" default="$(eval 0.14* arg('scale_rbt'))"/>-->
+  <arg name="z" default="0.2"/>
+  <arg name="roll" default="0.0"/>
+  <arg name="pitch" default="0.0"/>
+  <arg name="yaw" default="3.14"/>
+  <arg name="output" default="log"/>
+
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
   <!-- start gazebo client -->
@@ -52,6 +63,18 @@
   
   <node name="marker_server" pkg="EXPROBLAB_Assignment2" type="marker_server"/>
 
-  <node name="rosbot_spawn" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"	args="-urdf -model rosbot -param robot_description -x -6.0 -y 11.0 -z 0.2"/>
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="model_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="$(arg output)" 
+    args="-urdf -model rosbot -param robot_description -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
+
+  <rosparam file="$(find EXPROBLAB_Assignment2)/config/motors_config_m2wr.yaml" command="load" ns="/m2wr"/>
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="--namespace=/m2wr
+    joint_state_controller
+    joint1_position_controller
+    joint2_position_controller
+    joint3_position_controller
+    --shutdown-timeout 3">
+  </node>
 
 </launch>
