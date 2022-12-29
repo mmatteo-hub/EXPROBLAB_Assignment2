@@ -56,7 +56,7 @@
   <arg name="z" default="0.2"/>
   <arg name="roll" default="0.0"/>
   <arg name="pitch" default="0.0"/>
-  <arg name="yaw" default="3.14"/>
+  <arg name="yaw" default="0.0"/>
   <arg name="output" default="log"/>
 	
   <!-- Start Rviz -->  
@@ -68,7 +68,9 @@
     <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
   </group>
 
-  <!--<node name="marker_server" pkg="EXPROBLAB_Assignment2" type="marker_server" output="screen" launch-prefix="xterm -e"/>-->
+  <node name="marker_server" pkg="EXPROBLAB_Assignment2" type="marker_server" output="screen" launch-prefix="xterm -e"/>
+
+  <node name="detect_marker" pkg="EXPROBLAB_Assignment2" type="detect_marker" output="screen" launch-prefix="xterm -e"/>
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="model_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="$(arg output)"
