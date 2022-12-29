@@ -306,7 +306,7 @@
     <visual>
       <origin xyz="${scale_bot*0.01} 0 ${scale_bot*0.004}" rpy="1.5707 0 1.5707"/>
       <geometry>
-        <mesh filename="package://EXPROBLAB_Assignment2/meshes/astra.stl" scale="${scale_bot*0.001} ${scale_bot*0.001} ${scale_bot*0.001}" />
+        <mesh filename="package://EXPROBLAB_Assignment2/meshes/astra.stl" scale="${scale_bot*0.001/2} ${scale_bot*0.001/2} ${scale_bot*0.001/2}" />
       </geometry>
       <material name="Black"/>
     </visual>

@@ -202,7 +202,7 @@
       <origin xyz="${scale*-0.002} 0 ${scale*0.130}" rpy="0 0 0" />
       <parent link="${name}_link_4"/>
       <child link="${name}_link_5"/>
-      <axis xyz="0 0 -1" />
+      <axis xyz="0 0 1" />
       <!--<calibration rising="${arm_5_ref}" falling="${arm_5_ref}"/>-->
       <dynamics damping="1" friction="1" />
       <limit effort="1" velocity="${M_PI / 2.0}" lower="${joint_5_limit_down}" upper="${joint_5_limit_up}" />

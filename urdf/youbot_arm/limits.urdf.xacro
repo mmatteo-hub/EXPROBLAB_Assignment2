@@ -9,7 +9,7 @@
 
   <!-- up limits [rad] -->
   <xacro:property name="joint_1_limit_up" value="${M_PI}" />
-  <xacro:property name="joint_2_limit_up" value="2" />
+  <xacro:property name="joint_2_limit_up" value="${M_PI}" />
   <xacro:property name="joint_3_limit_up" value="0" />
   <xacro:property name="joint_4_limit_up" value="2.5" />
   <xacro:property name="joint_5_limit_up" value="${M_PI}" />
@@ -23,7 +23,7 @@
 
   <!-- up limits soft [rad] -->
   <xacro:property name="joint_1_limit_up_soft" value="${M_PI - threshold}" />
-  <xacro:property name="joint_2_limit_up_soft" value="${2 - threshold}" />
+  <xacro:property name="joint_2_limit_up_soft" value="${M_PI - threshold}" />
   <xacro:property name="joint_3_limit_up_soft" value="${0 - threshold}" />
   <xacro:property name="joint_4_limit_up_soft" value="${2.5 - threshold}" />
   <xacro:property name="joint_5_limit_up_soft" value="${M_PI - threshold}" />
@@ -36,12 +36,12 @@
   <xacro:property name="joint_5_limit_down_soft" value="${-M_PI + threshold}" />
 
   <!-- dynamic properties : mass (kg) Alu data sheet -->
-  <xacro:property name="link_0_mass" value="${scale*0.845}" />
-  <xacro:property name="link_1_mass" value="${scale*2.412}" />
-  <xacro:property name="link_2_mass" value="${scale*1.155}" />
-  <xacro:property name="link_3_mass" value="${scale*0.934}" />
-  <xacro:property name="link_4_mass" value="${scale*0.877}" />
-  <xacro:property name="link_5_mass" value="${scale*0.251}" />
+  <xacro:property name="link_0_mass" value="${0.845}" />
+  <xacro:property name="link_1_mass" value="${2.412}" />
+  <xacro:property name="link_2_mass" value="${1.155}" />
+  <xacro:property name="link_3_mass" value="${0.934}" />
+  <xacro:property name="link_4_mass" value="${0.877}" />
+  <xacro:property name="link_5_mass" value="${0.251}" />
   <!--<xacro:property name="link_0_mass" value="0.845" />
   <xacro:property name="link_1_mass" value="0.1" />
   <xacro:property name="link_2_mass" value="0.1" />
