@@ -59,9 +59,11 @@
   <arg name="yaw" default="0.0"/>
   <arg name="output" default="log"/>
 	
-  <!-- Start Rviz -->  
+  <!-- Start Rviz --> 
+  <node name="rviz" pkg="rviz" type="rviz" required="true" args="-d $(find EXPROBLAB_Assignment2)/config/rviz/rviz_config.rviz"/>
   <!--<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" ></node>-->
-  <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node>
+  <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />-->
 
   <!-- start gazebo client -->
   <group if="$(arg gui)">
@@ -91,5 +93,18 @@
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
     <remap from="joint_states" to="arm/joint_states"/>
   </node>
-	
+
+  <!-- Nodes -->
+  <!-- Node for the aRMOR server -->
+  <node pkg="armor" type="execute" name="armor_service" args="it.emarolab.armor.ARMORMainService" launch-prefix="xterm -e"/>
+  
+  <!-- Node for the planner server -->
+  <node pkg="EXPROBLAB_Assignment2" type="planner.py" name="planner" output="screen" launch-prefix="xterm -e"/>
+  
+  <!-- Node for the controller server -->
+  <node pkg="EXPROBLAB_Assignment2" type="controller.py" name="controller" output="screen" launch-prefix="xterm -e"/>
+  
+  <!-- Node for the FSM node -->
+  <node pkg="EXPROBLAB_Assignment2" type="fsm.py" name="fsm" output="screen" launch-prefix="xterm -e"/>
+
 </launch>
