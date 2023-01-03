@@ -27,7 +27,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -57,6 +57,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
    FILES
    RoomConnection.msg
+   Point.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -66,14 +67,18 @@ add_service_files(
  )
 
 ## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
+add_action_files(
+  FILES
+  Control.action
+  Plan.action
+)
 
 ## Generate added messages and services with any dependencies listed here
-generate_messages()
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  actionlib_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
