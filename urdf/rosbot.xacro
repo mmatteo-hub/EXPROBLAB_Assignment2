@@ -5,7 +5,7 @@
 
   <xacro:arg name="robot_namespace" default="rosbot"/>
 
-  <xacro:property name="scale_bot" value="3"/>
+  <xacro:property name="scale_bot" value="3.0"/>
 
   <xacro:include filename="$(find EXPROBLAB_Assignment2)/urdf/materials.xacro" />
   <xacro:include filename="$(find EXPROBLAB_Assignment2)/urdf/rosbot.gazebo" />
@@ -336,35 +336,34 @@
 
   <link name="camera_depth_frame">
   </link>
-<!--
+
   <joint name="rplidar_joint" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="0.02 0 0.058" rpy="0 0 3.14"/>
+    <origin xyz="${scale_bot*0.1} 0 ${scale_bot*0.058/4}" rpy="0 0 3.14"/>
     <parent link="body_link"/>
     <child link="laser"/>
   </joint>
--->
+
 
   <!-- rplidar Laser -->
-  <!--
   <link name="laser">
     <collision>
       <origin xyz="0 0 0" rpy="1.5707 0 4.71"/>
       <geometry>
-        <mesh filename="package://EXPROBLAB_Assignment2/meshes/rplidar.stl" scale="0.001 0.001 0.001" />
+        <mesh filename="package://EXPROBLAB_Assignment2/meshes/rplidar.stl" scale="${scale_bot*0.001} ${scale_bot*0.001} ${scale_bot*0.001}" />
       </geometry>
     </collision>
 
     <visual>
       <origin xyz="0 0 0" rpy="1.5707 0 4.71"/>
       <geometry>
-        <mesh filename="package://EXPROBLAB_Assignment2/meshes/rplidar.stl" scale="0.001 0.001 0.001" />
+        <mesh filename="package://EXPROBLAB_Assignment2/meshes/rplidar.stl" scale="${scale_bot*0.001} ${scale_bot*0.001} ${scale_bot*0.001}" />
       </geometry>
       <material name="Black"/>
     </visual>
 
     <inertial>
-      <mass value="1e-5" />
+      <mass value="${scale_bot*1e-5}" />
       <origin xyz="0 0 0" rpy="1.5707 0 4.71"/>
       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
     </inertial>
@@ -372,7 +371,7 @@
 
   <joint name="range_fl_joint" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="0.1 0.05 0.01" rpy="0 0 0.13 "/>
+    <origin xyz="${scale_bot*0.1} ${scale_bot*0.05} ${scale_bot*0.01}" rpy="0 0 0.13 "/>
     <parent link="body_link"/>
     <child link="range_fl"/>
   </joint>
@@ -380,7 +379,7 @@
 
   <joint name="range_fr_joint" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="0.1 -0.05 0.01" rpy="0 0 -0.13 "/>
+    <origin xyz="${scale_bot*0.1} ${scale_bot*-0.05} ${scale_bot*0.01}" rpy="0 0 -0.13 "/>
     <parent link="body_link"/>
     <child link="range_fr"/>
   </joint>
@@ -388,7 +387,7 @@
 
   <joint name="range_rl_joint" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="-0.1 0.05 0.01" rpy="0 0 3.01 "/>
+    <origin xyz="${scale_bot*-0.1} ${scale_bot*0.05} ${scale_bot*0.01}" rpy="0 0 3.01 "/>
     <parent link="body_link"/>
     <child link="range_rl"/>
   </joint>
@@ -396,10 +395,10 @@
 
   <joint name="range_rr_joint" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="-0.1 -0.05 0.01" rpy="0 0 3.27 "/>
+    <origin xyz="${scale_bot*-0.1} ${scale_bot*-0.05} ${scale_bot*0.01}" rpy="0 0 3.27 "/>
     <parent link="body_link"/>
     <child link="range_rr"/>
   </joint>
   <link name="range_rr"></link>
--->
+
 </robot>
