@@ -1,7 +1,8 @@
 <sdf version='1.7'>
   <world name='default'>
+
     <light name='sun' type='directional'>
-      <cast_shadows>1</cast_shadows>
+      <cast_shadows>0</cast_shadows>
       <pose>0 0 10 0 -0 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
@@ -57,7 +58,7 @@
           <material>
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
+              <name>Gazebo/White</name>
             </script>
           </material>
         </visual>
@@ -1074,13 +1075,13 @@
             <lighting>1</lighting>
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
+              <name>Gazebo/White</name>
             </script>
             <shader type='pixel'>
               <normal_map>__default__</normal_map>
             </shader>
             <emissive>0 0 0 1</emissive>
-            <ambient>0.3 0.3 0.3 1</ambient>
+            <ambient>0.9 0.9 0.9 1</ambient>
             <diffuse>0.7 0.7 0.7 1</diffuse>
             <specular>0.01 0.01 0.01 1</specular>
           </material>
@@ -1292,13 +1293,13 @@
             <lighting>1</lighting>
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
+              <name>Gazebo/White</name>
             </script>
             <shader type='pixel'>
               <normal_map>__default__</normal_map>
             </shader>
             <emissive>0 0 0 1</emissive>
-            <ambient>0.3 0.3 0.3 1</ambient>
+            <ambient>0.9 0.9 0.9 1</ambient>
             <diffuse>0.7 0.7 0.7 1</diffuse>
             <specular>0.01 0.01 0.01 1</specular>
           </material>
@@ -1510,13 +1511,13 @@
             <lighting>1</lighting>
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
+              <name>Gazebo/White</name>
             </script>
             <shader type='pixel'>
               <normal_map>__default__</normal_map>
             </shader>
             <emissive>0 0 0 1</emissive>
-            <ambient>0.3 0.3 0.3 1</ambient>
+            <ambient>0.9 0.9 0.9 1</ambient>
             <diffuse>0.7 0.7 0.7 1</diffuse>
             <specular>0.01 0.01 0.01 1</specular>
           </material>
@@ -1784,13 +1785,13 @@
             <lighting>1</lighting>
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
+              <name>Gazebo/White</name>
             </script>
             <shader type='pixel'>
               <normal_map>__default__</normal_map>
             </shader>
             <emissive>0 0 0 1</emissive>
-            <ambient>0.3 0.3 0.3 1</ambient>
+            <ambient>0.9 0.9 0.9 1</ambient>
             <diffuse>0.7 0.7 0.7 1</diffuse>
             <specular>0.01 0.01 0.01 1</specular>
           </material>
@@ -2002,13 +2003,13 @@
             <lighting>1</lighting>
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
+              <name>Gazebo/White</name>
             </script>
             <shader type='pixel'>
               <normal_map>__default__</normal_map>
             </shader>
             <emissive>0 0 0 1</emissive>
-            <ambient>0.3 0.3 0.3 1</ambient>
+            <ambient>0.9 0.9 0.9 1</ambient>
             <diffuse>0.7 0.7 0.7 1</diffuse>
             <specular>0.01 0.01 0.01 1</specular>
           </material>
@@ -2220,13 +2221,13 @@
             <lighting>1</lighting>
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
+              <name>Gazebo/White</name>
             </script>
             <shader type='pixel'>
               <normal_map>__default__</normal_map>
             </shader>
             <emissive>0 0 0 1</emissive>
-            <ambient>0.3 0.3 0.3 1</ambient>
+            <ambient>0.9 0.9 0.9 1</ambient>
             <diffuse>0.7 0.7 0.7 1</diffuse>
             <specular>0.01 0.01 0.01 1</specular>
           </material>
