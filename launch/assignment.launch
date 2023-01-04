@@ -24,11 +24,6 @@
   <!-- value for the robot scale -->
   <arg name="scale_rbt" value="3"/>
 
-  <!-- We resume the logic in empty_world.launch -->
-   <!--<include file="$(find gazebo_ros)/launch/empty_world.launch"> 
-    <arg name="paused" value="false"/>
-  </include>-->
-
   <!-- set command arguments -->
   <arg unless="$(arg paused)" name="command_arg1" value=""/>
   <arg     if="$(arg paused)" name="command_arg1" value="-u"/>
@@ -52,34 +47,38 @@
   <!-- Coordinates to spawn model -->
   <arg name="x" default="-6.0"/>
   <arg name="y" default="11.0"/>
-  <!--<arg name="z" default="$(eval 0.14* arg('scale_rbt'))"/>-->
-  <arg name="z" default="0.2"/>
+  <arg name="z" default="$(eval 0.14* arg('scale_rbt'))"/>
   <arg name="roll" default="0.0"/>
   <arg name="pitch" default="0.0"/>
   <arg name="yaw" default="0.0"/>
   <arg name="output" default="log"/>
-	
+  
   <!-- Start Rviz --> 
   <node name="rviz" pkg="rviz" type="rviz" required="true" args="-d $(find EXPROBLAB_Assignment2)/config/rviz/rviz_config.rviz"/>
-  <!--<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" ></node>-->
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node>
-  <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />-->
+
+  <!-- Nodes for robot model -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <remap from="joint_states" to="arm/joint_states"/>
+  </node>
 
   <!-- start gazebo client -->
   <group if="$(arg gui)">
     <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
   </group>
 
-  <node name="marker_server" pkg="EXPROBLAB_Assignment2" type="marker_server" output="screen" launch-prefix="xterm -e"/>
-
+  <!-- Server node -->
+  <node name="marker_server" pkg="EXPROBLAB_Assignment2" type="marker_server"/>
+  <!-- Marker detection node -->
   <node name="detect_marker" pkg="EXPROBLAB_Assignment2" type="detect_marker" output="screen" launch-prefix="xterm -e"/>
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="model_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="$(arg output)"
     args="-urdf -model rosbot -param robot_description -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
 
+  <!-- Parameters for robot arm motor -->
   <rosparam file="$(find EXPROBLAB_Assignment2)/config/motors_config.yaml" command="load" ns="/arm"/>
-
+  <!-- Controller spawner node -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="--namespace=/arm
     joint_state_controller
     yb_arm_joint_1_position_controller
@@ -90,21 +89,59 @@
     --shutdown-timeout 3">
   </node>
 
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
-    <remap from="joint_states" to="arm/joint_states"/>
-  </node>
-
-  <!-- Nodes -->
+  <!-- Nodes for the FSM -->
   <!-- Node for the aRMOR server -->
   <node pkg="armor" type="execute" name="armor_service" args="it.emarolab.armor.ARMORMainService" launch-prefix="xterm -e"/>
-  
   <!-- Node for the planner server -->
   <node pkg="EXPROBLAB_Assignment2" type="planner.py" name="planner" output="screen" launch-prefix="xterm -e"/>
-  
   <!-- Node for the controller server -->
   <node pkg="EXPROBLAB_Assignment2" type="controller.py" name="controller" output="screen" launch-prefix="xterm -e"/>
-  
   <!-- Node for the FSM node -->
   <node pkg="EXPROBLAB_Assignment2" type="fsm.py" name="fsm" output="screen" launch-prefix="xterm -e"/>
+
+  <!-- Move base node -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find EXPROBLAB_Assignment2)/param/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find EXPROBLAB_Assignment2)/param/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="$(find EXPROBLAB_Assignment2)/param/local_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find EXPROBLAB_Assignment2)/param/global_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find EXPROBLAB_Assignment2)/param/base_local_planner_params.yaml" command="load"/>
+    <rosparam file="$(find EXPROBLAB_Assignment2)/param/move_base_params.yaml" command="load"/>
+  </node>
+
+  <!-- Gmapping node -->
+  <param name="use_sim_time" value="true"/>
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
+    <param name="base_frame" value="base_link"/>
+    <param name="map_update_interval" value="5.0"/>
+    <param name="maxUrange" value="16.0"/>
+    <param name="sigma" value="0.05"/>
+    <param name="kernelSize" value="1"/>
+    <param name="lstep" value="0.05"/>
+    <param name="astep" value="0.03"/>
+    <param name="iterations" value="3"/>
+    <param name="lsigma" value="0.075"/>
+    <param name="ogain" value="3.0"/>
+    <param name="lskip" value="0"/>
+    <param name="srr" value="0.1"/>
+    <param name="srt" value="0.1"/>
+    <param name="str" value="0.1"/>
+    <param name="stt" value="0.1"/>
+    <param name="linearUpdate" value="1.0"/>
+    <param name="angularUpdate" value="0.2"/>
+    <param name="temporalUpdate" value="3.0"/>
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="particles" value="20"/>
+    <param name="xmin" value="-50.0"/>
+    <param name="ymin" value="-50.0"/>
+    <param name="xmax" value="50.0"/>
+    <param name="ymax" value="50.0"/>
+    <param name="delta" value="0.05"/>
+    <param name="llsamplerange" value="0.01"/>
+    <param name="llsamplestep" value="0.01"/>
+    <param name="lasamplerange" value="0.005"/>
+    <param name="lasamplestep" value="0.005"/>
+    <param name="transform_publish_period" value="0.0005"/>
+  </node>
 
 </launch>
