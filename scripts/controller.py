@@ -48,7 +48,7 @@ class ControllingAction(object):
         """
         # Instantiate and start the action server based on the `SimpleActionServer` class.
         self._as = SimpleActionServer(nm.ACTION_CONTROLLER,
-                                        EXPROBLAB_Assignment1.msg.ControlAction,
+                                        EXPROBLAB_Assignment2.msg.ControlAction,
                                         execute_cb=self.execute_callback,
                                         auto_start=False)
         self._as.start()

@@ -74,8 +74,8 @@ class InitState(smach.State):
 			self._helper.mutex.acquire()
 			try:
 				self._ontology_initialization()
-				#self._helper.action_for_change = nm.LOADED_ONTOLOGY
-				#return nm.LOADED_ONTOLOGY
+				self._helper.action_for_change = nm.LOADED_ONTOLOGY
+				return nm.LOADED_ONTOLOGY
 			finally:
 				self._helper.mutex.release()
 			rospy.sleep(0.3)
@@ -95,10 +95,44 @@ class InitState(smach.State):
 		Returns:
 			none
 		"""
-		if self._helper.markerArr:
-			self._server_request(self._helper.markerArr)
+		path = dirname(realpath(__file__))
+		path = path + "/../topology/"
+
+		# open ontology
+		self._helper.client.utils.load_ref_from_file(path + "topological_map.owl", "http://bnc/exp-rob-lab/2022-23",
+										True, "PELLET", True, False)
+		self._helper.client.utils.mount_on_ref()
+		self._helper.client.utils.set_log_to_terminal(True)
+
+		while not self._helper.markerArr: # waiting for the .cpp node to publish the marker list
+			pass
+
+		self._server_request(self._helper.markerArr)
 
 	def _server_request(self, lst):
 		for el in lst:
-			res = self._helper.marker_client(el)
-			print(res)
+			_res = self._helper.marker_client(el)
+			for el in _res.connections:
+				# add door to the ontology
+				self._helper.client.manipulation.add_objectprop_to_ind('hasDoor', _res.room, el.through_door)
+				# add room and door if they are not already present
+				if _res.room not in self._helper.rooms:
+					self._helper.rooms.append(_res.room)
+					_coord_x_y = []
+					_coord_x_y.append(_res.x)
+					_coord_x_y.append(_res.y)
+					self._helper.rooms_coordinates.append(_coord_x_y)
+				if el.through_door not in self._helper.doors:
+					self._helper.doors.append(el.through_door)
+
+		self._helper.client.manipulation.add_objectprop_to_ind('isIn', 'Robot1', 'E')
+
+		print("TOT: " + str(self._helper.rooms + self._helper.doors))
+
+		self._helper.client.call('DISJOINT', 'IND', '', self._helper.rooms + self._helper.doors)
+
+		# take the current time
+		_actual_time = str(int(time.time()))
+		for el in self._helper.rooms:
+			# add the timestamp
+			self._helper.client.manipulation.add_dataprop_to_ind('visitedAt', el, 'Long', _actual_time)

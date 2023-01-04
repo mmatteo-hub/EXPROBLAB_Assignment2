@@ -109,6 +109,7 @@ class Reasoner(smach.State):
 		"""
 		# query to find the entire group of total locations reachable
 		_reachable_locations = self._helper.format(self._helper.client.query.objectprop_b2_ind('canReach','Robot1'), '#', '>')
+		print("REACHABLE " + str(_reachable_locations))
 		# function to return only the corridors reachable
 		_reachable_corridors = self._check_for_corridors(_reachable_locations)
 		# function to return only the urgent locations reachable

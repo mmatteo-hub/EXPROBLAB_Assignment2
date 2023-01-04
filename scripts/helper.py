@@ -61,6 +61,11 @@ class Helper:
 
 		# marker array
 		self.markerArr = []
+
+		# lists to store rooms name, coordintes and doors
+		self.rooms = []
+		self.rooms_coordinates = []
+		self.doors = []
 		
 		# client for the arMOR server
 		self.client = ArmorClient('armor_client', "reference")
@@ -158,9 +163,9 @@ class Helper:
 			position(Point): actual position of the robot casted as a Point with x and y coordinates
 		"""
 		_pos = self.format(self.client.query.objectprop_b2_ind('isIn','Robot1'), '#', '>')[0]
-		for i in range(len(nm.ROOMS)):
-			if _pos == nm.ROOMS[i]:
-				return Point(x = nm.COORDINATES[i][0], y = nm.COORDINATES[i][1])
+		for i in range(len(self.rooms)):
+			if _pos == self.rooms[i]:
+				return Point(x = self.rooms_coordinates[i][0], y = self.rooms_coordinates[i][1])
 				
 	def _target_coordiantes(self, _location):
 		"""
@@ -174,9 +179,9 @@ class Helper:
 		Returns:
 			coordinates(Point): actual coordiantes of the location casted as a Point (with x and y)
 		"""
-		for i in range(len(nm.ROOMS)):
-			if _location == nm.ROOMS[i]:
-				return Point(x = nm.COORDINATES[i][0], y = nm.COORDINATES[i][1])
+		for i in range(len(self.rooms)):
+			if _location == self.rooms[i]:
+				return Point(x = self.rooms_coordinates[i][0], y = self.rooms_coordinates[i][1])
 
 	def _robot_timestamp_value(self):
 		"""

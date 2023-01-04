@@ -49,7 +49,7 @@ class PlaningAction(object):
         """
         # Instantiate and start the action server based on the `SimpleActionServer` class.
         self._as = SimpleActionServer(nm.ACTION_PLANNER, 
-                                        EXPROBLAB_Assignment1.msg.PlanAction, 
+                                        EXPROBLAB_Assignment2.msg.PlanAction, 
                                         execute_cb=self.execute_callback, 
                                         auto_start=False)
 
