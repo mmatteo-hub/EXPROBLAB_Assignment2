@@ -109,24 +109,19 @@ void MarkerDetectClass::_marker_find()
       joint_4_pose_pub.publish(msg);
       counter++;
     }
-
-    else if(counter >= 65 && counter < 80)
+    else
     {
-      msg.data = -2.1;
+      msg.data = 0.0;
       joint_1_pose_pub.publish(msg);
 
-      msg.data = 2.0;
+      msg.data = 0.0;
       joint_2_pose_pub.publish(msg);
 
-      msg.data = -1.2;
+      msg.data = 0.0;
       joint_3_pose_pub.publish(msg);
 
-      msg.data = 0.0;
-      joint_4_pose_pub.publish(msg);
-      counter++;
-    }
-    else
-      counter = -1;     
+      counter = -1;    
+    } 
   }
 }
 
