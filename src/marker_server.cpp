@@ -3,6 +3,14 @@
 #include <EXPROBLAB_Assignment2/RoomInformation.h>
 
 bool markerCallback(EXPROBLAB_Assignment2::RoomInformation::Request &req, EXPROBLAB_Assignment2::RoomInformation::Response &res){
+/**
+ * \file marker_server.cpp
+ * \brief file to manage the client request. It implements the server that is responsible of giving the information about the environment given an integer, the aruco value detected.
+ * \author
+ * \date
+ * 
+ * \details
+**/
 	EXPROBLAB_Assignment2::RoomConnection conn;
 	switch (req.id){
 	case 11:
