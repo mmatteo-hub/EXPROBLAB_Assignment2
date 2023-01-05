@@ -9,7 +9,9 @@
 
 This class represents the initial state of the state machine. It is the first state the program is into and it is not executed any longer during its entire execution.
 It is responsible of instantiating a type helper to use the useful functions there provided. Then it use a private function to start modifying the ontology given as reference.
-It adds all the parameters to the locations, doors, so that the reasoner will be able to know which one communicates with; it later sets that all the elements are different so that there cannot be ambiguities.
+It retrieves the parameters from the `list passed through the helper and then it adds all the parameters to the locations, doors, so that the reasoner will be able to know which one communicates with.
+it has to wait that the list is not empty, which means that the previous node has finished the monitoring action and has published.
+It later sets that all the elements are different so that there cannot be ambiguities.
 At the end of this process it is also retrieve the actual time in the execution and it is add among the properties of the entities so that it can be modified later when necessary.
 The execution ends with a return that allows the main program to pass to the next state of the finite state machine.
 The steps are computed thanks to the use of the aRMOR client that provides query to the respective server to modify and use the parameters.
@@ -83,12 +85,10 @@ class InitState(smach.State):
 	def _ontology_initialization(self):
 		"""
 		Function used to store all the request to the aRMOR server, through the client, to modifiy the onotlogy.
-		In particular it uses a pre-built ontology that is stored in the project folder and it modifies it by adding entities and properties.
+		In particular it uses the information taken from the list stored in the array and it continues by adding entities and properties.
 		It adds entities, it adds them properties, doors and it adds the timestamp.
 		When it ends it returns to the execute function and it changes state.
-		
-		(There is also the possibility to save the ontology in another .owl file, and this can be done by un-commenting the last line of code of this script)
-		
+				
 		Args:
 			none
 			
@@ -107,9 +107,23 @@ class InitState(smach.State):
 		while not self._helper.markerArr: # waiting for the .cpp node to publish the marker list
 			pass
 
+		# method to build the ontology
 		self._server_request(self._helper.markerArr)
 
 	def _server_request(self, lst):
+		"""
+		Function used to send the request to the server to retrieve information from the ArUco ID detected.
+		The function sends a request for each elements of the list, it connects it through the aRMOR by adding the doors and it stores the name and the coordinates
+		in two different list with a one-to-to relationship between them
+		Then it sets the initial position of the robot as the E room and it perfomrs the disjoint function to distinguish all the entities and sets the timestamp
+		for the first visit at the actual time for each room.
+				
+		Args:
+			lst: list of all the markers ID detected
+			
+		Returns:
+			none
+		"""
 		for el in lst:
 			_res = self._helper.marker_client(el)
 			for el in _res.connections:
