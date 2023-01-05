@@ -6,7 +6,7 @@
        xmlns:xacro="http://ros.org/wiki/xacro">
   <!-- reduction ratio doesn't affect the model-->
   <!-- reduction ratio must not to be 0-->
-  <xacro:property name="scale" value="0.6"/>
+  <xacro:property name="scale" value="0.5"/>
 
   <xacro:macro name="youbot_arm_transmission" params="name">
 
