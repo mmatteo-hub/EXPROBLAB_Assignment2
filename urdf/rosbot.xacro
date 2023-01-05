@@ -5,21 +5,14 @@
 
   <xacro:arg name="robot_namespace" default="rosbot"/>
 
-  <xacro:property name="scale_bot" value="3.0"/>
+  <xacro:property name="scale_bot" value="1.0"/>
 
   <xacro:include filename="$(find EXPROBLAB_Assignment2)/urdf/materials.xacro" />
   <xacro:include filename="$(find EXPROBLAB_Assignment2)/urdf/rosbot.gazebo" />
   <xacro:include filename="$(find EXPROBLAB_Assignment2)/urdf/youbot_arm/arm.urdf.xacro" />
 
-  <link name="base_link"></link> 
-  <joint name="base_link_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-    <parent link="base_link"/>
-    <child link="body_link"/>
-  </joint>
-
-  <link name='body_link'>
-    <pose>0 0 ${scale_bot*0.1} 0 0 0</pose>
+  <link name='base_link'>
+    <pose>0 0 0.1 0 0 0</pose>
 
     <inertial>
       <mass value="5"/>
@@ -30,27 +23,27 @@
       izz="0.01" 
       />
     </inertial>
-  
-    <collision>
+
+    <collision name='collision'>
       <origin xyz="0 0 ${scale_bot*0.02}" rpy="0 0 0"/>
       <geometry>
         <box size="${scale_bot*0.20} ${scale_bot*0.15} ${scale_bot*0.04}"/>
       </geometry>
     </collision>
 
-    <visual>
+    <visual name='base_link_visual'>
       <origin xyz="0 0 ${scale_bot*-0.02}" rpy=" 1.5707 0 1.5707"/>
       <geometry>
         <mesh filename="package://EXPROBLAB_Assignment2/meshes/box.stl" scale="${scale_bot*0.001} ${scale_bot*0.001} ${scale_bot*0.001}" />
       </geometry>
-      <material name="White"/>
     </visual>
+
   </link>
 
   <joint name="top_joint" type="fixed">
     <axis xyz="0 1 0" />
     <origin xyz="0 0 0" rpy="0 0 0"/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>
     <child link="top"/>
   </joint>
 
@@ -80,9 +73,9 @@
 
   <link name="front_left_wheel">
     <collision>
-      <origin xyz="0 ${scale_bot*-0.014} 0" rpy="${pi/2} 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 1.5707"/>
       <geometry>
-        <cylinder length="${scale_bot*0.036}" radius="${scale_bot*0.04}"/>
+        <mesh filename="package://EXPROBLAB_Assignment2/meshes/wheel.stl" scale="${scale_bot*0.001} ${scale_bot*0.001} ${scale_bot*0.001}" />
       </geometry>
       <surface>
         <friction>
@@ -103,7 +96,7 @@
       <material name="Black"/>
     </visual>
     <inertial>
-      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
       <mass value="0.5"/>
       <inertia 
       ixx="0.001" ixy="0.0" ixz="0" 
@@ -115,9 +108,9 @@
 
   <link name="front_right_wheel">
     <collision>
-      <origin xyz="0 ${scale_bot*0.014} 0" rpy="${pi/2} 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 -1.5707"/>
       <geometry>
-        <cylinder length="${scale_bot*0.036}" radius="${scale_bot*0.04}"/>
+        <mesh filename="package://EXPROBLAB_Assignment2/meshes/wheel.stl" scale="${scale_bot*0.001} ${scale_bot*0.001} ${scale_bot*0.001}" />
       </geometry>
       <surface>
         <friction>
@@ -150,9 +143,9 @@
 
   <link name="rear_left_wheel">
     <collision>
-      <origin xyz="0 ${scale_bot*-0.014} 0" rpy="${pi/2} 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 1.5707"/>
       <geometry>
-        <cylinder length="${scale_bot*0.036}" radius="${scale_bot*0.04}"/>
+        <mesh filename="package://EXPROBLAB_Assignment2/meshes/wheel.stl" scale="${scale_bot*0.001} ${scale_bot*0.001} ${scale_bot*0.001}" />
       </geometry>
       <surface>
         <friction>
@@ -185,9 +178,9 @@
 
   <link name="rear_right_wheel">
     <collision>
-      <origin xyz="0 ${scale_bot*0.014} 0" rpy="${pi/2} 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 -1.5707"/>
       <geometry>
-        <cylinder length="${scale_bot*0.036}" radius="${scale_bot*0.04}"/>
+        <mesh filename="package://EXPROBLAB_Assignment2/meshes/wheel.stl" scale="${scale_bot*0.001} ${scale_bot*0.001} ${scale_bot*0.001}" />
       </geometry>
       <surface>
         <friction>
@@ -222,7 +215,7 @@
   <joint type="continuous" name="front_left_wheel_hinge">
     <origin xyz="${scale_bot*0.05} ${scale_bot*0.11} 0" rpy="0 0 0"/>
     <child link="front_left_wheel"/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>
     <axis xyz="0 1 0" rpy="0 0 0"/>
     <limit effort="1" velocity="10"/>
     <joint_properties damping="5.0" friction="1.0"/>
@@ -241,7 +234,7 @@
   <joint type="continuous" name="front_right_wheel_hinge">
     <origin xyz="${scale_bot*0.05} ${scale_bot*-0.11} 0" rpy="0 0 0"/>
     <child link="front_right_wheel"/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>
     <axis xyz="0 1 0" rpy="0 0 0"/>
     <limit effort="1" velocity="10"/>
     <joint_properties damping="5.0" friction="1.0"/>
@@ -260,7 +253,7 @@
   <joint type="continuous" name="rear_left_wheel_hinge">
     <origin xyz="${scale_bot*-0.055} ${scale_bot*0.11} 0" rpy="0 0 0"/>
     <child link="rear_left_wheel"/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>
     <axis xyz="0 1 0" rpy="0 0 0"/>
     <limit effort="1" velocity="10"/>
     <joint_properties damping="5.0" friction="1.0"/>
@@ -279,7 +272,7 @@
   <joint type="continuous" name="rear_right_wheel_hinge">
     <origin xyz="${scale_bot*-0.055} ${scale_bot*-0.11} 0" rpy="0 0 0"/>
     <child link="rear_right_wheel"/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>
     <axis xyz="0 1 0" rpy="0 0 0"/>
     <limit effort="1" velocity="10"/>
     <joint_properties damping="5.0" friction="1.0"/>
@@ -348,7 +341,7 @@
   <joint name="rplidar_joint" type="fixed">
     <axis xyz="0 1 0" />
     <origin xyz="${scale_bot*0.1} 0 ${scale_bot*0.0584}" rpy="0 0 3.14"/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>
     <child link="laser"/>
   </joint>
 
@@ -379,7 +372,7 @@
   <joint name="range_fl_joint" type="fixed">
     <axis xyz="0 1 0" />
     <origin xyz="${scale_bot*0.1} ${scale_bot*0.05} ${scale_bot*0.05}" rpy="0 0 0.13 "/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>
     <child link="range_fl"/>
   </joint>
   <link name="range_fl"></link>
@@ -387,7 +380,7 @@
   <joint name="range_fr_joint" type="fixed">
     <axis xyz="0 1 0" />
     <origin xyz="${scale_bot*0.1} ${scale_bot*-0.05} ${scale_bot*0.01}" rpy="0 0 -0.13 "/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>
     <child link="range_fr"/>
   </joint>
   <link name="range_fr"></link>
@@ -395,7 +388,7 @@
   <joint name="range_rl_joint" type="fixed">
     <axis xyz="0 1 0" />
     <origin xyz="${scale_bot*-0.1} ${scale_bot*0.05} ${scale_bot*0.01}" rpy="0 0 3.01 "/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>
     <child link="range_rl"/>
   </joint>
   <link name="range_rl"></link>
@@ -403,7 +396,7 @@
   <joint name="range_rr_joint" type="fixed">
     <axis xyz="0 1 0" />
     <origin xyz="${scale_bot*-0.1} ${scale_bot*-0.05} ${scale_bot*0.01}" rpy="0 0 3.27 "/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>
     <child link="range_rr"/>
   </joint>
   <link name="range_rr"></link>

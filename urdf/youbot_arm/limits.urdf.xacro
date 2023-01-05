@@ -3,7 +3,7 @@
 
   <!-- common properties -->
   <xacro:property name="M_PI" value="3.1415926535897931" />
-  <xacro:property name="scale_robot" value="3.0"/>
+  <xacro:property name="scale_robot" value="1.0"/>
   <xacro:property name="scale" value="${scale_robot*0.5}"/>
   <xacro:property name="threshold" value="${0}" />
 

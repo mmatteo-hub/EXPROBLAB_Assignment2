@@ -8,7 +8,7 @@
   <xacro:include filename="$(find EXPROBLAB_Assignment2)/urdf/youbot_arm/arm.transmission.xacro" />
   <xacro:include filename="$(find EXPROBLAB_Assignment2)/urdf/youbot_arm/limits.urdf.xacro" />
 
-  <xacro:property name="scale_robot" value="3.0"/>
+  <xacro:property name="scale_robot" value="1.0"/>
   <xacro:property name="scale" value="${scale_robot*0.5}"/>
 
   <!-- specifies the offset to include the 10mm table flange and the 3.225cm model offset -->
