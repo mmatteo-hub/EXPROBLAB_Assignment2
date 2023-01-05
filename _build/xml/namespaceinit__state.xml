@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="namespaceinit__state" kind="namespace" language="Python">
+    <compoundname>init_state</compoundname>
+    <innerclass refid="classinit__state_1_1_init_state" prot="public">init_state::InitState</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><verbatim>.. module:: init_state
+    :platform: ROS
+    :synopsis: Class for the InitState state of the finite state machine
+
+.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it
+
+This class represents the initial state of the state machine. It is the first state the program is into and it is not executed any longer during its entire execution.
+It is responsible of instantiating a type helper to use the useful functions there provided. Then it use a private function to start modifying the ontology given as reference.
+It retrieves the parameters from the `list passed through the helper and then it adds all the parameters to the locations, doors, so that the reasoner will be able to know which one communicates with.
+it has to wait that the list is not empty, which means that the previous node has finished the monitoring action and has published.
+It later sets that all the elements are different so that there cannot be ambiguities.
+At the end of this process it is also retrieve the actual time in the execution and it is add among the properties of the entities so that it can be modified later when necessary.
+The execution ends with a return that allows the main program to pass to the next state of the finite state machine.
+The steps are computed thanks to the use of the aRMOR client that provides query to the respective server to modify and use the parameters.
+The client is taken from the helper object.
+
+Clients:
+    :attr:`client`: aRMOR client used from the helper entity to send request to the respective server</verbatim> </para>
+    </detaileddescription>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/init_state.py" line="1" column="1"/>
+  </compounddef>
+</doxygen>

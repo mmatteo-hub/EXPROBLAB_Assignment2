@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="name__mapper_8py" kind="file" language="Python">
+    <compoundname>name_mapper.py</compoundname>
+    <innernamespace refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper">EXPROBLAB_Assignment2::name_mapper</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1" refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper" refkind="compound"><highlight class="comment">#!/usr/bin/env<sp/>python</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="stringliteral">&quot;&quot;&quot;</highlight></codeline>
+<codeline lineno="4"><highlight class="stringliteral">..<sp/>module::<sp/>name_mapper</highlight></codeline>
+<codeline lineno="5"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>:platform:<sp/>ROS</highlight></codeline>
+<codeline lineno="6"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>:synopsis:<sp/>Class<sp/>for<sp/>the<sp/>Name<sp/>Mapper<sp/>module</highlight></codeline>
+<codeline lineno="7"><highlight class="stringliteral"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="8"><highlight class="stringliteral">..<sp/>moduleauthor::<sp/>Matteo<sp/>Maragliano<sp/>4636216@studenti.unitge.it</highlight></codeline>
+<codeline lineno="9"><highlight class="stringliteral"></highlight></codeline>
+<codeline lineno="10"><highlight class="stringliteral">This<sp/>scripts<sp/>is<sp/>used<sp/>in<sp/>the<sp/>package<sp/>to<sp/>define<sp/>all<sp/>the<sp/>names<sp/>of<sp/>the<sp/>variables<sp/>used.<sp/>It<sp/>is<sp/>a<sp/>way<sp/>to<sp/>use<sp/>a<sp/>variable<sp/>instead<sp/>of<sp/>the<sp/>total<sp/>name<sp/>thus<sp/>avoiding<sp/>spelling<sp/>problems<sp/>while<sp/>writing<sp/>it.</highlight></codeline>
+<codeline lineno="11"><highlight class="stringliteral">It<sp/>is<sp/>divided<sp/>as<sp/>follows:</highlight></codeline>
+<codeline lineno="12"><highlight class="stringliteral"></highlight></codeline>
+<codeline lineno="13"><highlight class="stringliteral">*<sp/>name<sp/>of<sp/>the<sp/>state<sp/>if<sp/>the<sp/>Finite<sp/>State<sp/>Machine<sp/>and<sp/>of<sp/>the<sp/>Sub<sp/>Finite<sp/>State<sp/>Machine;</highlight></codeline>
+<codeline lineno="14"><highlight class="stringliteral">*<sp/>name<sp/>of<sp/>all<sp/>the<sp/>transition<sp/>used:<sp/>there<sp/>are<sp/>also<sp/>some<sp/>parameters<sp/>that<sp/>are<sp/>not<sp/>properly<sp/>transition<sp/>but<sp/>they<sp/>are<sp/>used<sp/>to<sp/>modify<sp/>the<sp/>value<sp/>of<sp/>the<sp/>shared<sp/>variable<sp/>of<sp/>the<sp/>helper<sp/>to<sp/>guarantee<sp/>the<sp/>correct<sp/>flow<sp/>in<sp/>the<sp/>program;</highlight></codeline>
+<codeline lineno="15"><highlight class="stringliteral">*<sp/>name<sp/>of<sp/>the<sp/>action,<sp/>planner<sp/>and<sp/>controller,<sp/>used<sp/>in<sp/>the<sp/>program;</highlight></codeline>
+<codeline lineno="16"><highlight class="stringliteral">*<sp/>parameters<sp/>for<sp/>the<sp/>robot<sp/>behaviour:</highlight></codeline>
+<codeline lineno="17"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>*<sp/>battery<sp/>threshold:<sp/>value<sp/>after<sp/>which<sp/>the<sp/>robot<sp/>has<sp/>to<sp/>be<sp/>recharged;</highlight></codeline>
+<codeline lineno="18"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>*<sp/>busy<sp/>paramter:<sp/>value<sp/>to<sp/>define<sp/>the<sp/>busy<sp/>waiting<sp/>that<sp/>the<sp/>robot<sp/>has<sp/>to<sp/>perform<sp/>before<sp/>starting<sp/>the<sp/>plan<sp/>to<sp/>another<sp/>location;</highlight></codeline>
+<codeline lineno="19"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>*<sp/>number<sp/>of<sp/>points:<sp/>value<sp/>that<sp/>define<sp/>the<sp/>number<sp/>of<sp/>points<sp/>the<sp/>planner<sp/>module<sp/>has<sp/>to<sp/>compute<sp/>for<sp/>each<sp/>path<sp/>required;</highlight></codeline>
+<codeline lineno="20"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>*<sp/>recharging<sp/>room:<sp/>string<sp/>name<sp/>of<sp/>the<sp/>recharging<sp/>room.<sp/>It<sp/>is<sp/>needed<sp/>in<sp/>particular<sp/>when<sp/>the<sp/>robot<sp/>has<sp/>to<sp/>check<sp/>the<sp/>availability<sp/>of<sp/>this<sp/>particualr<sp/>location<sp/>when<sp/>it<sp/>has<sp/>to<sp/>go<sp/>to<sp/>the<sp/>recharge<sp/>state.</highlight></codeline>
+<codeline lineno="21"><highlight class="stringliteral">*<sp/>rooms:<sp/>name<sp/>of<sp/>all<sp/>locations<sp/>in<sp/>the<sp/>ontology;</highlight></codeline>
+<codeline lineno="22"><highlight class="stringliteral">*<sp/>coordinates:<sp/>x<sp/>and<sp/>y<sp/>coordinate<sp/>of<sp/>each<sp/>location.<sp/>Here<sp/>it<sp/>is<sp/>needed<sp/>a<sp/><sp/>match<sp/>one<sp/>to<sp/>one<sp/>with<sp/>the<sp/>names<sp/>above.</highlight></codeline>
+<codeline lineno="23"><highlight class="stringliteral"></highlight></codeline>
+<codeline lineno="24"><highlight class="stringliteral">&quot;&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="keyword">import</highlight><highlight class="normal"><sp/>rospy</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="comment">#<sp/>File<sp/>needed<sp/>to<sp/>define<sp/>some<sp/>variables<sp/>that<sp/>are<sp/>used<sp/>multiple<sp/>times<sp/>in<sp/>the<sp/>program.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="comment">#<sp/>In<sp/>this<sp/>way<sp/>thei<sp/>can<sp/>be<sp/>accessed<sp/>as<sp/>a<sp/>field<sp/>of<sp/>this<sp/>file,<sp/>thus<sp/>avoiding<sp/>error<sp/>in<sp/>strings<sp/>writing.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal">INIT_STATE<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;INIT_STATE&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal">RECHARGE<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;RECHARGE&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal">REASONER<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;REASONER&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal">PLAN_PATH_TO_LOCATION<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;PLAN_PATH_TO_LOCATION&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal">GO_TO_LOCATION_TO_VISIT<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;GO_TO_LOCATION_TO_VISIT&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal">MOVE_RANDOM<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;MOVE_RANDOM&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal">BATTERY_OK<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;BATTERY_OK&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal">BATTERY_LOW<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;BATTERY_LOW&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal">LOADED_ONTOLOGY<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;LOADED_ONTOLOGY&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal">REASONED<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;REASONED&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal">PLANNED_PATH<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;PLANNED_PATH&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal">LOCATION_REACHED<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;LOCATION_REACHED&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal">RECHARGING_CHECK<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;RECHARGING_CHECK&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal">ACTION_PLANNER<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;motion/planner&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal">ACTION_CONTROLLER<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;motion/controller&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal">NODE_PLANNER<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;planner&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal">NODE_CONTROLLER<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;controller&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal">NODE_ROBOT_STATE<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;robot-state&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal">BATTERY_THRESHOLD<sp/>=<sp/>300<sp/></highlight><highlight class="comment">#[s]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="comment">#<sp/>Parameter<sp/>to<sp/>simulate<sp/>the<sp/>busy<sp/>waiting<sp/>of<sp/>the<sp/>robot<sp/>in<sp/>a<sp/>specific<sp/>location<sp/>(in<sp/>seconds)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal">BUSY_PARAMETER<sp/>=<sp/>5<sp/></highlight><highlight class="comment">#[s]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="comment">#<sp/>Parameter<sp/>to<sp/>know<sp/>the<sp/>number<sp/>of<sp/>points<sp/>needed<sp/>in<sp/>the<sp/>path</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal">NUMBER_OF_POINTS_PATH<sp/>=<sp/>10</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight><highlight class="comment">#<sp/>Parameter<sp/>to<sp/>indicate<sp/>the<sp/>name<sp/>of<sp/>the<sp/>recharging<sp/>room</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal">RECHARGING_ROOM<sp/>=<sp/></highlight><highlight class="stringliteral">&apos;E&apos;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal">ROOMS<sp/>=<sp/>[</highlight><highlight class="stringliteral">&apos;E&apos;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&apos;C1&apos;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&apos;C2&apos;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&apos;R1&apos;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&apos;R2&apos;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&apos;R3&apos;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&apos;R4&apos;</highlight><highlight class="normal">]</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight><highlight class="comment">#<sp/>List<sp/>of<sp/>all<sp/>the<sp/>coordinates<sp/>of<sp/>the<sp/>locations<sp/>in<sp/>the<sp/>ontology</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight><highlight class="comment">#<sp/>IMPORTANT:<sp/>Follow<sp/>a<sp/>one<sp/>to<sp/>one<sp/>relation<sp/>between<sp/>the<sp/>name<sp/>and<sp/>the<sp/>coordinates</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal">COORDINATES<sp/>=<sp/>[[0.0,0.0],<sp/>[2.0,0.0],<sp/>[3.0,0.0],<sp/>[1.0,0.0],<sp/>[1.0,1.0],<sp/>[4.0,0.0],<sp/>[4.0,1.0]]</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight><highlight class="comment">#<sp/>Function<sp/>used<sp/>to<sp/>label<sp/>each<sp/>log<sp/>with<sp/>a<sp/>producer<sp/>tag.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight><highlight class="keyword">def<sp/></highlight><highlight class="normal"><ref refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a867184196330b8f1bcd77d3e6bfe5dd3" kindref="member">tag_log</ref>(msg,<sp/>producer_tag):</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;&quot;&quot;</highlight></codeline>
+<codeline lineno="80"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>This<sp/>function<sp/>is<sp/>used<sp/>to<sp/>generate<sp/>the<sp/>log<sp/>tag<sp/>that<sp/>is<sp/>shown<sp/>in<sp/>the<sp/>FSM<sp/>while<sp/>running.</highlight></codeline>
+<codeline lineno="81"><highlight class="stringliteral"></highlight></codeline>
+<codeline lineno="82"><highlight class="stringliteral"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Args:</highlight></codeline>
+<codeline lineno="83"><highlight class="stringliteral"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>msg(String):<sp/>message<sp/>to<sp/>be<sp/>visualized</highlight></codeline>
+<codeline lineno="84"><highlight class="stringliteral"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>producer_tag(String):<sp/>name<sp/>of<sp/>the<sp/>state<sp/>that<sp/>has<sp/>to<sp/>send<sp/>the<sp/>log<sp/>message</highlight></codeline>
+<codeline lineno="85"><highlight class="stringliteral"></highlight></codeline>
+<codeline lineno="86"><highlight class="stringliteral"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Returns:</highlight></codeline>
+<codeline lineno="87"><highlight class="stringliteral"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>log_msg(String):<sp/>message<sp/>for<sp/>the<sp/>log</highlight></codeline>
+<codeline lineno="88"><highlight class="stringliteral"><sp/><sp/><sp/><sp/>&quot;&quot;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&apos;@%s&gt;&gt;<sp/>%s&apos;</highlight><highlight class="normal"><sp/>%<sp/>(producer_tag,<sp/>msg)</highlight></codeline>
+    </programlisting>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/utilities/EXPROBLAB_Assignment2/name_mapper.py"/>
+  </compounddef>
+</doxygen>

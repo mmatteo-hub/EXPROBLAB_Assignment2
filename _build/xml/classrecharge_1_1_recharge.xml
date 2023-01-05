@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classrecharge_1_1_recharge" kind="class" language="Python" prot="public">
+    <compoundname>recharge::Recharge</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">State</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classrecharge_1_1_recharge_1ad5a9d2a23e333ee12de97bd55145dcf1" prot="private" static="no" mutable="no">
+        <type></type>
+        <definition>recharge.Recharge::_helper</definition>
+        <argsstring></argsstring>
+        <name>_helper</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" line="49" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classrecharge_1_1_recharge_1a6ed5ee772fc02c9a1d3aeb6b4896777e" prot="private" static="no" mutable="no">
+        <type></type>
+        <definition>recharge.Recharge::_pos</definition>
+        <argsstring></argsstring>
+        <name>_pos</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" line="75" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classrecharge_1_1_recharge_1a6d972ae78dbab73436bafe42098ec847" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def recharge.Recharge.__init__</definition>
+        <argsstring>(self, helper)</argsstring>
+        <name>__init__</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>helper</type>
+          <defname>helper</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>This function is used to initialize the Recharge state for the finite state machine.
+It is used also the helper object imported from the Helper class to use the shared variables and the mutex.
+
+Args:
+    helper(Helper): object that helps the sharing of information relating the shared variables and the mutex among the states of the machine
+
+Returns:
+    none
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" line="38" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" bodystart="38" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classrecharge_1_1_recharge_1a73ba830fb77b19b0f82f78fa9152e38f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def recharge.Recharge.execute</definition>
+        <argsstring>(self, userdata)</argsstring>
+        <name>execute</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>userdata</type>
+          <defname>userdata</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function that is executed every time the machine enters the state.
+It is responsible of returning a state transitioning to change the state.
+It uses the mutex instantiated in the helper to manage the variable access.
+
+Args:
+    userdata: pointer to pass the data among the states of a State Machine
+    
+Returns:
+    transition(String): string containing the label of the action performed and used to change state in the machine.
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" line="56" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" bodystart="56" bodyend="88"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classrecharge_1_1_recharge_1ac1350fcd65c5c3b8fe355361dc99904a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def recharge.Recharge._check_rob_pos</definition>
+        <argsstring>(self)</argsstring>
+        <name>_check_rob_pos</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Private function that checks the robot position with a query by the aRMOR client to the respective server.
+
+Args:
+    none
+    
+Returns:
+    _location(String): actual location of the robot
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" line="89" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" bodystart="89" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classrecharge_1_1_recharge_1ae6260097eab356b2f02417f553657d2c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def recharge.Recharge._plan_and_go_to_recharge</definition>
+        <argsstring>(self)</argsstring>
+        <name>_plan_and_go_to_recharge</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Private function that is used to plan the path to the recharging location and move the robot to that position before recharging it.
+
+Args:
+    none
+    
+Returns:
+    none
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" line="101" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" bodystart="101" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classrecharge_1_1_recharge_1a60e373a3a8f0e2d98dc48a4a3b3eb91a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def recharge.Recharge._recharging_method</definition>
+        <argsstring>(self)</argsstring>
+        <name>_recharging_method</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Private function that performs the recharging on the robot if and only if it is located in the recharging room.
+
+Args:
+    none
+    
+Returns:
+    none
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" line="134" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" bodystart="134" bodyend="165"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>smach::State</label>
+      </node>
+      <node id="1">
+        <label>recharge.Recharge</label>
+        <link refid="classrecharge_1_1_recharge"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>smach::State</label>
+      </node>
+      <node id="1">
+        <label>recharge.Recharge</label>
+        <link refid="classrecharge_1_1_recharge"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" line="37" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/recharge.py" bodystart="37" bodyend="165"/>
+    <listofallmembers>
+      <member refid="classrecharge_1_1_recharge_1a6d972ae78dbab73436bafe42098ec847" prot="public" virt="non-virtual"><scope>recharge::Recharge</scope><name>__init__</name></member>
+      <member refid="classrecharge_1_1_recharge_1ac1350fcd65c5c3b8fe355361dc99904a" prot="private" virt="non-virtual"><scope>recharge::Recharge</scope><name>_check_rob_pos</name></member>
+      <member refid="classrecharge_1_1_recharge_1ad5a9d2a23e333ee12de97bd55145dcf1" prot="private" virt="non-virtual"><scope>recharge::Recharge</scope><name>_helper</name></member>
+      <member refid="classrecharge_1_1_recharge_1ae6260097eab356b2f02417f553657d2c" prot="private" virt="non-virtual"><scope>recharge::Recharge</scope><name>_plan_and_go_to_recharge</name></member>
+      <member refid="classrecharge_1_1_recharge_1a6ed5ee772fc02c9a1d3aeb6b4896777e" prot="private" virt="non-virtual"><scope>recharge::Recharge</scope><name>_pos</name></member>
+      <member refid="classrecharge_1_1_recharge_1a60e373a3a8f0e2d98dc48a4a3b3eb91a" prot="private" virt="non-virtual"><scope>recharge::Recharge</scope><name>_recharging_method</name></member>
+      <member refid="classrecharge_1_1_recharge_1a73ba830fb77b19b0f82f78fa9152e38f" prot="public" virt="non-virtual"><scope>recharge::Recharge</scope><name>execute</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

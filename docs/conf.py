@@ -62,7 +62,7 @@ todo_include_todos = True
 
 # -- Options for breathe
 breathe_projects = {
-	"detect_marker": "_build/xml/"
+	"detect_marker": "docs/_build/xml/"
 }
 breathe_default_project = "detect_marker"
 breathe_default_members = ('members', 'undoc-members')

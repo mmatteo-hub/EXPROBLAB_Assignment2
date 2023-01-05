@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="namespacereasoner" kind="namespace" language="Python">
+    <compoundname>reasoner</compoundname>
+    <innerclass refid="classreasoner_1_1_reasoner" prot="public">reasoner::Reasoner</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><verbatim>.. module:: reasoner
+    :platform: ROS
+    :synopsis: Class for Reason state of the finite state machine
+    
+.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it
+
+This class is used to reason the changes in the program execution.
+The changes included are:
+
+* actual robot position in the environment built;
+* the choice of the next reachable location the robot will have to reach.
+
+All these are computed thanks to the use of the Helper object and few private functions.
+The important thing the reasoner has to take into account is the hierarchy among the locations that it has to choose among, in particular:
+
+* the robot should stay mainly in the corridors;
+* as soon as a room becomes urgent the robot has to visit it, if it is reachable by the actual robot position;
+* the robot has to go to recharge itself in the proper recharging room as soon as the battery is low and the robot can reach that specific location.
+
+For this purpose the recharging room is set as the most urgent among the other as soon as the battery is low so that it has the priority for the robot as soon as it is reachable by it.
+The client is taken from the helper object.
+
+Clients:
+    :attr:`client`: aRMOR client to make the query request to the respective server to take the infos from the actual situation of the robot and the location in the environment
+</verbatim> </para>
+    </detaileddescription>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/reasoner.py" line="1" column="1"/>
+  </compounddef>
+</doxygen>

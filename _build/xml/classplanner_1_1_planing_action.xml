@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classplanner_1_1_planing_action" kind="class" language="Python" prot="public">
+    <compoundname>planner::PlaningAction</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">object</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classplanner_1_1_planing_action_1a398fbf9a9a18a16e70d9830bd12d4916" prot="private" static="no" mutable="no">
+        <type></type>
+        <definition>planner.PlaningAction::_as</definition>
+        <argsstring></argsstring>
+        <name>_as</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/planner.py" line="51" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/planner.py" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classplanner_1_1_planing_action_1af3b94d2fa34123aeda578226fb2bdc75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def planner.PlaningAction.__init__</definition>
+        <argsstring>(self)</argsstring>
+        <name>__init__</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>This function is used to initialize the Planner server
+
+Args:
+    none
+
+Returns:
+    none
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/planner.py" line="40" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/planner.py" bodystart="40" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="classplanner_1_1_planing_action_1aa6888e4c453bb5cc76726cb904eb97a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def planner.PlaningAction.execute_callback</definition>
+        <argsstring>(self, goal)</argsstring>
+        <name>execute_callback</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>goal</type>
+          <defname>goal</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function that is executed every time the machine needs to compute a plan from two locations.
+The callback invoked when a client set a goal to the :mod:`planner` server.
+This function will return a list of points (the plan) where the fist point is the current robot position (passed as goal.start parameter), while the last point is the *target* position (passed as :attr:`goal.target` parameter).
+
+Args:
+    none
+    
+Returns:
+    none
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/planner.py" line="63" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/planner.py" bodystart="63" bodyend="121"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>object</label>
+      </node>
+      <node id="1">
+        <label>planner.PlaningAction</label>
+        <link refid="classplanner_1_1_planing_action"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>object</label>
+      </node>
+      <node id="1">
+        <label>planner.PlaningAction</label>
+        <link refid="classplanner_1_1_planing_action"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/planner.py" line="39" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/planner.py" bodystart="39" bodyend="122"/>
+    <listofallmembers>
+      <member refid="classplanner_1_1_planing_action_1af3b94d2fa34123aeda578226fb2bdc75" prot="public" virt="non-virtual"><scope>planner::PlaningAction</scope><name>__init__</name></member>
+      <member refid="classplanner_1_1_planing_action_1a398fbf9a9a18a16e70d9830bd12d4916" prot="private" virt="non-virtual"><scope>planner::PlaningAction</scope><name>_as</name></member>
+      <member refid="classplanner_1_1_planing_action_1aa6888e4c453bb5cc76726cb904eb97a4" prot="public" virt="non-virtual"><scope>planner::PlaningAction</scope><name>execute_callback</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

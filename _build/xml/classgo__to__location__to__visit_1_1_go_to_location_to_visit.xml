@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classgo__to__location__to__visit_1_1_go_to_location_to_visit" kind="class" language="Python" prot="public">
+    <compoundname>go_to_location_to_visit::GoToLocationToVisit</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">State</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgo__to__location__to__visit_1_1_go_to_location_to_visit_1ac922d103af8774d948bff11275c49ccc" prot="private" static="no" mutable="no">
+        <type></type>
+        <definition>go_to_location_to_visit.GoToLocationToVisit::_helper</definition>
+        <argsstring></argsstring>
+        <name>_helper</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/go_to_location_to_visit.py" line="46" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/go_to_location_to_visit.py" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgo__to__location__to__visit_1_1_go_to_location_to_visit_1adf1313c5f2d68fb46abd0053b527978b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def go_to_location_to_visit.GoToLocationToVisit.__init__</definition>
+        <argsstring>(self, helper)</argsstring>
+        <name>__init__</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>helper</type>
+          <defname>helper</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function used to initialize the state of the sub-machine.
+In this step there is also the declaration of all the outcomes that the state can have.
+
+Args:
+    helper(Helper): helper object that allows the user to use shared elements among the scripts.
+    
+Returns:
+    none
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/go_to_location_to_visit.py" line="35" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/go_to_location_to_visit.py" bodystart="35" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classgo__to__location__to__visit_1_1_go_to_location_to_visit_1a82ee186ff5b95958f4af049757397e65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def go_to_location_to_visit.GoToLocationToVisit.execute</definition>
+        <argsstring>(self, userdata)</argsstring>
+        <name>execute</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>userdata</type>
+          <defname>userdata</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function that is executed every time the machine enters the state.
+It is responsible of returning a state transitioning to change the state.
+It uses the mutex instantiated in the helper to manage the variable access.
+
+Args:
+    userdata: pointer to pass the data among the states of a State Machine
+    
+Returns:
+    transition(String): string containing the label of the action performed and used to change state in the sub machine and returning to the upper one.
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/go_to_location_to_visit.py" line="53" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/go_to_location_to_visit.py" bodystart="53" bodyend="103"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>go_to_location_to_visit.GoToLocationToVisit</label>
+        <link refid="classgo__to__location__to__visit_1_1_go_to_location_to_visit"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>State</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>go_to_location_to_visit.GoToLocationToVisit</label>
+        <link refid="classgo__to__location__to__visit_1_1_go_to_location_to_visit"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>State</label>
+      </node>
+    </collaborationgraph>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/go_to_location_to_visit.py" line="34" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/go_to_location_to_visit.py" bodystart="34" bodyend="103"/>
+    <listofallmembers>
+      <member refid="classgo__to__location__to__visit_1_1_go_to_location_to_visit_1adf1313c5f2d68fb46abd0053b527978b" prot="public" virt="non-virtual"><scope>go_to_location_to_visit::GoToLocationToVisit</scope><name>__init__</name></member>
+      <member refid="classgo__to__location__to__visit_1_1_go_to_location_to_visit_1ac922d103af8774d948bff11275c49ccc" prot="private" virt="non-virtual"><scope>go_to_location_to_visit::GoToLocationToVisit</scope><name>_helper</name></member>
+      <member refid="classgo__to__location__to__visit_1_1_go_to_location_to_visit_1a82ee186ff5b95958f4af049757397e65" prot="public" virt="non-virtual"><scope>go_to_location_to_visit::GoToLocationToVisit</scope><name>execute</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

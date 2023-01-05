@@ -1,0 +1,513 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classhelper_1_1_helper" kind="class" language="Python" prot="public">
+    <compoundname>helper::Helper</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classhelper_1_1_helper_1a26bd65c2fc364aadda165229dc779edd" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::mutex</definition>
+        <argsstring></argsstring>
+        <name>mutex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="57" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classhelper_1_1_helper_1a2913758e993928417669a48f8b8af35f" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::action_for_change</definition>
+        <argsstring></argsstring>
+        <name>action_for_change</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="60" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classhelper_1_1_helper_1ac7a7623f7778a7b63aaf89203f6462bc" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::robot_timestamp_value</definition>
+        <argsstring></argsstring>
+        <name>robot_timestamp_value</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="61" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classhelper_1_1_helper_1ad7071947de531f00d006fbc9123c7558" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::markerArr</definition>
+        <argsstring></argsstring>
+        <name>markerArr</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="64" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classhelper_1_1_helper_1a0c4c9363483cfe33fa4fac6f2455cb44" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::rooms</definition>
+        <argsstring></argsstring>
+        <name>rooms</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="67" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classhelper_1_1_helper_1a1562d8ef97b1dddb954f33d2b4cbc737" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::rooms_coordinates</definition>
+        <argsstring></argsstring>
+        <name>rooms_coordinates</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="68" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classhelper_1_1_helper_1a5a4c0f54a8240bdfd4632458cdb1ee63" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::doors</definition>
+        <argsstring></argsstring>
+        <name>doors</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="69" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classhelper_1_1_helper_1adbf4b03ef474c9a9cead0ca83baffb6b" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::client</definition>
+        <argsstring></argsstring>
+        <name>client</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="72" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classhelper_1_1_helper_1a8d6fbb75ee38217c36db0fede065dea7" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::planner_client</definition>
+        <argsstring></argsstring>
+        <name>planner_client</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="75" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classhelper_1_1_helper_1a6f4616fd4a998d08611703b2441fe72e" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::controller_client</definition>
+        <argsstring></argsstring>
+        <name>controller_client</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="78" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classhelper_1_1_helper_1ad030761ba7dd30c1cab89d8052dc7c6f" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>helper.Helper::marker_client</definition>
+        <argsstring></argsstring>
+        <name>marker_client</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="84" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classhelper_1_1_helper_1a0aa0f8cbde8e1f1ef4171ac56fab75c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper.__init__</definition>
+        <argsstring>(self, done_callback=None, feedback_callback=None, mutex=None)</argsstring>
+        <name>__init__</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>done_callback</type>
+          <defname>done_callback</defname>
+          <defval>None</defval>
+        </param>
+        <param>
+          <type>feedback_callback</type>
+          <defname>feedback_callback</defname>
+          <defval>None</defval>
+        </param>
+        <param>
+          <type>mutex</type>
+          <defname>mutex</defname>
+          <defval>None</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function to inizialize the helper.
+It also initializes the mutex that will be used to share the common resources in order to avoid multiple accesses and having errors while reading/writing values.
+
+The initalization includes of course also the clients used in the program.
+
+Args:
+    none
+
+Returns:
+    none
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="43" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="43" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classhelper_1_1_helper_1ab67d70587e7b87d44d6384e1104804b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper.listCallback</definition>
+        <argsstring>(self, msg)</argsstring>
+        <name>listCallback</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>msg</type>
+          <defname>msg</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="86" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="86" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classhelper_1_1_helper_1a70b43671eeae66bc50baa23569886816" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper.reason_changes</definition>
+        <argsstring>(self)</argsstring>
+        <name>reason_changes</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function to apply the modifications to the ontology.
+It uses the aRMOR client to do this and it is called every time the program changes something related to the ontology entities (timestamps, robot position etc ...)
+
+Args:
+    none
+
+Returns:
+    none
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="89" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="89" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classhelper_1_1_helper_1a4a17646ed70c26e8bcc0e55af7a9e60c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper.check_battery</definition>
+        <argsstring>(self)</argsstring>
+        <name>check_battery</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function to check the threshold to rise the battery low process.
+This function checks the difference between the actual time and the last time the battery has been recharged and if it has passed too much time it changes the value of the shared variable.
+This changes is read by the states of the finite state machine and so the SMACH machine can adapt its behaviour to deal with this event.
+
+Args:
+    none
+
+Returns:
+    none
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="103" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="103" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="function" id="classhelper_1_1_helper_1ab4c1b223feb4fa21be1ef4f6e36dc5c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper.format</definition>
+        <argsstring>(self, oldlist, start, end)</argsstring>
+        <name>format</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>oldlist</type>
+          <defname>oldlist</defname>
+        </param>
+        <param>
+          <type>start</type>
+          <defname>start</defname>
+        </param>
+        <param>
+          <type>end</type>
+          <defname>end</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function to format a list of strings.
+For all the elements in the list, it takes two character, a start and a finish one. In each element i-th it is looked for these two characters and it is taken just the portion of the string between them.
+The return is a new list with the elements &quot;cleaned&quot; by not useful characters.
+
+Args:
+    oldlist(List): the list that has to be re-written in a better way
+    start(Char): the start character for the list member cut
+    end(Char): the end characted for the list memeber cut
+
+Returns:
+    newList(List): the new list with all the elements written in a proper way
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="120" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="120" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="classhelper_1_1_helper_1ac52df50d958804fcad3ce9c7383791d2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper.plan_location</definition>
+        <argsstring>(self, location)</argsstring>
+        <name>plan_location</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>location</type>
+          <defname>location</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>It returns the client goal formatted as the start and target position.
+It uses some private methods to compute the actual robot position and the target goal for the robot.
+
+Args:
+    location(String): location to which the robot has to arrive
+
+Returns:
+    goal(PlanGoal): the goal composed as two Points (start and target both with x and y coordinates)
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="139" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="139" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="classhelper_1_1_helper_1a846f1099f04585fce934a8e0ce3e51ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper.update_timestamp</definition>
+        <argsstring>(self)</argsstring>
+        <name>update_timestamp</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function to update the timestamp of an entity in the ontology.
+It is replaced the timestamp of the robot with the acutal time.
+This timestamp is then used to replace the location timestamp to set where the robot is at the actual time (the actual robot timestamp is now taken from the private method since it has just been updated)
+
+Args:
+    none
+    
+Returns:
+    none
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="216" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="216" bodyend="231"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classhelper_1_1_helper_1a5a0ee4df6ce70a5ee55bab95ad3b8b2c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper._robot_pos</definition>
+        <argsstring>(self)</argsstring>
+        <name>_robot_pos</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Private function that checks and returns the actual robot position thanks to a query to the aRMOR server.
+The function returns a type Point with its x and y parameters.
+
+Args:
+    none
+
+Returns:
+    position(Point): actual position of the robot casted as a Point with x and y coordinates
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="155" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="155" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="classhelper_1_1_helper_1a3b9064ffd4318ed01d4c04928eaaebd5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper._target_coordiantes</definition>
+        <argsstring>(self, _location)</argsstring>
+        <name>_target_coordiantes</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>_location</type>
+          <defname>_location</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function to retrieve the room coordinates (x and y) from its name.
+The function works with the help of the :mod:`name_mapper` file that stores both the name and the corresponding coordinates for each location in the ontology.
+In this file there are two list with a one to one correspondence between the name and the coordinates location.
+
+Args:
+    _location(String): string containing the name of the location
+
+Returns:
+    coordinates(Point): actual coordiantes of the location casted as a Point (with x and y)
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="171" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="171" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="function" id="classhelper_1_1_helper_1abefe51498f6b7536da2d9a86865116a9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper._robot_timestamp_value</definition>
+        <argsstring>(self)</argsstring>
+        <name>_robot_timestamp_value</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function to retrieve the timestamp of the robot.
+It is used the aRMOR server with a query and the timestamp is returned as output.
+
+Args:
+    none
+    
+Returns:
+    _timestamp(String): timestamp of the robot casted as a string
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="187" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="187" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="classhelper_1_1_helper_1a24cd6cb89c07e8afefb78507960b346c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>def</type>
+        <definition>def helper.Helper._location_old_timestamp</definition>
+        <argsstring>(self, _location)</argsstring>
+        <name>_location_old_timestamp</name>
+        <param>
+          <type>self</type>
+          <defname>self</defname>
+        </param>
+        <param>
+          <type>_location</type>
+          <defname>_location</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>Function to retrieve the timestamp of the lcoation.
+It is used the aRMOR server with a query and the timestamp is returned as output.
+The output represents the last time the location was visited by the robot.
+
+Args:
+    _location(String): name of the location the timestamp is required for
+    
+Returns:
+    _timestamp(String): timestamp of the location casted as a string
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="201" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="201" bodyend="215"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" line="42" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/helper.py" bodystart="42" bodyend="231"/>
+    <listofallmembers>
+      <member refid="classhelper_1_1_helper_1a0aa0f8cbde8e1f1ef4171ac56fab75c1" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>__init__</name></member>
+      <member refid="classhelper_1_1_helper_1a24cd6cb89c07e8afefb78507960b346c" prot="private" virt="non-virtual"><scope>helper::Helper</scope><name>_location_old_timestamp</name></member>
+      <member refid="classhelper_1_1_helper_1a5a0ee4df6ce70a5ee55bab95ad3b8b2c" prot="private" virt="non-virtual"><scope>helper::Helper</scope><name>_robot_pos</name></member>
+      <member refid="classhelper_1_1_helper_1abefe51498f6b7536da2d9a86865116a9" prot="private" virt="non-virtual"><scope>helper::Helper</scope><name>_robot_timestamp_value</name></member>
+      <member refid="classhelper_1_1_helper_1a3b9064ffd4318ed01d4c04928eaaebd5" prot="private" virt="non-virtual"><scope>helper::Helper</scope><name>_target_coordiantes</name></member>
+      <member refid="classhelper_1_1_helper_1a2913758e993928417669a48f8b8af35f" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>action_for_change</name></member>
+      <member refid="classhelper_1_1_helper_1a4a17646ed70c26e8bcc0e55af7a9e60c" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>check_battery</name></member>
+      <member refid="classhelper_1_1_helper_1adbf4b03ef474c9a9cead0ca83baffb6b" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>client</name></member>
+      <member refid="classhelper_1_1_helper_1a6f4616fd4a998d08611703b2441fe72e" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>controller_client</name></member>
+      <member refid="classhelper_1_1_helper_1a5a4c0f54a8240bdfd4632458cdb1ee63" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>doors</name></member>
+      <member refid="classhelper_1_1_helper_1ab4c1b223feb4fa21be1ef4f6e36dc5c5" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>format</name></member>
+      <member refid="classhelper_1_1_helper_1ab67d70587e7b87d44d6384e1104804b3" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>listCallback</name></member>
+      <member refid="classhelper_1_1_helper_1ad030761ba7dd30c1cab89d8052dc7c6f" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>marker_client</name></member>
+      <member refid="classhelper_1_1_helper_1ad7071947de531f00d006fbc9123c7558" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>markerArr</name></member>
+      <member refid="classhelper_1_1_helper_1a26bd65c2fc364aadda165229dc779edd" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>mutex</name></member>
+      <member refid="classhelper_1_1_helper_1ac52df50d958804fcad3ce9c7383791d2" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>plan_location</name></member>
+      <member refid="classhelper_1_1_helper_1a8d6fbb75ee38217c36db0fede065dea7" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>planner_client</name></member>
+      <member refid="classhelper_1_1_helper_1a70b43671eeae66bc50baa23569886816" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>reason_changes</name></member>
+      <member refid="classhelper_1_1_helper_1ac7a7623f7778a7b63aaf89203f6462bc" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>robot_timestamp_value</name></member>
+      <member refid="classhelper_1_1_helper_1a0c4c9363483cfe33fa4fac6f2455cb44" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>rooms</name></member>
+      <member refid="classhelper_1_1_helper_1a1562d8ef97b1dddb954f33d2b4cbc737" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>rooms_coordinates</name></member>
+      <member refid="classhelper_1_1_helper_1a846f1099f04585fce934a8e0ce3e51ce" prot="public" virt="non-virtual"><scope>helper::Helper</scope><name>update_timestamp</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

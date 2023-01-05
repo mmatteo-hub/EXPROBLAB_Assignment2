@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="dir_8de6457a31e66bec61fe33e091c1c3d4" kind="dir">
+    <compoundname>/root/ros_ws/src/EXPROBLAB_Assignment2/utilities/EXPROBLAB_Assignment2</compoundname>
+    <innerfile refid="____init_____8py">__init__.py</innerfile>
+    <innerfile refid="name__mapper_8py">name_mapper.py</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/utilities/EXPROBLAB_Assignment2/"/>
+  </compounddef>
+</doxygen>

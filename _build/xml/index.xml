@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.8.17">
+  <compound refid="classcontroller_1_1_controlling_action" kind="class"><name>controller::ControllingAction</name>
+    <member refid="classcontroller_1_1_controlling_action_1a6532d245dcd95c94afb11b1cc9d2be21" kind="variable"><name>_as</name></member>
+    <member refid="classcontroller_1_1_controlling_action_1adce59a934deb3cc5a9ffc16609cbb5b0" kind="variable"><name>move_client</name></member>
+    <member refid="classcontroller_1_1_controlling_action_1abd4eba5c5478116f58e1103268859aa2" kind="variable"><name>goal_counter</name></member>
+    <member refid="classcontroller_1_1_controlling_action_1a0b724a5fa8384c3d58a63ee6802aa9cd" kind="variable"><name>feedback_counter</name></member>
+    <member refid="classcontroller_1_1_controlling_action_1a9f2a6b7801bdd0990bd04e4b5b809e2a" kind="variable"><name>is_active</name></member>
+    <member refid="classcontroller_1_1_controlling_action_1a864137ca73531e2771504c4c95d92713" kind="function"><name>__init__</name></member>
+    <member refid="classcontroller_1_1_controlling_action_1aab54964f603544e46a4620b3f71dcc2a" kind="function"><name>execute_callback</name></member>
+    <member refid="classcontroller_1_1_controlling_action_1a34bcc096a350450cc3f9f39e327226c4" kind="function"><name>active_callback</name></member>
+    <member refid="classcontroller_1_1_controlling_action_1aa234dba07e55d6e00cee42fee2c7b647" kind="function"><name>feedback_callback</name></member>
+    <member refid="classcontroller_1_1_controlling_action_1a73e8a12699ab2c92f739df28bffcd4e1" kind="function"><name>done_callback</name></member>
+    <member refid="classcontroller_1_1_controlling_action_1acd4f2e11aae37f243082b93c42788edf" kind="function"><name>move_to_goal</name></member>
+  </compound>
+  <compound refid="classgo__to__location__to__visit_1_1_go_to_location_to_visit" kind="class"><name>go_to_location_to_visit::GoToLocationToVisit</name>
+    <member refid="classgo__to__location__to__visit_1_1_go_to_location_to_visit_1ac922d103af8774d948bff11275c49ccc" kind="variable"><name>_helper</name></member>
+    <member refid="classgo__to__location__to__visit_1_1_go_to_location_to_visit_1adf1313c5f2d68fb46abd0053b527978b" kind="function"><name>__init__</name></member>
+    <member refid="classgo__to__location__to__visit_1_1_go_to_location_to_visit_1a82ee186ff5b95958f4af049757397e65" kind="function"><name>execute</name></member>
+  </compound>
+  <compound refid="classhelper_1_1_helper" kind="class"><name>helper::Helper</name>
+    <member refid="classhelper_1_1_helper_1a26bd65c2fc364aadda165229dc779edd" kind="variable"><name>mutex</name></member>
+    <member refid="classhelper_1_1_helper_1a2913758e993928417669a48f8b8af35f" kind="variable"><name>action_for_change</name></member>
+    <member refid="classhelper_1_1_helper_1ac7a7623f7778a7b63aaf89203f6462bc" kind="variable"><name>robot_timestamp_value</name></member>
+    <member refid="classhelper_1_1_helper_1ad7071947de531f00d006fbc9123c7558" kind="variable"><name>markerArr</name></member>
+    <member refid="classhelper_1_1_helper_1a0c4c9363483cfe33fa4fac6f2455cb44" kind="variable"><name>rooms</name></member>
+    <member refid="classhelper_1_1_helper_1a1562d8ef97b1dddb954f33d2b4cbc737" kind="variable"><name>rooms_coordinates</name></member>
+    <member refid="classhelper_1_1_helper_1a5a4c0f54a8240bdfd4632458cdb1ee63" kind="variable"><name>doors</name></member>
+    <member refid="classhelper_1_1_helper_1adbf4b03ef474c9a9cead0ca83baffb6b" kind="variable"><name>client</name></member>
+    <member refid="classhelper_1_1_helper_1a8d6fbb75ee38217c36db0fede065dea7" kind="variable"><name>planner_client</name></member>
+    <member refid="classhelper_1_1_helper_1a6f4616fd4a998d08611703b2441fe72e" kind="variable"><name>controller_client</name></member>
+    <member refid="classhelper_1_1_helper_1ad030761ba7dd30c1cab89d8052dc7c6f" kind="variable"><name>marker_client</name></member>
+    <member refid="classhelper_1_1_helper_1a0aa0f8cbde8e1f1ef4171ac56fab75c1" kind="function"><name>__init__</name></member>
+    <member refid="classhelper_1_1_helper_1ab67d70587e7b87d44d6384e1104804b3" kind="function"><name>listCallback</name></member>
+    <member refid="classhelper_1_1_helper_1a70b43671eeae66bc50baa23569886816" kind="function"><name>reason_changes</name></member>
+    <member refid="classhelper_1_1_helper_1a4a17646ed70c26e8bcc0e55af7a9e60c" kind="function"><name>check_battery</name></member>
+    <member refid="classhelper_1_1_helper_1ab4c1b223feb4fa21be1ef4f6e36dc5c5" kind="function"><name>format</name></member>
+    <member refid="classhelper_1_1_helper_1ac52df50d958804fcad3ce9c7383791d2" kind="function"><name>plan_location</name></member>
+    <member refid="classhelper_1_1_helper_1a846f1099f04585fce934a8e0ce3e51ce" kind="function"><name>update_timestamp</name></member>
+    <member refid="classhelper_1_1_helper_1a5a0ee4df6ce70a5ee55bab95ad3b8b2c" kind="function"><name>_robot_pos</name></member>
+    <member refid="classhelper_1_1_helper_1a3b9064ffd4318ed01d4c04928eaaebd5" kind="function"><name>_target_coordiantes</name></member>
+    <member refid="classhelper_1_1_helper_1abefe51498f6b7536da2d9a86865116a9" kind="function"><name>_robot_timestamp_value</name></member>
+    <member refid="classhelper_1_1_helper_1a24cd6cb89c07e8afefb78507960b346c" kind="function"><name>_location_old_timestamp</name></member>
+  </compound>
+  <compound refid="classinit__state_1_1_init_state" kind="class"><name>init_state::InitState</name>
+    <member refid="classinit__state_1_1_init_state_1af8136adce2a6b3f39b46993983d613b7" kind="variable"><name>_helper</name></member>
+    <member refid="classinit__state_1_1_init_state_1a85c022a382ebe943b2a1e8ee67d2052f" kind="function"><name>__init__</name></member>
+    <member refid="classinit__state_1_1_init_state_1a48f0dff650a5b7428d76f9035062933b" kind="function"><name>execute</name></member>
+    <member refid="classinit__state_1_1_init_state_1a083d6ca449a698bf0ff1b8b251f6ebea" kind="function"><name>_ontology_initialization</name></member>
+    <member refid="classinit__state_1_1_init_state_1a9bc259cf8bf0d43bf0e6afaddf3b0428" kind="function"><name>_server_request</name></member>
+  </compound>
+  <compound refid="class_marker_detect_class" kind="class"><name>MarkerDetectClass</name>
+    <member refid="class_marker_detect_class_1aeb987d4db622bb858bb3fb6d14d19a79" kind="variable"><name>nh_</name></member>
+    <member refid="class_marker_detect_class_1a293dc7b5901bcb83dc04900c33254864" kind="variable"><name>joint_1_pose_pub</name></member>
+    <member refid="class_marker_detect_class_1a17824caa5283cce6db735c72bed1f022" kind="variable"><name>joint_2_pose_pub</name></member>
+    <member refid="class_marker_detect_class_1a6bc1efcda3479183af5f8baca3cb3ddd" kind="variable"><name>joint_3_pose_pub</name></member>
+    <member refid="class_marker_detect_class_1a012dcce2d65f4b4850f057079d8ed731" kind="variable"><name>joint_4_pose_pub</name></member>
+    <member refid="class_marker_detect_class_1a0e6a5db565fbf03a4d6065a219f6b765" kind="variable"><name>joint_5_pose_pub</name></member>
+    <member refid="class_marker_detect_class_1a0555c90752c90c421ab84ac5e6f40a65" kind="variable"><name>list_pub</name></member>
+    <member refid="class_marker_detect_class_1a6d99d5bcedb8f51d7265f7ff8e72cdcf" kind="variable"><name>cam_sub</name></member>
+    <member refid="class_marker_detect_class_1a11d05736c495824252a35c1f3536a724" kind="variable"><name>counter</name></member>
+    <member refid="class_marker_detect_class_1a51dc37068ddee72c9f731b9cc8f9c986" kind="function"><name>MarkerDetectClass</name></member>
+    <member refid="class_marker_detect_class_1a9ee2dc51223227082dcb04bef21c68ef" kind="function"><name>initializePublishers</name></member>
+    <member refid="class_marker_detect_class_1af39d273e475ffd5670c0983e53ad98d0" kind="function"><name>initializeSubscribers</name></member>
+    <member refid="class_marker_detect_class_1aa85c5f7bdbd52db414a39ecb7627268d" kind="function"><name>cb_cam</name></member>
+    <member refid="class_marker_detect_class_1a1fb9187ce94a1811419140d2057a9cea" kind="function"><name>_marker_find</name></member>
+  </compound>
+  <compound refid="classplanner_1_1_planing_action" kind="class"><name>planner::PlaningAction</name>
+    <member refid="classplanner_1_1_planing_action_1a398fbf9a9a18a16e70d9830bd12d4916" kind="variable"><name>_as</name></member>
+    <member refid="classplanner_1_1_planing_action_1af3b94d2fa34123aeda578226fb2bdc75" kind="function"><name>__init__</name></member>
+    <member refid="classplanner_1_1_planing_action_1aa6888e4c453bb5cc76726cb904eb97a4" kind="function"><name>execute_callback</name></member>
+  </compound>
+  <compound refid="classplan__path__to__location_1_1_plan_path_to_location" kind="class"><name>plan_path_to_location::PlanPathToLocation</name>
+    <member refid="classplan__path__to__location_1_1_plan_path_to_location_1ae20289ebcb685d1ae5706c4e674e7e0f" kind="variable"><name>_helper</name></member>
+    <member refid="classplan__path__to__location_1_1_plan_path_to_location_1a3fc26c824c536004b3758789ccdb1594" kind="function"><name>__init__</name></member>
+    <member refid="classplan__path__to__location_1_1_plan_path_to_location_1ae7b50b00150804352b5fe87baa6afdbb" kind="function"><name>execute</name></member>
+  </compound>
+  <compound refid="classreasoner_1_1_reasoner" kind="class"><name>reasoner::Reasoner</name>
+    <member refid="classreasoner_1_1_reasoner_1a43359502b0ba0232419f75ac14640399" kind="variable"><name>_helper</name></member>
+    <member refid="classreasoner_1_1_reasoner_1a70fcfcb2a5313bda1c44978a4d4864d0" kind="function"><name>__init__</name></member>
+    <member refid="classreasoner_1_1_reasoner_1a641884b8101d29b8f96d9b4243677215" kind="function"><name>execute</name></member>
+    <member refid="classreasoner_1_1_reasoner_1a1d536c67f9c851c82c5e3fcb2163ebc1" kind="function"><name>_check_accessible_location</name></member>
+    <member refid="classreasoner_1_1_reasoner_1a4042916c1eb0ea5d5e50a76b869683b7" kind="function"><name>_check_recharge_location_available</name></member>
+    <member refid="classreasoner_1_1_reasoner_1a7edf9848a12b7bc3dbf478b99c054620" kind="function"><name>_check_for_corridors</name></member>
+    <member refid="classreasoner_1_1_reasoner_1a1ef8a7c390e881590ae34b4938c7d5d6" kind="function"><name>_check_for_urgent_locations</name></member>
+    <member refid="classreasoner_1_1_reasoner_1a705b0f21f37a0e9d5c5b08e6231fc225" kind="function"><name>_check_for_recharging_room</name></member>
+    <member refid="classreasoner_1_1_reasoner_1af9ddda066fa674c8cd36c0151c93c8aa" kind="function"><name>_choose_destination</name></member>
+  </compound>
+  <compound refid="classrecharge_1_1_recharge" kind="class"><name>recharge::Recharge</name>
+    <member refid="classrecharge_1_1_recharge_1ad5a9d2a23e333ee12de97bd55145dcf1" kind="variable"><name>_helper</name></member>
+    <member refid="classrecharge_1_1_recharge_1a6ed5ee772fc02c9a1d3aeb6b4896777e" kind="variable"><name>_pos</name></member>
+    <member refid="classrecharge_1_1_recharge_1a6d972ae78dbab73436bafe42098ec847" kind="function"><name>__init__</name></member>
+    <member refid="classrecharge_1_1_recharge_1a73ba830fb77b19b0f82f78fa9152e38f" kind="function"><name>execute</name></member>
+    <member refid="classrecharge_1_1_recharge_1ac1350fcd65c5c3b8fe355361dc99904a" kind="function"><name>_check_rob_pos</name></member>
+    <member refid="classrecharge_1_1_recharge_1ae6260097eab356b2f02417f553657d2c" kind="function"><name>_plan_and_go_to_recharge</name></member>
+    <member refid="classrecharge_1_1_recharge_1a60e373a3a8f0e2d98dc48a4a3b3eb91a" kind="function"><name>_recharging_method</name></member>
+  </compound>
+  <compound refid="namespaceconf" kind="namespace"><name>conf</name>
+    <member refid="conf_8py_1a332f430461432dc465213f884a1e4967" kind="variable"><name>shell</name></member>
+    <member refid="conf_8py_1a45653c983098153b78e33600e39230eb" kind="variable"><name>project</name></member>
+    <member refid="conf_8py_1a33fa97cf51dcb25970fbf53f10159589" kind="variable"><name>copyright</name></member>
+    <member refid="conf_8py_1a637c239d256432248aa8d9f3ab0b8c52" kind="variable"><name>author</name></member>
+    <member refid="conf_8py_1a325dc746d8bf05c54d26351c35a21d90" kind="variable"><name>release</name></member>
+    <member refid="conf_8py_1ae475e080536acb271a0a0efe56c3ba42" kind="variable"><name>extensions</name></member>
+    <member refid="conf_8py_1ae850ae634911b713e036b43894fdd525" kind="variable"><name>templates_path</name></member>
+    <member refid="conf_8py_1a7ad48fb6f3e9b129c02346ea0d3527c1" kind="variable"><name>exclude_patterns</name></member>
+    <member refid="conf_8py_1a3117edf4443d9b8c70a9f0f44294ba79" kind="variable"><name>highlight_language</name></member>
+    <member refid="conf_8py_1a10af2a769eb3bd3322e874f677e435b1" kind="variable"><name>source_suffix</name></member>
+    <member refid="conf_8py_1a6fcd7e5236f355b1e1a55f9d95988810" kind="variable"><name>master_doc</name></member>
+    <member refid="conf_8py_1a6c3bfcc1a44546c1c75ce20f55bd0fd6" kind="variable"><name>html_theme</name></member>
+    <member refid="conf_8py_1af4fb5d8851ccaade135c2668dd3ced41" kind="variable"><name>html_static_path</name></member>
+    <member refid="conf_8py_1ae1323788e132618f5d7b9839f2adc5e3" kind="variable"><name>autodoc_default_options</name></member>
+    <member refid="conf_8py_1a8375f4f963de3ac8026eaa9beced9564" kind="variable"><name>intersphinx_mapping</name></member>
+    <member refid="conf_8py_1a8fe7f0d85f975f4ecba5cb6066959a09" kind="variable"><name>todo_include_todos</name></member>
+    <member refid="conf_8py_1acb47d2c0c2904fa7d36b63142533f383" kind="variable"><name>breathe_projects</name></member>
+    <member refid="conf_8py_1a6eba2d2c7ae923054b1c49e686ec89b9" kind="variable"><name>breathe_default_project</name></member>
+  </compound>
+  <compound refid="namespacecontroller" kind="namespace"><name>controller</name>
+    <member refid="namespacecontroller_1a4fc1b6a99bc87906a47c7cad719ccb74" kind="variable"><name>LOG_TAG</name></member>
+    <member refid="namespacecontroller_1a99a847a8cdf1284e51872a5704e85411" kind="variable"><name>NODE_CONTROLLER</name></member>
+    <member refid="namespacecontroller_1a65f5ca619d887ed3eea896dd96035444" kind="variable"><name>log_level</name></member>
+    <member refid="namespacecontroller_1af7ece586506b0ed00fa2d33f4102566e" kind="variable"><name>server</name></member>
+  </compound>
+  <compound refid="namespace_e_x_p_r_o_b_l_a_b___assignment2" kind="namespace"><name>EXPROBLAB_Assignment2</name>
+  </compound>
+  <compound refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper" kind="namespace"><name>EXPROBLAB_Assignment2::name_mapper</name>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1ae6b52513c8f7343e67e71f0c73c309b7" kind="variable"><name>INIT_STATE</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a25ff774ee036e2c9adcdee6985d67098" kind="variable"><name>RECHARGE</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1ac2885862b2fe4dfb3bfd4ffcc8109862" kind="variable"><name>REASONER</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a7e653cafff092bd1eb00cb980ea80609" kind="variable"><name>PLAN_PATH_TO_LOCATION</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a14f8725e19323bc9212d1dd65ab2cd11" kind="variable"><name>GO_TO_LOCATION_TO_VISIT</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1aa96901ace792e275d5ded504a014853f" kind="variable"><name>MOVE_RANDOM</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1aafd0e9f6ba433a9d665525e2e0d979a2" kind="variable"><name>BATTERY_OK</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1ac205e99e145f3749392c866f08c2e46e" kind="variable"><name>BATTERY_LOW</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a181111ec5dd435d832072c916e0ce615" kind="variable"><name>LOADED_ONTOLOGY</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a1143c768d8676a1f3da33e129604e99e" kind="variable"><name>REASONED</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a4a901003c356d8b3a18c3e5ecf0c6632" kind="variable"><name>PLANNED_PATH</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1aac86fa6ea84ed051f3d13a4ca4f05beb" kind="variable"><name>LOCATION_REACHED</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1aa66baa711e4cb9488eb406692817dcf6" kind="variable"><name>RECHARGING_CHECK</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1adb7a8d8a118bfae19cefb84feddea068" kind="variable"><name>ACTION_PLANNER</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a203e9753edbc4cb33c83bee930c82062" kind="variable"><name>ACTION_CONTROLLER</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a25f204428befb7e61bed07d4187d2332" kind="variable"><name>NODE_PLANNER</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a8d16fa84df5898e7d550872283c9147a" kind="variable"><name>NODE_CONTROLLER</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a8ac81909dd896e75633fd018f4e29c6e" kind="variable"><name>NODE_ROBOT_STATE</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a0fe7515edd4962f0271f39323b724345" kind="variable"><name>BATTERY_THRESHOLD</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a5b8a254df0d8db84b0dcae219ef4f33d" kind="variable"><name>BUSY_PARAMETER</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a528eb25a02c9e017fb07dc569939b9fb" kind="variable"><name>NUMBER_OF_POINTS_PATH</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a7138885ef7176950c9b055ebacb2ee0f" kind="variable"><name>RECHARGING_ROOM</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a8f5fb1edb28e6c4921d12cc74c452629" kind="variable"><name>ROOMS</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a8f9c8aa1d48c21a9623837ec8c31d85a" kind="variable"><name>COORDINATES</name></member>
+    <member refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper_1a867184196330b8f1bcd77d3e6bfe5dd3" kind="function"><name>tag_log</name></member>
+  </compound>
+  <compound refid="namespacefsm" kind="namespace"><name>fsm</name>
+    <member refid="namespacefsm_1a973dbd0b67087a3e7a64abd7ae573b99" kind="function"><name>main</name></member>
+  </compound>
+  <compound refid="namespacego__to__location__to__visit" kind="namespace"><name>go_to_location_to_visit</name>
+  </compound>
+  <compound refid="namespacehelper" kind="namespace"><name>helper</name>
+  </compound>
+  <compound refid="namespaceinit__state" kind="namespace"><name>init_state</name>
+  </compound>
+  <compound refid="namespaceplan__path__to__location" kind="namespace"><name>plan_path_to_location</name>
+  </compound>
+  <compound refid="namespaceplanner" kind="namespace"><name>planner</name>
+    <member refid="namespaceplanner_1a4209f7309acdbba1a84f1587681dfec0" kind="variable"><name>LOG_TAG</name></member>
+    <member refid="namespaceplanner_1aff8e189f86f74f8aaf3351cbb7356409" kind="variable"><name>NODE_PLANNER</name></member>
+    <member refid="namespaceplanner_1ab554f56ade44b42d452d34ab0f92591d" kind="variable"><name>log_level</name></member>
+    <member refid="namespaceplanner_1aaba81fa6983b3c1cd69468b3659420e6" kind="variable"><name>server</name></member>
+  </compound>
+  <compound refid="namespacereasoner" kind="namespace"><name>reasoner</name>
+  </compound>
+  <compound refid="namespacerecharge" kind="namespace"><name>recharge</name>
+  </compound>
+  <compound refid="namespacesetup" kind="namespace"><name>setup</name>
+    <member refid="setup_8py_1a504ffa482edfe0eff08f64b2f5dff0e9" kind="variable"><name>setup_args</name></member>
+  </compound>
+  <compound refid="_c_make_lists_8txt" kind="file"><name>CMakeLists.txt</name>
+  </compound>
+  <compound refid="conf_8py" kind="file"><name>conf.py</name>
+  </compound>
+  <compound refid="_r_e_a_d_m_e_8md" kind="file"><name>README.md</name>
+  </compound>
+  <compound refid="controller_8py" kind="file"><name>controller.py</name>
+  </compound>
+  <compound refid="fsm_8py" kind="file"><name>fsm.py</name>
+  </compound>
+  <compound refid="go__to__location__to__visit_8py" kind="file"><name>go_to_location_to_visit.py</name>
+  </compound>
+  <compound refid="helper_8py" kind="file"><name>helper.py</name>
+  </compound>
+  <compound refid="init__state_8py" kind="file"><name>init_state.py</name>
+  </compound>
+  <compound refid="plan__path__to__location_8py" kind="file"><name>plan_path_to_location.py</name>
+  </compound>
+  <compound refid="planner_8py" kind="file"><name>planner.py</name>
+  </compound>
+  <compound refid="reasoner_8py" kind="file"><name>reasoner.py</name>
+  </compound>
+  <compound refid="recharge_8py" kind="file"><name>recharge.py</name>
+  </compound>
+  <compound refid="setup_8py" kind="file"><name>setup.py</name>
+  </compound>
+  <compound refid="detect__marker_8cpp" kind="file"><name>detect_marker.cpp</name>
+    <member refid="detect__marker_8cpp_1ae3b32ecec4590e38557f4c80e5ed58ed" kind="variable"><name>msg</name></member>
+    <member refid="detect__marker_8cpp_1a8c1acd69538a2dc82fcc94e9942be30e" kind="variable"><name>marker_list</name></member>
+    <member refid="detect__marker_8cpp_1a49c04bb816c28cda15baf215e0f13cee" kind="variable"><name>mDetector_</name></member>
+    <member refid="detect__marker_8cpp_1a0e3776f9f5d938830d69f7fe428d5c35" kind="variable"><name>markers_</name></member>
+    <member refid="detect__marker_8cpp_1a5c9bd70cbf4ee05efa17860dc5913a09" kind="variable"><name>camParam_</name></member>
+    <member refid="detect__marker_8cpp_1a46a054ab4fc737d95a4b5555d51a761c" kind="variable"><name>cv_ptr</name></member>
+    <member refid="detect__marker_8cpp_1a3061dec99ad9aff2b1b5dfedb9fa9d5d" kind="variable"><name>inImage_</name></member>
+    <member refid="detect__marker_8cpp_1a4a453f22d3fcb344a1ed28eac4e484a5" kind="variable"><name>marker_size_</name></member>
+    <member refid="detect__marker_8cpp_1a3c04138a5bfe5d72780bb7e82a18e627" kind="function"><name>main</name></member>
+  </compound>
+  <compound refid="detect__marker_8h" kind="file"><name>detect_marker.h</name>
+  </compound>
+  <compound refid="marker__server_8cpp" kind="file"><name>marker_server.cpp</name>
+    <member refid="marker__server_8cpp_1a3c04138a5bfe5d72780bb7e82a18e627" kind="function"><name>main</name></member>
+  </compound>
+  <compound refid="____init_____8py" kind="file"><name>__init__.py</name>
+  </compound>
+  <compound refid="name__mapper_8py" kind="file"><name>name_mapper.py</name>
+  </compound>
+  <compound refid="md__root_ros_ws_src__e_x_p_r_o_b_l_a_b__assignment2__r_e_a_d_m_e" kind="page"><name>md__root_ros_ws_src_EXPROBLAB_Assignment2_README</name>
+  </compound>
+  <compound refid="dir_8de6457a31e66bec61fe33e091c1c3d4" kind="dir"><name>/root/ros_ws/src/EXPROBLAB_Assignment2/utilities/EXPROBLAB_Assignment2</name>
+  </compound>
+  <compound refid="dir_53e6fa9553ac22a5646d2a2b2d7b97a1" kind="dir"><name>/root/ros_ws/src/EXPROBLAB_Assignment2/scripts</name>
+  </compound>
+  <compound refid="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir"><name>/root/ros_ws/src/EXPROBLAB_Assignment2/src</name>
+  </compound>
+  <compound refid="dir_df38b2a5d584e0f6066b4518b95c638b" kind="dir"><name>/root/ros_ws/src/EXPROBLAB_Assignment2/utilities</name>
+  </compound>
+</doxygenindex>

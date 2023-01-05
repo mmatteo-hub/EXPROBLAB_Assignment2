@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="namespace_e_x_p_r_o_b_l_a_b___assignment2" kind="namespace" language="Python">
+    <compoundname>EXPROBLAB_Assignment2</compoundname>
+    <innernamespace refid="namespace_e_x_p_r_o_b_l_a_b___assignment2_1_1name__mapper">EXPROBLAB_Assignment2::name_mapper</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/utilities/EXPROBLAB_Assignment2/__init__.py" line="1" column="1"/>
+  </compounddef>
+</doxygen>

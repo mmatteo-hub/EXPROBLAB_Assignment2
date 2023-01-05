@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="namespaceplan__path__to__location" kind="namespace" language="Python">
+    <compoundname>plan_path_to_location</compoundname>
+    <innerclass refid="classplan__path__to__location_1_1_plan_path_to_location" prot="public">plan_path_to_location::PlanPathToLocation</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><verbatim>.. module:: plan_path_to_location
+    :platform: ROS
+    :synopsis: Class for the PlanPathToLocation state of the sub-finite state machine
+
+.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it
+
+This class is a state of the sub-state machine *move random*. This class has the aim to compute a plan of *n* points from the actual position of the robot to the target location given by the reasoner.
+The number of points is a parameter specified in the :mod:`name_mapper` file.
+The class call the :func:`plan_location` function from the helper object, previously initialized, which uses the :mod:`planner` server to compute the path.
+As soon as the server gives to the client the response with the result of the path the the sub-machine passes to the next state.
+The client is taken from the helper object.
+
+Clients:
+    :attr:`planner_client`: client that makes the request to the respective server to take the path from the starting to the end position for the robot
+</verbatim> </para>
+    </detaileddescription>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/scripts/plan_path_to_location.py" line="1" column="1"/>
+  </compounddef>
+</doxygen>
