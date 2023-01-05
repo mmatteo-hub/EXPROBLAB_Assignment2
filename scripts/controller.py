@@ -118,16 +118,43 @@ class ControllingAction(object):
         return  # Succeeded.
 
     def active_callback(self):
-        # Function executed when the communication starts.
-        self.goal_counter += 1   # Increments the goal counter.
+        """
+        Function that is executed when the communication starts.
+        It simply increments a goal counter
+
+        Args:
+            none
+
+        Returns:
+            none
+        """
+        self.goal_counter += 1
 
     def feedback_callback(self, feedback):
-        # Function executed when a feedback is received.
-        self.feedback_counter += 1   # Increments the feedback counter.
+        """
+        Function that is executed when a feedback is received.
+        It simply increments a feedback counter
+
+        Args:
+            feedback: feedack of the action server
+
+        Returns:
+            none
+        """
+        self.feedback_counter += 1
 
     def done_callback(self, status, result):
-        # Function executed when the communication ends.
-        
+        """
+        Function executed when the communication ends.
+        It checks the status of the action client and it prints a message relating to the status.
+
+        Args:
+            status: actual status of the action server
+            result: result to return
+
+        Returns:
+            none
+        """
         self.is_active = False   # The action client communication is not active.
 
         # Prints on the info window the status returned by the action server communication.
@@ -148,6 +175,17 @@ class ControllingAction(object):
             return
 
     def move_to_goal(self, x, y):
+        """
+        Function to move the robot to a specific goal set by the planner.
+        The function takes the x and y coordinates of the goal and publishes through an action client to the server the coordinates the robot has to reach
+
+        Args:
+            x: x coordinate of the goal
+            y: y coordinate of the goal
+
+        Returns:
+            none
+        """
         self.is_active = True
 
         self.move_client.wait_for_server()
