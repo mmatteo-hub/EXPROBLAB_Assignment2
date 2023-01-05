@@ -18,6 +18,7 @@ Servers:
 
 import random
 import rospy
+import actionlib
 # Import constant name defined to structure the architecture.
 from EXPROBLAB_Assignment2 import name_mapper as nm
 # Import the ActionServer implementation used.
@@ -28,6 +29,7 @@ from EXPROBLAB_Assignment2.srv import SetPose
 import EXPROBLAB_Assignment2  # This is required to pass the ControlAction` type for instantiating the `SimpleActionServer`.
 from helper import Helper
 from armor_api.armor_client import ArmorClient
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 # A tag for identifying logs producer.
 LOG_TAG = nm.NODE_CONTROLLER
@@ -51,6 +53,14 @@ class ControllingAction(object):
                                         EXPROBLAB_Assignment2.msg.ControlAction,
                                         execute_cb=self.execute_callback,
                                         auto_start=False)
+
+        # controller for movig the robot
+        self.move_client = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
+
+        self.goal_counter = 0
+        self.feedback_counter = 0
+        self.is_active = False
+
         self._as.start()
         # Log information.
         log_msg = (f'`{nm.ACTION_CONTROLLER}` Action Server initialised. It will navigate trough the plan with a fixed delay ' 
@@ -85,17 +95,19 @@ class ControllingAction(object):
                 # Actually cancel this service.
                 self._as.set_preempted()
                 return
-                # Wait before to reach the following via point. This is just for testing purposes.
 
-			# Wait to simulate movement.
-            delay = 0.25
-            rospy.sleep(delay)
+            # Wait before to reach the following via point. This is just for testing purposes.
+            self.move_to_goal(goal.via_points[9].x, goal.via_points[9].y)
+
             # Publish a feedback to the client to simulate that a via point has been reached. 
-            feedback.reached_point = point
+            feedback.reached_point = goal.via_points[9]
             self._as.publish_feedback(feedback)
+
+            while self.is_active is True or not rospy.is_shutdown():
+                rospy.sleep(0.01)
             
             # Log current robot position.
-            log_msg = f'Reaching point ({point.x}, {point.y}).'
+            log_msg = f'Reaching point ({goal.via_points[9].x}, {goal.via_points[9].y}).'
             rospy.loginfo(nm.tag_log(log_msg, LOG_TAG))
 
         # Publish the results to the client.
@@ -104,6 +116,52 @@ class ControllingAction(object):
         rospy.loginfo(nm.tag_log('Motion control successes.', LOG_TAG))
         self._as.set_succeeded(result)
         return  # Succeeded.
+
+    def active_callback(self):
+        # Function executed when the communication starts.
+        self.goal_counter += 1   # Increments the goal counter.
+
+    def feedback_callback(self, feedback):
+        # Function executed when a feedback is received.
+        self.feedback_counter += 1   # Increments the feedback counter.
+
+    def done_callback(self, status, result):
+        # Function executed when the communication ends.
+        
+        self.is_active = False   # The action client communication is not active.
+
+        # Prints on the info window the status returned by the action server communication.
+        if status == 2 or status == 8:
+            rospy.loginfo("Goal received a cancel request.")
+            return
+
+        if status == 3:
+            rospy.loginfo("Goal reached.")
+            return
+
+        if status == 4:
+            rospy.loginfo("Goal aborted.")
+            return
+
+        if status == 5:
+            rospy.loginfo("Goal rejected.")
+            return
+
+    def move_to_goal(self, x, y):
+        self.is_active = True
+
+        self.move_client.wait_for_server()
+
+        goal = MoveBaseGoal()
+
+        goal.target_pose.header.frame_id = "map"
+        goal.target_pose.header.stamp = rospy.Time.now()
+        goal.target_pose.pose.orientation.w = 1
+        goal.target_pose.pose.position.x = x
+        goal.target_pose.pose.position.y = y
+
+        self.move_client.send_goal(goal, self.done_callback, self.active_callback, self.feedback_callback)
+        rospy.loginfo("Goal Published")
 
 if __name__ == '__main__':
     # Initialise the node, its action server, and wait.   

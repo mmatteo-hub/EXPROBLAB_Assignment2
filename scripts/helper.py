@@ -34,6 +34,7 @@ from EXPROBLAB_Assignment2 import name_mapper as nm
 from EXPROBLAB_Assignment2.msg import Point, PlanAction, PlanGoal, ControlAction
 from EXPROBLAB_Assignment2.srv import RoomInformation
 from armor_api.armor_client import ArmorClient
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 from threading import Thread
 from threading import Lock
