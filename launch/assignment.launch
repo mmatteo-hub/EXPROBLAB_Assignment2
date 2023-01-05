@@ -47,10 +47,11 @@
   <!-- Coordinates to spawn model -->
   <arg name="x" default="-6.0"/>
   <arg name="y" default="11.0"/>
-  <arg name="z" default="$(eval 0.14* arg('scale_rbt'))"/>
+  <!--<arg name="z" default="$(eval 0.14* arg('scale_rbt'))"/>-->
+  <arg name="z" default="0.15"/>
   <arg name="roll" default="0.0"/>
   <arg name="pitch" default="0.0"/>
-  <arg name="yaw" default="0.0"/>
+  <arg name="yaw" default="3.14"/>
   <arg name="output" default="log"/>
   
   <!-- Start Rviz --> 
@@ -91,7 +92,7 @@
 
   <!-- Nodes for the FSM -->
   <!-- Node for the aRMOR server -->
-  <node pkg="armor" type="execute" name="armor_service" args="it.emarolab.armor.ARMORMainService" launch-prefix="xterm -e"/>
+  <node pkg="armor" type="execute" name="armor_service" args="it.emarolab.armor.ARMORMainService"/>
   <!-- Node for the planner server -->
   <node pkg="EXPROBLAB_Assignment2" type="planner.py" name="planner" output="screen" launch-prefix="xterm -e"/>
   <!-- Node for the controller server -->
