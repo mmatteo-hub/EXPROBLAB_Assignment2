@@ -1,2 +1,0 @@
-string connected_to
-string through_door
