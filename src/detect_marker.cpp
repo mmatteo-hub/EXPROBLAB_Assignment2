@@ -169,7 +169,7 @@ void MarkerDetectClass::_marker_find()
       msg.data = 3.14;
       joint_1_pose_pub.publish(msg);
 
-      msg.data = 0.9;
+      msg.data = 0.7;
       joint_4_pose_pub.publish(msg);
       counter++;
     }
@@ -185,6 +185,9 @@ void MarkerDetectClass::_marker_find()
     {
       msg.data = 3.14;
       joint_1_pose_pub.publish(msg);
+
+      msg.data = -0.3;
+      joint_3_pose_pub.publish(msg);
 
       msg.data = 0.0;
       joint_4_pose_pub.publish(msg);
@@ -226,7 +229,7 @@ int main(int argc,char **argv)
   ROS_INFO("main: instantiating an object of type MarkerDetectClass");
   MarkerDetectClass MarkerDetectClass(&nh);
 
-  ros::Rate loop_rate(0.5);
+  ros::Rate loop_rate(1);
 
   while(ros::ok())
   {
