@@ -51,7 +51,7 @@
   <arg name="z" default="0.15"/>
   <arg name="roll" default="0.0"/>
   <arg name="pitch" default="0.0"/>
-  <arg name="yaw" default="3.14"/>
+  <arg name="yaw" default="-1.707"/>
   <arg name="output" default="log"/>
   
   <!-- Start Rviz --> 
