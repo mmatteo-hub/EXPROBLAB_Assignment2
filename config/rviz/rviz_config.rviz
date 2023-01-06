@@ -65,10 +65,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        body_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
           Value: true
         camera_depth_frame:
           Alpha: 1
@@ -265,7 +261,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base_link
+    Fixed Frame: odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -289,7 +285,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 32.647369384765625
+      Distance: 51.37126922607422
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -325,5 +321,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1266
-  X: 54
-  Y: -60
+  X: 53
+  Y: -80
