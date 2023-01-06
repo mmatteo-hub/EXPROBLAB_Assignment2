@@ -89,6 +89,14 @@ class GoToLocationToVisit(smach.State):
 						log_msg = f'Doing something in the location \033[0;36;49m' + str(self._helper.choice) + '\033[0m'
 						rospy.loginfo(nm.tag_log(log_msg, nm.GO_TO_LOCATION_TO_VISIT))
 						rospy.sleep(nm.BUSY_PARAMETER)
+
+						# make the robot turn on the spot by publishing angular velocity
+						msg = Twist()
+						msg.angular.z = 3.0
+						self._helper.vel_publisher.publish()
+						rospy.sleep(3)
+						msg.angular.z = 0.0
+						self._helper.vel_publisher.publish()
 					
 					# if the reasoner is checking for the recharging room but it cannot reach it directly because in a location no directly connected to the recharging one,
 					# then it move the robot into another location and try to reach the recharging room from this new one

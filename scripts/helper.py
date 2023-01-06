@@ -30,6 +30,7 @@ import time
 import re
 import numpy
 from std_msgs.msg import Int32,Int32MultiArray
+from geometry_msgs.msg import Twist
 from EXPROBLAB_Assignment2 import name_mapper as nm
 from EXPROBLAB_Assignment2.msg import Point, PlanAction, PlanGoal, ControlAction
 from EXPROBLAB_Assignment2.srv import RoomInformation
@@ -82,6 +83,9 @@ class Helper:
 
 		# client for the marker server
 		self.marker_client = rospy.ServiceProxy('/room_info', RoomInformation)
+
+		# publisher for publishing velocity to the robot
+		self.vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size = 1000)
 
 	def listCallback(self, msg):
 		self.markerArr = msg.data

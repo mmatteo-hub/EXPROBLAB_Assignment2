@@ -88,27 +88,35 @@ class ControllingAction(object):
         # Construct the feedback and loop for each via point.
         feedback = ControlFeedback()
         rospy.loginfo(nm.tag_log('Server is controlling...', LOG_TAG))
-        for point in goal.via_points:
-            # Check that the client did not cancel this service.
-            if self._as.is_preempt_requested():
-                rospy.loginfo(nm.tag_log('Service has been cancelled by the client!', LOG_TAG))
-                # Actually cancel this service.
-                self._as.set_preempted()
-                return
-
-            # Wait before to reach the following via point. This is just for testing purposes.
-            self.move_to_goal(goal.via_points[9].x, goal.via_points[9].y)
-
-            # Publish a feedback to the client to simulate that a via point has been reached. 
-            feedback.reached_point = goal.via_points[9]
-            self._as.publish_feedback(feedback)
-
-            while self.is_active is True or not rospy.is_shutdown():
-                rospy.sleep(0.01)
             
-            # Log current robot position.
-            log_msg = f'Reaching point ({goal.via_points[9].x}, {goal.via_points[9].y}).'
-            rospy.loginfo(nm.tag_log(log_msg, LOG_TAG))
+        # Check that the client did not cancel this service.
+        if self._as.is_preempt_requested():
+            rospy.loginfo(nm.tag_log('Service has been cancelled by the client!', LOG_TAG))
+            # Actually cancel this service.
+            self._as.set_preempted()
+            return
+
+        # Wait before to reach the following via point. This is just for testing purposes.
+        self.move_to_goal(goal.via_points[9].x, goal.via_points[9].y)
+
+        # Log current robot position.
+        log_msg = f'Reaching point ({goal.via_points[9].x}, {goal.via_points[9].y}).'
+        rospy.loginfo(nm.tag_log(log_msg, LOG_TAG))
+
+        # Publish a feedback to the client to simulate that a via point has been reached. 
+        feedback.reached_point = goal.via_points[9]
+        self._as.publish_feedback(feedback)
+
+        while self.is_active is True or not rospy.is_shutdown():
+            rospy.sleep(0.01)
+
+        # set the client not active and cancel the goal reached
+        self.is_active = False
+        self.move_client.cancel_goal()
+            
+        # Log current robot position.
+        log_msg = f'Reached point ({goal.via_points[9].x}, {goal.via_points[9].y}).'
+        rospy.loginfo(nm.tag_log(log_msg, LOG_TAG))
 
         # Publish the results to the client.
         result = ControlResult()
