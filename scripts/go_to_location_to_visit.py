@@ -30,6 +30,7 @@ import smach_ros
 import time
 from actionlib_msgs.msg import GoalStatus
 from EXPROBLAB_Assignment2 import name_mapper as nm
+from geometry_msgs.msg import Twist
 
 class GoToLocationToVisit(smach.State):
 	def __init__(self, helper):

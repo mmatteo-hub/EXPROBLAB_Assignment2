@@ -107,8 +107,8 @@ class ControllingAction(object):
         feedback.reached_point = goal.via_points[9]
         self._as.publish_feedback(feedback)
 
-        while self.is_active is True or not rospy.is_shutdown():
-            rospy.sleep(0.01)
+        while self.is_active is True and not rospy.is_shutdown():
+            rospy.sleep(0.1)
 
         # set the client not active and cancel the goal reached
         self.is_active = False
@@ -137,6 +137,7 @@ class ControllingAction(object):
             none
         """
         self.goal_counter += 1
+        rospy.loginfo("Goal " + str(self.goal_counter))
 
     def feedback_callback(self, feedback):
         """
@@ -150,6 +151,8 @@ class ControllingAction(object):
             none
         """
         self.feedback_counter += 1
+        if self.feedback_counter % 100 == 0:
+            rospy.loginfo("Feedback " + str(self.feedback_counter))
 
     def done_callback(self, status, result):
         """
