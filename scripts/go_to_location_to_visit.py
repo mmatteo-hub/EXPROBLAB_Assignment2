@@ -30,7 +30,7 @@ import smach_ros
 import time
 from actionlib_msgs.msg import GoalStatus
 from EXPROBLAB_Assignment2 import name_mapper as nm
-from geometry_msgs.msg import Twist
+from std_msgs.msg import Float64
 
 class GoToLocationToVisit(smach.State):
 	def __init__(self, helper):
@@ -92,12 +92,15 @@ class GoToLocationToVisit(smach.State):
 						rospy.sleep(nm.BUSY_PARAMETER)
 
 						# make the robot turn on the spot by publishing angular velocity
-						msg = Twist()
-						msg.angular.z = 3.0
-						self._helper.vel_publisher.publish()
-						rospy.sleep(3)
-						msg.angular.z = 0.0
-						self._helper.vel_publisher.publish()
+						msg = Float64()
+						# change the angle direction
+						self._helper.joint1_angle = self._helper.joint1_angle * -1
+						# set the angle direction
+						msg.data = 3.14 * self._helper.joint1_angle;
+						#publish the angle
+						self._helper.vel_publisher.publish(msg)
+						# wait 10 seconda before continuing
+						rospy.sleep(10)
 					
 					# if the reasoner is checking for the recharging room but it cannot reach it directly because in a location no directly connected to the recharging one,
 					# then it move the robot into another location and try to reach the recharging room from this new one

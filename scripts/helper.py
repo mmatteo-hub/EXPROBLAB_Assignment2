@@ -30,7 +30,7 @@ import time
 import re
 import numpy
 from std_msgs.msg import Int32,Int32MultiArray
-from geometry_msgs.msg import Twist
+from std_msgs.msg import Float64
 from EXPROBLAB_Assignment2 import name_mapper as nm
 from EXPROBLAB_Assignment2.msg import Point, PlanAction, PlanGoal, ControlAction
 from EXPROBLAB_Assignment2.srv import RoomInformation
@@ -68,6 +68,9 @@ class Helper:
 		self.rooms = []
 		self.rooms_coordinates = []
 		self.doors = []
+
+		# variable to store the joint 1 position of the robot
+		self.joint1_angle = -1 # -1 indicates -3.14, +1 indicates 3.14. Initialized to -1 since the detect_marker.cpp set it
 		
 		# client for the arMOR server
 		self.client = ArmorClient('armor_client', "reference")
@@ -85,7 +88,7 @@ class Helper:
 		self.marker_client = rospy.ServiceProxy('/room_info', RoomInformation)
 
 		# publisher for publishing velocity to the robot
-		self.vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size = 1000)
+		self.joint_1_publisher = rospy.Publisher('/arm/yb_arm_joint_1_position_controller/command', Float64, queue_size = 1000)
 
 	def listCallback(self, msg):
 		self.markerArr = msg.data
