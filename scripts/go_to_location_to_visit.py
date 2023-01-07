@@ -7,10 +7,10 @@
 	
 .. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it
 
-This class is a state of the sub-state machine *move randomly*. This class has the aim to move the robot through the path computed in the previous state.
-The path is taken from the :mod:`planner` client by taking its result provided by the respsctive server and then it is passed to the :mod:`controller` ones. This uses the :mod:`controller` to make the robot move through the points of the path.
-This state is a little trivial since it is used both to move the robot from a location to another both to drive it to the recharging room when necessary and when possible.
-Due to this as soon as the robot has a location that has to reach, this location is reached and then, depending of the variable shared by the Helper, it can be retrieved if the move was just a random movement or it was needed to reach a location from which check again the possibility to reach the recharging room.
+This class is a state of the sub-state machine *move randomly*. This class has aim to move the robot through the path computed in the previous state.
+The path is taken from the :mod:`planner` client by taking its result provided by the respective server and then it is passed to the :mod:`controller` ones. This uses the :mod:`controller` to make the robot move through the points of the path.
+This state is a little trivial since it is used both to move the robot from one location to another both to drive it to the recharging room when necessary and when possible.
+Due to this as soon as the robot has a location that has to reach, this location is reached, and then, depending on the variable shared by the Helper, it can be retrieved if the move was just a random movement or it was needed to reach a location from which check again the possibility to reach the recharging room.
 The clients are taken from the helper object.
 
 Clients:
@@ -35,8 +35,8 @@ from std_msgs.msg import Float64
 class GoToLocationToVisit(smach.State):
 	def __init__(self, helper):
 		"""
-		Function used to initialize the state of the sub-machine.
-		In this step there is also the declaration of all the outcomes that the state can have.
+		The function is used to initialize the state of the sub-machine.
+		In this step, there is also the declaration of all the outcomes that the state can have.
 		
 		Args:
 			helper(Helper): helper object that allows the user to use shared elements among the scripts.
@@ -53,15 +53,15 @@ class GoToLocationToVisit(smach.State):
 		
 	def execute(self, userdata):
 		"""
-		Function that is executed every time the machine enters the state.
-		It is responsible of returning a state transitioning to change the state.
+		The function is executed every time the machine enters the state.
+		It is responsible for returning a state and transitioning to change the state.
 		It uses the mutex instantiated in the helper to manage the variable access.
 		
 		Args:
 			userdata: pointer to pass the data among the states of a State Machine
 			
 		Returns:
-			transition(String): string containing the label of the action performed and used to change state in the sub machine and returning to the upper one.
+			transition(String): string containing the label of the action performed and used to change the state in the sub-machine and return to the upper one.
 		"""
 		# function called when exiting from the node, it can be blacking
 		rospy.loginfo('Executing state ' + nm.GO_TO_LOCATION_TO_VISIT + ' (users = %f)'%userdata.go_to_location_to_visit_counter_in)
@@ -102,8 +102,8 @@ class GoToLocationToVisit(smach.State):
 						# wait 30 seconda before continuing
 						rospy.sleep(30)
 					
-					# if the reasoner is checking for the recharging room but it cannot reach it directly because in a location no directly connected to the recharging one,
-					# then it move the robot into another location and try to reach the recharging room from this new one
+					# if the reasoner is checking for the recharging room but cannot reach it directly because in a location no directly connected to the recharging one,
+					# then it moves the robot into another location and tries to reach the recharging room from this new one
 					if self._helper.action_for_change == nm.RECHARGING_CHECK:
 						self._helper.action_for_change = nm.BATTERY_LOW
 					else:

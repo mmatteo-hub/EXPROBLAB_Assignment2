@@ -7,12 +7,12 @@
 
 .. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it
 
-This class represent the recharging state of the finite state machine. This state is executed every time the battery of the robot is low and the robot is located in the recharging room.
-In particular, if the robot is in a location and it can reach the recharging room then the FSM enters in this state, brings the robot to the recharging room and then recharges it.
-If the robot is in a location and it cannot reach the recharging room this state is not executed because the robot could not physically enter in the rechargin location.
-At the end if the robot is already in the recharging location then the recharging state just recharges the robot and returns an execute action that allows the program know the robot can start again moving randonmly.
-The recharging method takes more or less 5 seconds to recharge the robot completely to 100% before let it go away again.
-The movement or the robot is performed thanks to the :mod:`planner` and the :mod:`controller` through a request to the servers by the clients used.
+This class represents the recharging state of the finite state machine. This state is executed every time the battery of the robot is low and the robot is located in the recharging room.
+In particular, if the robot is in a location and it can reach the recharging room then the FSM enters this state, brings the robot to the recharging room, and then recharges it.
+If the robot is in a location and it cannot reach the recharging room this state is not executed because the robot could not physically enter the recharging location.
+In the end, if the robot is already in the recharging location then the recharging state just recharges the robot and returns an executive action that allows the program to know the robot can start again moving randomly.
+The recharging method takes more or less 5 seconds to recharge the robot completely to 100% before letting it go away again.
+The movement of the robot is performed thanks to the :mod:`planner` and the :mod:`controller` through a request to the servers by the clients used.
 The location of the robot is checked by a query by the aRMOR client and its respective server.
 The clients are taken from the helper object initialized in the state.
 
@@ -21,7 +21,7 @@ Clients:
 	
 	:attr:`planner_client`: client from which it is taken the goal, which means the path just computed to be passed to the controller.
 	
-	:attr:`controller_client`: client that makes the request to the respective server to move the robot through the path from the starting to the end position.
+	:attr:`controller_client`: client that requests the respective server to move the robot through the path from the starting to the end position.
 """
 
 import sys
@@ -38,7 +38,7 @@ class Recharge(smach.State):
 	def __init__(self, helper):
 		"""
 		This function is used to initialize the Recharge state for the finite state machine.
-		It is used also the helper object imported from the Helper class to use the shared variables and the mutex.
+		It is used also as the helper object imported from the Helper class to use the shared variables and the mutex.
 		
 		Args:
 			helper(Helper): object that helps the sharing of information relating the shared variables and the mutex among the states of the machine
@@ -55,15 +55,15 @@ class Recharge(smach.State):
 		
 	def execute(self, userdata):
 		"""
-		Function that is executed every time the machine enters the state.
-		It is responsible of returning a state transitioning to change the state.
+		The function is executed every time the machine enters the state.
+		It is responsible for returning a state and transitioning to change the state.
 		It uses the mutex instantiated in the helper to manage the variable access.
 		
 		Args:
 			userdata: pointer to pass the data among the states of a State Machine
 			
 		Returns:
-			transition(String): string containing the label of the action performed and used to change state in the machine.
+			transition(String): string containing the label of the action performed and used to change the state in the machine.
 		"""
 		# function called when exiting from the node, it can be blacking
 		rospy.loginfo('Executing state ' + nm.RECHARGE + ' (users = %f)'%userdata.recharge_counter_in)
@@ -88,7 +88,7 @@ class Recharge(smach.State):
 			
 	def _check_rob_pos(self):
 		"""
-		Private function that checks the robot position with a query by the aRMOR client to the respective server.
+		A private function that checks the robot position with a query by the aRMOR client to the respective server.
 		
 		Args:
 			none
@@ -100,7 +100,7 @@ class Recharge(smach.State):
 
 	def _plan_and_go_to_recharge(self):
 		"""
-		Private function that is used to plan the path to the recharging location and move the robot to that position before recharging it.
+		A private function that is used to plan the path to the recharging location and move the robot to that position before recharging it.
 		
 		Args:
 			none
@@ -133,7 +133,7 @@ class Recharge(smach.State):
 
 	def _recharging_method(self):
 		"""
-		Private function that performs the recharging on the robot if and only if it is located in the recharging room.
+		A private function that performs the recharging on the robot if and only if it is located in the recharging room.
 		
 		Args:
 			none

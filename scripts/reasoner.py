@@ -13,18 +13,18 @@ The changes included are:
 * actual robot position in the environment built;
 * the choice of the next reachable location the robot will have to reach.
 
-All these are computed thanks to the use of the Helper object and few private functions.
+All these are computed thanks to the use of the Helper object and a few private functions.
 The important thing the reasoner has to take into account is the hierarchy among the locations that it has to choose among, in particular:
 
 * the robot should stay mainly in the corridors;
-* as soon as a room becomes urgent the robot has to visit it, if it is reachable by the actual robot position;
+* as soon as a room becomes urgent the robot has to visit it if it is reachable by the actual robot position;
 * the robot has to go to recharge itself in the proper recharging room as soon as the battery is low and the robot can reach that specific location.
 
-For this purpose the recharging room is set as the most urgent among the other as soon as the battery is low so that it has the priority for the robot as soon as it is reachable by it.
+For this purpose, the recharging room is set as the most urgent among the other as soon as the battery is low so that it has priority for the robot as soon as it is reachable by it.
 The client is taken from the helper object.
 
 Clients:
-	:attr:`client`: aRMOR client to make the query request to the respective server to take the infos from the actual situation of the robot and the location in the environment
+	:attr:`client`: aRMOR client to make the query request to the respective server to take the info from the actual situation of the robot and the location in the environment
 """
 
 import sys
@@ -40,7 +40,7 @@ class Reasoner(smach.State):
 	def __init__(self, helper):
 		"""
 		This function is used to initialize the Reasoner state for the finite state machine.
-		It is used also the helper object imported from the Helper class to use the shared variables and the mutex.
+		It is used also as the helper object imported from the Helper class to use the shared variables and the mutex.
 		
 		Args:
 			helper(Helper): object that helps the sharing of information relating the shared variables and the use of mutex among the states of the machine
@@ -58,15 +58,15 @@ class Reasoner(smach.State):
 		
 	def execute(self, userdata):
 		"""
-		Function that is executed every time the machine enters the state.
-		It is responsible of returning a state transitioning to change the state.
+		The function is executed every time the machine enters the state.
+		It is responsible for returning a state and transitioning to change the state.
 		It uses the mutex instantiated in the helper to manage the variable access.
 		
 		Args:
 			userdata: pointer to pass the data among the states of a State Machine
 			
 		Returns:
-			transition(String): string containing the label of the action performed and used to change state in the machine.
+			transition(String): string containing the label of the action performed and used to change the state in the machine.
 		"""
 		# function called when exiting from the node, it can be blacking
 		rospy.loginfo('Executing state ' + nm.REASONER + ' (users = %f)'%userdata.reasoner_counter_in)
@@ -92,14 +92,14 @@ class Reasoner(smach.State):
 
 	def _check_accessible_location(self):
 		"""
-		Private function that checks for the reachable locations of the robot when it is in a certain location.
-		Its main functionality is to return the list of reachable location that are needed: in particular it has to follow the hierarchy of the program:
+		The private function checks for the reachable locations of the robot when it is in a certain location.
+		Its main functionality is to return the list of reachable locations that are needed: in particular, it has to follow the hierarchy of the program:
 		
 		* urgent location (if any);
 		* corridors (if there are not any urgent and if there are any corridors reachable);
 		* general location (if none of the previous returned something)
 		
-		The choice is computed randomly among the list that are found and returned.
+		The choice is computed randomly among the list that is found and returned.
 		
 		Args:
 			none
@@ -128,7 +128,7 @@ class Reasoner(smach.State):
 			
 	def _check_recharge_location_available(self):
 		"""
-		Private funtion to check if the recharging room is available from the actual robot position.
+		Private function to check if the recharging room is available from the actual robot position.
 		This is a function used when the battery is low to see if the robot can directly move to the recharging room or has to move to another location before reaching it.
 		If it can reach then it is returned the name of the location otherwise an empty list.
 		
@@ -147,7 +147,7 @@ class Reasoner(smach.State):
 		"""
 		Private function to check if there are any corridors that can be reached by the robot from the actual position.
 		The group of all the corridors is taken by a query to the aRMOR server by the client.
-		However this list includes all the corridors in the ontology so they have to be sorted according to the locations reachable by the robot, which is the parameter passed to the function.
+		However, this list includes all the corridors in the ontology so they have to be sorted according to the locations reachable by the robot, which is the parameter passed to the function.
 		
 		Args:
 			_reachable_locations(List): list of all the reachable locations by the robot from its actual position
@@ -185,8 +185,8 @@ class Reasoner(smach.State):
 		
 	def _check_for_recharging_room(self, _reachable_locations):
 		"""
-		Private function to check the rechability of the recharging room from the actual position of the robot.
-		The list of all the reachable locations is passed as parameter and the function checks if the recharging room is present or not in the list.
+		Private function to check the reachability of the recharging room from the actual position of the robot.
+		The list of all the reachable locations is passed as a parameter and the function checks if the recharging room is present or not in the list.
 		If yes it returns the name of this location.
 		
 		Args:
@@ -202,7 +202,7 @@ class Reasoner(smach.State):
 	def _choose_destination(self, _locations):
 		"""
 		Private function to choose the actual location the robot has to reach.
-		The location is chosen randomly from a list of rechable locations passed to the function.
+		The location is chosen randomly from a list of reachable locations passed to the function.
 		
 		Args:
 			_locations(List): list of all the reachable locations by the robot from its actual position

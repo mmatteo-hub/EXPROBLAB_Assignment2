@@ -4,13 +4,19 @@
 
 bool markerCallback(EXPROBLAB_Assignment2::RoomInformation::Request &req, EXPROBLAB_Assignment2::RoomInformation::Response &res){
 /**
- * \file marker_server.cpp
- * \brief file to manage the client request. It implements the server that is responsible of giving the information about the environment given an integer, the aruco value detected.
- * \author
- * \date
- * 
- * \details
-**/
+ * \brief This function provides information about a room in a building based on an input ID.
+ *
+ * The function processes the request by looking at the value of req.id and setting the appropriate
+ * values in the response message. If the ID does not correspond to any known room, the function sets
+ * res.room to "no room associated with this marker id".
+ *
+ * \param
+ * 	req The request message containing the ID of the room
+ * 	res The response message to be filled with information about the room
+ *
+ * \return 
+ * 	True if the request was successful, false otherwise
+ */
 	EXPROBLAB_Assignment2::RoomConnection conn;
 	switch (req.id){
 	case 11:
@@ -98,6 +104,21 @@ bool markerCallback(EXPROBLAB_Assignment2::RoomInformation::Request &req, EXPROB
 
 int main(int argc, char **argv)
 {
+/**
+ * \brief The main function for the EXPROBLAB_Assignment2 ROS node.
+ *
+ * The function initializes the ROS node and creates a service server that listens for requests on the
+ * "/room_info" topic. When a request is received, the markerCallback function is called to process the
+ * request and provide a response. The function then enters a loop to keep the node running until it is
+ * shut down.
+ *
+ * \param
+ * 	argc The number of command line arguments
+ * 	argv The command line arguments
+ *
+ * \return 
+ * 	0 on success, non-zero on failure
+ */
 	ros::init(argc, argv, "EXPROBLAB_Assignment2");
 	ros::NodeHandle nh;
 	ros::ServiceServer oracle = nh.advertiseService( "/room_info",markerCallback);

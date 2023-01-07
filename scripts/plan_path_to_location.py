@@ -7,10 +7,10 @@
 
 .. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it
 
-This class is a state of the sub-state machine *move random*. This class has the aim to compute a plan of *n* points from the actual position of the robot to the target location given by the reasoner.
+This class is a state of the sub-state machine *move random*. This class aim to compute a plan of *n* points from the actual position of the robot to the target location given by the reasoner.
 The number of points is a parameter specified in the :mod:`name_mapper` file.
-The class call the :func:`plan_location` function from the helper object, previously initialized, which uses the :mod:`planner` server to compute the path.
-As soon as the server gives to the client the response with the result of the path the the sub-machine passes to the next state.
+The class calls the :func:`plan_location` function from the helper object, previously initialized, which uses the :mod:`planner` server to compute the path.
+As soon as the server gives the client the response with the result of the path the sub-machine passes to the next state.
 The client is taken from the helper object.
 
 Clients:
@@ -31,8 +31,8 @@ from EXPROBLAB_Assignment2 import name_mapper as nm
 class PlanPathToLocation(smach.State):
 	def __init__(self, helper):
 		"""
-		Function used to initialize the state of the sub-machine.
-		In this step there is also the declaration of all the outcomes that the state can have.
+		The function is used to initialize the state of the sub-machine.
+		In this step, there is also the declaration of all the outcomes that the state can have.
 		
 		Args:
 			helper(Helper): helper object that allows the user to use shared elements among the scripts.
@@ -49,8 +49,8 @@ class PlanPathToLocation(smach.State):
 		
 	def execute(self, userdata):
 		"""
-		Function that is executed every time the machine enters the state.
-		It is responsible of returning a state transitioning to change the state.
+		The function is executed every time the machine enters the state.
+		It is responsible for returning a state and transitioning to change the state.
 		It uses the mutex instantiated in the helper to manage the variable access.
 		
 		Args:
