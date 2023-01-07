@@ -62,7 +62,7 @@ todo_include_todos = True
 
 # -- Options for breathe
 breathe_projects = {
-	"detect_marker": "docs/_build/xml/"
+	"EXPROBLAB_Assignment2": "_build/xml/"
 }
-breathe_default_project = "detect_marker"
+breathe_default_project = "EXPROBLAB_Assignment2"
 breathe_default_members = ('members', 'undoc-members')

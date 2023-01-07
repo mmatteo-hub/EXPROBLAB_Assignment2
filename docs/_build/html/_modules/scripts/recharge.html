@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.recharge &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripts.html">scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.recharge</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.recharge</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: recahrge</span>
+<span class="sd">	:platform: ROS</span>
+<span class="sd">	:synopsis: Class for Recharge state of the finite state machine</span>
+
+<span class="sd">.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it</span>
+
+<span class="sd">This class represents the recharging state of the finite state machine. This state is executed every time the battery of the robot is low and the robot is located in the recharging room.</span>
+<span class="sd">In particular, if the robot is in a location and it can reach the recharging room then the FSM enters this state, brings the robot to the recharging room, and then recharges it.</span>
+<span class="sd">If the robot is in a location and it cannot reach the recharging room this state is not executed because the robot could not physically enter the recharging location.</span>
+<span class="sd">In the end, if the robot is already in the recharging location then the recharging state just recharges the robot and returns an executive action that allows the program to know the robot can start again moving randomly.</span>
+<span class="sd">The recharging method takes more or less 5 seconds to recharge the robot completely to 100% before letting it go away again.</span>
+<span class="sd">The movement of the robot is performed thanks to the :mod:`planner` and the :mod:`controller` through a request to the servers by the clients used.</span>
+<span class="sd">The location of the robot is checked by a query by the aRMOR client and its respective server.</span>
+<span class="sd">The clients are taken from the helper object initialized in the state.</span>
+
+<span class="sd">Clients:</span>
+<span class="sd">	:attr:`client`: aRMOR client used to update the timestamp of the robot and of the location the robot has just visited</span>
+<span class="sd">	</span>
+<span class="sd">	:attr:`planner_client`: client from which it is taken the goal, which means the path just computed to be passed to the controller.</span>
+<span class="sd">	</span>
+<span class="sd">	:attr:`controller_client`: client that requests the respective server to move the robot through the path from the starting to the end position.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">roslib</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">actionlib</span>
+<span class="kn">import</span> <span class="nn">smach</span>
+<span class="kn">import</span> <span class="nn">smach_ros</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2</span> <span class="kn">import</span> <span class="n">name_mapper</span> <span class="k">as</span> <span class="n">nm</span>
+
+<div class="viewcode-block" id="Recharge"><a class="viewcode-back" href="../../scripts.html#scripts.recharge.Recharge">[docs]</a><span class="k">class</span> <span class="nc">Recharge</span><span class="p">(</span><span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">helper</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		This function is used to initialize the Recharge state for the finite state machine.</span>
+<span class="sd">		It is used also as the helper object imported from the Helper class to use the shared variables and the mutex.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			helper(Helper): object that helps the sharing of information relating the shared variables and the mutex among the states of the machine</span>
+<span class="sd">		</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			none</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span> <span class="o">=</span> <span class="n">helper</span>
+		<span class="c1"># initialisation function, it should not wait</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+								<span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">],</span>
+								<span class="n">input_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;recharge_counter_in&#39;</span><span class="p">],</span>
+								<span class="n">output_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;recharge_counter_out&#39;</span><span class="p">])</span>
+		
+<div class="viewcode-block" id="Recharge.execute"><a class="viewcode-back" href="../../scripts.html#scripts.recharge.Recharge.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userdata</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The function is executed every time the machine enters the state.</span>
+<span class="sd">		It is responsible for returning a state and transitioning to change the state.</span>
+<span class="sd">		It uses the mutex instantiated in the helper to manage the variable access.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			userdata: pointer to pass the data among the states of a State Machine</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			transition(String): string containing the label of the action performed and used to change the state in the machine.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># function called when exiting from the node, it can be blacking</span>
+		<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s1">&#39;Executing state &#39;</span> <span class="o">+</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span> <span class="o">+</span> <span class="s1">&#39; (users = </span><span class="si">%f</span><span class="s1">)&#39;</span><span class="o">%</span><span class="n">userdata</span><span class="o">.</span><span class="n">recharge_counter_in</span><span class="p">)</span>
+		<span class="n">userdata</span><span class="o">.</span><span class="n">recharge_counter_out</span> <span class="o">=</span> <span class="n">userdata</span><span class="o">.</span><span class="n">recharge_counter_in</span> <span class="o">+</span> <span class="mi">1</span>
+				
+		<span class="c1"># send the plan goal and control goal to the respective action server to move the robot to the recharging location</span>
+		<span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_rob_pos</span><span class="p">()</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">:</span>
+					<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_recharging_method</span><span class="p">()</span>
+					<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">!=</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">planner_client</span><span class="o">.</span><span class="n">cancel_goal</span><span class="p">()</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_plan_and_go_to_recharge</span><span class="p">()</span>
+			<span class="k">finally</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+			<span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span></div>
+			
+<div class="viewcode-block" id="Recharge._check_rob_pos"><a class="viewcode-back" href="../../scripts.html#scripts.recharge.Recharge._check_rob_pos">[docs]</a>	<span class="k">def</span> <span class="nf">_check_rob_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		A private function that checks the robot position with a query by the aRMOR client to the respective server.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			none</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			_location(String): actual location of the robot</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">objectprop_b2_ind</span><span class="p">(</span><span class="s1">&#39;isIn&#39;</span><span class="p">,</span><span class="s1">&#39;Robot1&#39;</span><span class="p">),</span> <span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Recharge._plan_and_go_to_recharge"><a class="viewcode-back" href="../../scripts.html#scripts.recharge.Recharge._plan_and_go_to_recharge">[docs]</a>	<span class="k">def</span> <span class="nf">_plan_and_go_to_recharge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		A private function that is used to plan the path to the recharging location and move the robot to that position before recharging it.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			none</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			none</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">_goal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">plan_location</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">planner_client</span><span class="o">.</span><span class="n">send_goal</span><span class="p">(</span><span class="n">_goal</span><span class="p">)</span>
+		<span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Planning the path to the recharging room </span><span class="se">\033</span><span class="s1">[0;36;49m&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+		<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">))</span>
+		
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">planner_client</span><span class="o">.</span><span class="n">wait_for_result</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">controller_client</span><span class="o">.</span><span class="n">send_goal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">planner_client</span><span class="o">.</span><span class="n">get_result</span><span class="p">())</span>
+		
+		<span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Moving the robot to the recharging room </span><span class="se">\033</span><span class="s1">[0;36;49m&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+		<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">))</span>
+		
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">controller_client</span><span class="o">.</span><span class="n">wait_for_result</span><span class="p">()</span>
+		
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">old_loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span>
+		
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">manipulation</span><span class="o">.</span><span class="n">replace_objectprop_b2_ind</span><span class="p">(</span><span class="s1">&#39;isIn&#39;</span><span class="p">,</span> <span class="s1">&#39;Robot1&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">choice</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">old_loc</span><span class="p">))</span>
+		
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">update_timestamp</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">reason_changes</span><span class="p">()</span>
+		
+		<span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Robot in recharging room </span><span class="se">\033</span><span class="s1">[0;36;49m&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+		<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Recharge._recharging_method"><a class="viewcode-back" href="../../scripts.html#scripts.recharge.Recharge._recharging_method">[docs]</a>	<span class="k">def</span> <span class="nf">_recharging_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		A private function that performs the recharging on the robot if and only if it is located in the recharging room.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			none</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			none</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Robot in </span><span class="se">\033</span><span class="s1">[0;36;49m&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m is recharging&#39;</span>
+		<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">))</span>
+		
+		<span class="n">_battery</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="n">_battery</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+			<span class="c1"># print red battery</span>
+			<span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[</span><span class="se">\033</span><span class="s2">[1;31;49m&quot;</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_battery</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m] | Battery: </span><span class="se">\033</span><span class="s2">[1;31;49m&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m %&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+			<span class="c1"># print yellow battery</span>
+			<span class="k">elif</span> <span class="mi">20</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">70</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[</span><span class="se">\033</span><span class="s2">[1;33;49m&quot;</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_battery</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m] | Battery: </span><span class="se">\033</span><span class="s2">[1;33;49m&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m %&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+			<span class="c1"># print green battery</span>
+			<span class="k">elif</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">70</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[</span><span class="se">\033</span><span class="s2">[1;32;49m&quot;</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_battery</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m] | Battery: </span><span class="se">\033</span><span class="s2">[1;32;49m&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m %&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+			<span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+		
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">battery_timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span></div></div>
+		
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.8.17">
+  <compound refid="class_marker_detect_class" kind="class"><name>MarkerDetectClass</name>
+    <member refid="class_marker_detect_class_1aeb987d4db622bb858bb3fb6d14d19a79" kind="variable"><name>nh_</name></member>
+    <member refid="class_marker_detect_class_1a293dc7b5901bcb83dc04900c33254864" kind="variable"><name>joint_1_pose_pub</name></member>
+    <member refid="class_marker_detect_class_1a17824caa5283cce6db735c72bed1f022" kind="variable"><name>joint_2_pose_pub</name></member>
+    <member refid="class_marker_detect_class_1a6bc1efcda3479183af5f8baca3cb3ddd" kind="variable"><name>joint_3_pose_pub</name></member>
+    <member refid="class_marker_detect_class_1a012dcce2d65f4b4850f057079d8ed731" kind="variable"><name>joint_4_pose_pub</name></member>
+    <member refid="class_marker_detect_class_1a0e6a5db565fbf03a4d6065a219f6b765" kind="variable"><name>joint_5_pose_pub</name></member>
+    <member refid="class_marker_detect_class_1a0555c90752c90c421ab84ac5e6f40a65" kind="variable"><name>list_pub</name></member>
+    <member refid="class_marker_detect_class_1a6d99d5bcedb8f51d7265f7ff8e72cdcf" kind="variable"><name>cam_sub</name></member>
+    <member refid="class_marker_detect_class_1a11d05736c495824252a35c1f3536a724" kind="variable"><name>counter</name></member>
+    <member refid="class_marker_detect_class_1a51dc37068ddee72c9f731b9cc8f9c986" kind="function"><name>MarkerDetectClass</name></member>
+    <member refid="class_marker_detect_class_1a9ee2dc51223227082dcb04bef21c68ef" kind="function"><name>initializePublishers</name></member>
+    <member refid="class_marker_detect_class_1af39d273e475ffd5670c0983e53ad98d0" kind="function"><name>initializeSubscribers</name></member>
+    <member refid="class_marker_detect_class_1aa85c5f7bdbd52db414a39ecb7627268d" kind="function"><name>cb_cam</name></member>
+    <member refid="class_marker_detect_class_1a1fb9187ce94a1811419140d2057a9cea" kind="function"><name>_marker_find</name></member>
+  </compound>
+  <compound refid="detect__marker_8cpp" kind="file"><name>detect_marker.cpp</name>
+    <member refid="detect__marker_8cpp_1ae3b32ecec4590e38557f4c80e5ed58ed" kind="variable"><name>msg</name></member>
+    <member refid="detect__marker_8cpp_1a8c1acd69538a2dc82fcc94e9942be30e" kind="variable"><name>marker_list</name></member>
+    <member refid="detect__marker_8cpp_1a49c04bb816c28cda15baf215e0f13cee" kind="variable"><name>mDetector_</name></member>
+    <member refid="detect__marker_8cpp_1a0e3776f9f5d938830d69f7fe428d5c35" kind="variable"><name>markers_</name></member>
+    <member refid="detect__marker_8cpp_1a5c9bd70cbf4ee05efa17860dc5913a09" kind="variable"><name>camParam_</name></member>
+    <member refid="detect__marker_8cpp_1a46a054ab4fc737d95a4b5555d51a761c" kind="variable"><name>cv_ptr</name></member>
+    <member refid="detect__marker_8cpp_1a3061dec99ad9aff2b1b5dfedb9fa9d5d" kind="variable"><name>inImage_</name></member>
+    <member refid="detect__marker_8cpp_1a4a453f22d3fcb344a1ed28eac4e484a5" kind="variable"><name>marker_size_</name></member>
+    <member refid="detect__marker_8cpp_1a3c04138a5bfe5d72780bb7e82a18e627" kind="function"><name>main</name></member>
+  </compound>
+  <compound refid="detect__marker_8h" kind="file"><name>detect_marker.h</name>
+  </compound>
+  <compound refid="marker__server_8cpp" kind="file"><name>marker_server.cpp</name>
+    <member refid="marker__server_8cpp_1aa5e52cbe4af0297df6f76b2163a38206" kind="function"><name>markerCallback</name></member>
+    <member refid="marker__server_8cpp_1a3c04138a5bfe5d72780bb7e82a18e627" kind="function"><name>main</name></member>
+  </compound>
+  <compound refid="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir"><name>/root/ros_ws/src/EXPROBLAB_Assignment2/src</name>
+  </compound>
+</doxygenindex>

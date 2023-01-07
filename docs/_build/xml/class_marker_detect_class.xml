@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="class_marker_detect_class" kind="class" language="C++" prot="public">
+    <compoundname>MarkerDetectClass</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="class_marker_detect_class_1aeb987d4db622bb858bb3fb6d14d19a79" prot="public" static="no" mutable="no">
+        <type>ros::NodeHandle</type>
+        <definition>ros::NodeHandle MarkerDetectClass::nh_</definition>
+        <argsstring></argsstring>
+        <name>nh_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="18" column="21" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_marker_detect_class_1a293dc7b5901bcb83dc04900c33254864" prot="public" static="no" mutable="no">
+        <type>ros::Publisher</type>
+        <definition>ros::Publisher MarkerDetectClass::joint_1_pose_pub</definition>
+        <argsstring></argsstring>
+        <name>joint_1_pose_pub</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="20" column="20" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_marker_detect_class_1a17824caa5283cce6db735c72bed1f022" prot="public" static="no" mutable="no">
+        <type>ros::Publisher</type>
+        <definition>ros::Publisher MarkerDetectClass::joint_2_pose_pub</definition>
+        <argsstring></argsstring>
+        <name>joint_2_pose_pub</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="21" column="20" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_marker_detect_class_1a6bc1efcda3479183af5f8baca3cb3ddd" prot="public" static="no" mutable="no">
+        <type>ros::Publisher</type>
+        <definition>ros::Publisher MarkerDetectClass::joint_3_pose_pub</definition>
+        <argsstring></argsstring>
+        <name>joint_3_pose_pub</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="22" column="20" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_marker_detect_class_1a012dcce2d65f4b4850f057079d8ed731" prot="public" static="no" mutable="no">
+        <type>ros::Publisher</type>
+        <definition>ros::Publisher MarkerDetectClass::joint_4_pose_pub</definition>
+        <argsstring></argsstring>
+        <name>joint_4_pose_pub</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="23" column="20" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_marker_detect_class_1a0e6a5db565fbf03a4d6065a219f6b765" prot="public" static="no" mutable="no">
+        <type>ros::Publisher</type>
+        <definition>ros::Publisher MarkerDetectClass::joint_5_pose_pub</definition>
+        <argsstring></argsstring>
+        <name>joint_5_pose_pub</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="24" column="20" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_marker_detect_class_1a0555c90752c90c421ab84ac5e6f40a65" prot="public" static="no" mutable="no">
+        <type>ros::Publisher</type>
+        <definition>ros::Publisher MarkerDetectClass::list_pub</definition>
+        <argsstring></argsstring>
+        <name>list_pub</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="26" column="20" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_marker_detect_class_1a6d99d5bcedb8f51d7265f7ff8e72cdcf" prot="public" static="no" mutable="no">
+        <type>ros::Subscriber</type>
+        <definition>ros::Subscriber MarkerDetectClass::cam_sub</definition>
+        <argsstring></argsstring>
+        <name>cam_sub</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="28" column="21" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_marker_detect_class_1a11d05736c495824252a35c1f3536a724" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int MarkerDetectClass::counter</definition>
+        <argsstring></argsstring>
+        <name>counter</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="30" column="9" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_marker_detect_class_1a51dc37068ddee72c9f731b9cc8f9c986" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>MarkerDetectClass::MarkerDetectClass</definition>
+        <argsstring>(ros::NodeHandle *nodehandle)</argsstring>
+        <name>MarkerDetectClass</name>
+        <param>
+          <type>ros::NodeHandle *</type>
+          <declname>nodehandle</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Contructor of the <ref refid="class_marker_detect_class" kindref="compound">MarkerDetectClass</ref> <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>nodehandle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para></para>
+</simplesect>
+This is the constructor of the <ref refid="class_marker_detect_class" kindref="compound">MarkerDetectClass</ref>. It simply initializes publishers and subscribers that will be used in the code</para>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="16" column="5" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.cpp" bodystart="62" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="class_marker_detect_class_1a9ee2dc51223227082dcb04bef21c68ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MarkerDetectClass::initializePublishers</definition>
+        <argsstring>()</argsstring>
+        <name>initializePublishers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Method to initialize the publishers <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="32" column="10" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.cpp" bodystart="79" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="class_marker_detect_class_1af39d273e475ffd5670c0983e53ad98d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MarkerDetectClass::initializeSubscribers</definition>
+        <argsstring>()</argsstring>
+        <name>initializeSubscribers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Method to initialize the subscriber <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="33" column="10" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.cpp" bodystart="99" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="class_marker_detect_class_1aa85c5f7bdbd52db414a39ecb7627268d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MarkerDetectClass::cb_cam</definition>
+        <argsstring>(const sensor_msgs::Image::ConstPtr &amp;msg)</argsstring>
+        <name>cb_cam</name>
+        <param>
+          <type>const sensor_msgs::Image::ConstPtr &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Callback for the camera <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="35" column="10" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.cpp" bodystart="113" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="class_marker_detect_class_1a1fb9187ce94a1811419140d2057a9cea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MarkerDetectClass::_marker_find</definition>
+        <argsstring>()</argsstring>
+        <name>_marker_find</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Method to find the marker <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </inbodydescription>
+        <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="37" column="10" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.cpp" bodystart="147" bodyend="210"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" line="14" column="1" bodyfile="/root/ros_ws/src/EXPROBLAB_Assignment2/src/detect_marker.h" bodystart="13" bodyend="39"/>
+    <listofallmembers>
+      <member refid="class_marker_detect_class_1a1fb9187ce94a1811419140d2057a9cea" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>_marker_find</name></member>
+      <member refid="class_marker_detect_class_1a6d99d5bcedb8f51d7265f7ff8e72cdcf" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>cam_sub</name></member>
+      <member refid="class_marker_detect_class_1aa85c5f7bdbd52db414a39ecb7627268d" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>cb_cam</name></member>
+      <member refid="class_marker_detect_class_1a11d05736c495824252a35c1f3536a724" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>counter</name></member>
+      <member refid="class_marker_detect_class_1a9ee2dc51223227082dcb04bef21c68ef" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>initializePublishers</name></member>
+      <member refid="class_marker_detect_class_1af39d273e475ffd5670c0983e53ad98d0" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>initializeSubscribers</name></member>
+      <member refid="class_marker_detect_class_1a293dc7b5901bcb83dc04900c33254864" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>joint_1_pose_pub</name></member>
+      <member refid="class_marker_detect_class_1a17824caa5283cce6db735c72bed1f022" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>joint_2_pose_pub</name></member>
+      <member refid="class_marker_detect_class_1a6bc1efcda3479183af5f8baca3cb3ddd" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>joint_3_pose_pub</name></member>
+      <member refid="class_marker_detect_class_1a012dcce2d65f4b4850f057079d8ed731" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>joint_4_pose_pub</name></member>
+      <member refid="class_marker_detect_class_1a0e6a5db565fbf03a4d6065a219f6b765" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>joint_5_pose_pub</name></member>
+      <member refid="class_marker_detect_class_1a0555c90752c90c421ab84ac5e6f40a65" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>list_pub</name></member>
+      <member refid="class_marker_detect_class_1a51dc37068ddee72c9f731b9cc8f9c986" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>MarkerDetectClass</name></member>
+      <member refid="class_marker_detect_class_1aeb987d4db622bb858bb3fb6d14d19a79" prot="public" virt="non-virtual"><scope>MarkerDetectClass</scope><name>nh_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

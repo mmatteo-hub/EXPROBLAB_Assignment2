@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="src" href="src.html" />
+    <link rel="prev" title="Welcome to EXPROBLAB_Assignment2’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.helper">Helper Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scripts.helper.Helper"><code class="docutils literal notranslate"><span class="pre">Helper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.helper.Helper._location_old_timestamp"><code class="docutils literal notranslate"><span class="pre">Helper._location_old_timestamp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.helper.Helper._robot_pos"><code class="docutils literal notranslate"><span class="pre">Helper._robot_pos()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.helper.Helper._robot_timestamp_value"><code class="docutils literal notranslate"><span class="pre">Helper._robot_timestamp_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.helper.Helper._target_coordiantes"><code class="docutils literal notranslate"><span class="pre">Helper._target_coordiantes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.helper.Helper.check_battery"><code class="docutils literal notranslate"><span class="pre">Helper.check_battery()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.helper.Helper.format"><code class="docutils literal notranslate"><span class="pre">Helper.format()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.helper.Helper.listCallback"><code class="docutils literal notranslate"><span class="pre">Helper.listCallback()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.helper.Helper.plan_location"><code class="docutils literal notranslate"><span class="pre">Helper.plan_location()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.helper.Helper.reason_changes"><code class="docutils literal notranslate"><span class="pre">Helper.reason_changes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.helper.Helper.update_timestamp"><code class="docutils literal notranslate"><span class="pre">Helper.update_timestamp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.init_state">InitState Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scripts.init_state.InitState"><code class="docutils literal notranslate"><span class="pre">InitState</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.init_state.InitState._ontology_initialization"><code class="docutils literal notranslate"><span class="pre">InitState._ontology_initialization()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.init_state.InitState._server_request"><code class="docutils literal notranslate"><span class="pre">InitState._server_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.init_state.InitState.execute"><code class="docutils literal notranslate"><span class="pre">InitState.execute()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.fsm">FSM Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scripts.fsm.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.reasoner">Reasoner Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scripts.reasoner.Reasoner"><code class="docutils literal notranslate"><span class="pre">Reasoner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.reasoner.Reasoner._check_accessible_location"><code class="docutils literal notranslate"><span class="pre">Reasoner._check_accessible_location()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.reasoner.Reasoner._check_for_corridors"><code class="docutils literal notranslate"><span class="pre">Reasoner._check_for_corridors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.reasoner.Reasoner._check_for_recharging_room"><code class="docutils literal notranslate"><span class="pre">Reasoner._check_for_recharging_room()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.reasoner.Reasoner._check_for_urgent_locations"><code class="docutils literal notranslate"><span class="pre">Reasoner._check_for_urgent_locations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.reasoner.Reasoner._check_recharge_location_available"><code class="docutils literal notranslate"><span class="pre">Reasoner._check_recharge_location_available()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.reasoner.Reasoner._choose_destination"><code class="docutils literal notranslate"><span class="pre">Reasoner._choose_destination()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.reasoner.Reasoner.execute"><code class="docutils literal notranslate"><span class="pre">Reasoner.execute()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.recharge">Recharge Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scripts.recharge.Recharge"><code class="docutils literal notranslate"><span class="pre">Recharge</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.recharge.Recharge._check_rob_pos"><code class="docutils literal notranslate"><span class="pre">Recharge._check_rob_pos()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.recharge.Recharge._plan_and_go_to_recharge"><code class="docutils literal notranslate"><span class="pre">Recharge._plan_and_go_to_recharge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.recharge.Recharge._recharging_method"><code class="docutils literal notranslate"><span class="pre">Recharge._recharging_method()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.recharge.Recharge.execute"><code class="docutils literal notranslate"><span class="pre">Recharge.execute()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.plan_path_to_location">Plan Path To Location Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scripts.plan_path_to_location.PlanPathToLocation"><code class="docutils literal notranslate"><span class="pre">PlanPathToLocation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.plan_path_to_location.PlanPathToLocation.execute"><code class="docutils literal notranslate"><span class="pre">PlanPathToLocation.execute()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.go_to_location_to_visit">Go To Location To Visit Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scripts.go_to_location_to_visit.GoToLocationToVisit"><code class="docutils literal notranslate"><span class="pre">GoToLocationToVisit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.go_to_location_to_visit.GoToLocationToVisit.execute"><code class="docutils literal notranslate"><span class="pre">GoToLocationToVisit.execute()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.planner">Planner Server Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scripts.planner.PlaningAction"><code class="docutils literal notranslate"><span class="pre">PlaningAction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.planner.PlaningAction.execute_callback"><code class="docutils literal notranslate"><span class="pre">PlaningAction.execute_callback()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.controller">Controller Server Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scripts.controller.ControllingAction"><code class="docutils literal notranslate"><span class="pre">ControllingAction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.controller.ControllingAction.active_callback"><code class="docutils literal notranslate"><span class="pre">ControllingAction.active_callback()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.controller.ControllingAction.done_callback"><code class="docutils literal notranslate"><span class="pre">ControllingAction.done_callback()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.controller.ControllingAction.execute_callback"><code class="docutils literal notranslate"><span class="pre">ControllingAction.execute_callback()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.controller.ControllingAction.feedback_callback"><code class="docutils literal notranslate"><span class="pre">ControllingAction.feedback_callback()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scripts.controller.ControllingAction.move_to_goal"><code class="docutils literal notranslate"><span class="pre">ControllingAction.move_to_goal()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>scripts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/scripts.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="scripts">
+<h1>scripts<a class="headerlink" href="#scripts" title="Permalink to this heading"></a></h1>
+<div class="section" id="module-scripts.helper">
+<span id="helper-module"></span><h2>Helper Module<a class="headerlink" href="#module-scripts.helper" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-helper"></span><p>This class implements a helper member that can be used in the program it is included in to simplify the code.
+In particular, this helper provides all the actions clients used and needed to control the robot plus other functions used to retrieve information from the data and queries acquired.
+It is a way to avoid the use of many global variables that could lead to some problems in the code and it also allows easier re-use of the code.</p>
+<dl>
+<dt>Clients:</dt><dd><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">armor_client</span></code>: client to communicate with the aRMOR server. It provides the possibility to create, load, modify and save an ontology. Moreover, it is used to retrieve information about the robot’s position and its possibility to reach a particular location.</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">motion_planner</span></code>: client to communicate with the planner server. This client is used to give the server a start and a target position and the server provides a plan of points that the robot will have to follow.</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">motion_controller</span></code>: client to communicate with the controller server. The client is responsible for moving the robot, so it has to give the robot the planner client points and makes it follow them to reach the target position.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.helper.Helper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scripts.helper.</span></span><span class="sig-name descname"><span class="pre">Helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">done_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feedback_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="scripts.helper.Helper._location_old_timestamp">
+<span class="sig-name descname"><span class="pre">_location_old_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_location</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper._location_old_timestamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper._location_old_timestamp" title="Permalink to this definition"></a></dt>
+<dd><p>Function to retrieve the timestamp of the location.
+It is used the aRMOR server with a query and the timestamp is returned as output.
+The output represents the last time the location was visited by the robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_location</strong> (<em>String</em>) – name of the location the timestamp is required for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>timestamp of the location cast as a string</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_timestamp(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.helper.Helper._robot_pos">
+<span class="sig-name descname"><span class="pre">_robot_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper._robot_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper._robot_pos" title="Permalink to this definition"></a></dt>
+<dd><p>The private function checks and returns the actual robot position thanks to a query to the aRMOR server.
+The function returns a type Point with its x and y parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>actual position of the robot cast as a Point with x and y coordinates</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>position(Point)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.helper.Helper._robot_timestamp_value">
+<span class="sig-name descname"><span class="pre">_robot_timestamp_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper._robot_timestamp_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper._robot_timestamp_value" title="Permalink to this definition"></a></dt>
+<dd><p>Function to retrieve the timestamp of the robot.
+It is used the aRMOR server with a query and the timestamp is returned as output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>timestamp of the robot cast as a string</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_timestamp(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.helper.Helper._target_coordiantes">
+<span class="sig-name descname"><span class="pre">_target_coordiantes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_location</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper._target_coordiantes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper._target_coordiantes" title="Permalink to this definition"></a></dt>
+<dd><p>Function to retrieve the room coordinates (x and y) from its name.
+The function works with the help of the <a class="reference internal" href="utilities.html#module-name_mapper" title="name_mapper: Class for the Name Mapper module (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">name_mapper</span></code></a> file that stores both the name and the corresponding coordinates for each location in the ontology.
+In this file, there are two lists with a one-to-one correspondence between the name and the location of the coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_location</strong> (<em>String</em>) – string containing the name of the location</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>actual coordinates of the location cast as a Point (with x and y)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>coordinates(Point)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.helper.Helper.check_battery">
+<span class="sig-name descname"><span class="pre">check_battery</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper.check_battery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper.check_battery" title="Permalink to this definition"></a></dt>
+<dd><p>Function to check the threshold to rise the battery low process.
+This function checks the difference between the actual time and the last time the battery has been recharged and if it has passed too much time it changes the value of the shared variable.
+This change is read by the states of the finite state machine and so the SMACH machine can adapt its behavior to deal with this event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.helper.Helper.format">
+<span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oldlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper.format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper.format" title="Permalink to this definition"></a></dt>
+<dd><p>Function to format a list of strings.
+For all the elements in the list, it takes two characters, a start, and a finish. In each element i-th it is looked at these two characters and it is taken just the portion of the string between them.
+The return is a new list with the elements “cleaned” by not useful characters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>oldlist</strong> (<em>List</em>) – the list that has to be re-written in a better way</p></li>
+<li><p><strong>start</strong> (<em>Char</em>) – the start character for the list member cut</p></li>
+<li><p><strong>end</strong> (<em>Char</em>) – the end character for the list member cut</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the new list with all the elements written in a proper way</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>newList(List)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.helper.Helper.listCallback">
+<span class="sig-name descname"><span class="pre">listCallback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper.listCallback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper.listCallback" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.helper.Helper.plan_location">
+<span class="sig-name descname"><span class="pre">plan_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper.plan_location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper.plan_location" title="Permalink to this definition"></a></dt>
+<dd><p>It returns the client goal formatted as the start and target position.
+It uses some private methods to compute the actual robot position and the target goal for the robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>location</strong> (<em>String</em>) – location to which the robot has to arrive</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the goal is composed as two Points (start and target both with x and y coordinates)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>goal(PlanGoal)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.helper.Helper.reason_changes">
+<span class="sig-name descname"><span class="pre">reason_changes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper.reason_changes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper.reason_changes" title="Permalink to this definition"></a></dt>
+<dd><p>Function to apply the modifications to the ontology.
+It uses the aRMOR client to do this and it is called every time the program changes something related to the ontology entities (timestamps, robot position, etc …)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.helper.Helper.update_timestamp">
+<span class="sig-name descname"><span class="pre">update_timestamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/helper.html#Helper.update_timestamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.helper.Helper.update_timestamp" title="Permalink to this definition"></a></dt>
+<dd><p>Function to update the timestamp of an entity in the ontology.
+It replaced the timestamp of the robot with the actual time.
+This timestamp is then used to replace the location timestamp to set where the robot is at the actual time (the actual robot timestamp is now taken from the private method since it has just been updated)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.init_state">
+<span id="initstate-module"></span><h2>InitState Module<a class="headerlink" href="#module-scripts.init_state" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-init_state"></span><p>This class represents the initial state of the state machine. It is the first state the program is into and it is not executed any longer during its entire execution.
+It is responsible for instantiating a type helper to use the useful functions there provided. Then it uses a private function to start modifying the ontology given as a reference.
+It retrieves the parameters from the list passed through the helper and then it adds all the parameters to the locations, and doors so that the reasoner will be able to know which one communicates with.
+it has to wait until the list is not empty, which means that the previous node has finished the monitoring action and has published.
+It later sets that all the elements are different so that there cannot be ambiguities.
+At the end of this process, it also retrieves the actual time in the execution and it is added to the properties of the entities so that it can be modified later when necessary.
+The execution ends with a return that allows the main program to pass to the next state of the finite state machine.
+The steps are computed thanks to the use of the aRMOR client that provides a query to the respective server to modify and use the parameters.
+The client is taken from the helper object.</p>
+<dl class="simple">
+<dt>Clients:</dt><dd><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">client</span></code>: aRMOR client used from the helper entity to send a request to the respective server</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.init_state.InitState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scripts.init_state.</span></span><span class="sig-name descname"><span class="pre">InitState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">helper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/init_state.html#InitState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.init_state.InitState" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="scripts.init_state.InitState._ontology_initialization">
+<span class="sig-name descname"><span class="pre">_ontology_initialization</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/init_state.html#InitState._ontology_initialization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.init_state.InitState._ontology_initialization" title="Permalink to this definition"></a></dt>
+<dd><p>The function is used to store all the requests to the aRMOR server, through the client, to modify the ontology.
+In particular, it uses the information taken from the list stored in the array and it continues by adding entities and properties.
+It adds entities, it adds them properties, doors and it adds timestamp.
+When it ends it returns to the execute function and it changes state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.init_state.InitState._server_request">
+<span class="sig-name descname"><span class="pre">_server_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lst</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/init_state.html#InitState._server_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.init_state.InitState._server_request" title="Permalink to this definition"></a></dt>
+<dd><p>The function is used to send the request to the server to retrieve information from the ArUco ID detected.
+The function sends a request for each element of the list, connects it through the aRMOR by adding the doors and stores the name and the coordinates
+in two different lists with a one-to-to relationship between them
+Then it sets the initial position of the robot as the E room and it performs the disjoint function to distinguish all the entities and sets the timestamp
+for the first visit at the actual time for each room.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lst</strong> – list of all the markers ID detected</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.init_state.InitState.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/init_state.html#InitState.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.init_state.InitState.execute" title="Permalink to this definition"></a></dt>
+<dd><p>The function is executed every time the machine enters the state.
+It is responsible for returning a state and transitioning to change the state.
+It uses the mutex instantiated in the helper to manage the variable access.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>userdata</strong> – pointer to pass the data among the states of a State Machine</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string containing the label of the action performed and used to change the state in the machine.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>transition(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.fsm">
+<span id="fsm-module"></span><h2>FSM Module<a class="headerlink" href="#module-scripts.fsm" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-fsm"></span><p>This script is used to define the structure of the finite state machine. Here it is initialized with all its states and their respective transitions.
+For each state, it is defined how to behave for each transition received so that the machine cannot be stuck or have errors in the changes.
+At the beginning of the execution, it is also instantiated a helper entity that is passed to each state as a parameter to make it easier in some cases to use functions and shared variables. This entity is an attribute of the respective Class <a class="reference internal" href="#module-helper" title="helper: Class for help functions (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">helper</span></code></a>.
+However, the main role of the helper is the sharing of the mutex that is used to access the shared variables without having trouble doing it. The mutex used is of course just one to try to have a perfect synchronization among the state and the reading/writing processes.
+The finite state machine that has been created is composed of four main states: <code class="xref py py-mod docutils literal notranslate"><span class="pre">ìnit_state</span></code>, <a class="reference internal" href="#module-reasoner" title="reasoner: Class for Reason state of the finite state machine (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">reasoner</span></code></a>, <em>move randomly</em>, which is in fact a submachine, and <code class="xref py py-mod docutils literal notranslate"><span class="pre">recharge</span></code>.
+Of course, these states include many different tasks so the decision of using a sub-machine allows us to have a more modular code and a more reactive program since the execution cores of the states are not so long.
+The machine is divided as follows:</p>
+<ul class="simple">
+<li><p>initialization phase: responsible of initializing the ontology of the environment;</p></li>
+<li><p>reason state: responsible for reasoning all the changes that happened and computing the new location the robot has to visit (according to some statements);</p></li>
+<li><dl class="simple">
+<dt>move random state: divided into <a class="reference internal" href="#module-plan_path_to_location" title="plan_path_to_location: Class for the PlanPathToLocation state of the sub-finite state machine (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plan_path_to_location</span></code></a> and <a class="reference internal" href="#module-go_to_location_to_visit" title="go_to_location_to_visit: Class for the GoToLocationToVisit state of the sub-finite state machine (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">go_to_location_to_visit</span></code></a>:</dt><dd><ul>
+<li><p>The first is responsible for computing a path from the actual robot position to the target position computed by the reasoner;</p></li>
+<li><p>The second is responsible for moving the robot through the points of the path just computed.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>recharge state: it is responsible for recharging the robot battery. The robot can be recharged if and only if it is in the correct recharging room so there are some steps to make the robot arrive there before being recharged.</p></li>
+</ul>
+<dl class="simple">
+<dt>Servers:</dt><dd><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sis</span></code>: this is the name that the variable of the ROS server has in the program. It is necessary for the smach ROS state machine and it is responsible of the execution of each state and their transitions.</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.fsm.main">
+<span class="sig-prename descclassname"><span class="pre">scripts.fsm.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/fsm.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.fsm.main" title="Permalink to this definition"></a></dt>
+<dd><p>This function initializes the finite state machine node, called _smach_finite_state_machine_.
+It also creates the helper object to make it easier to access shared variables and use some functions.
+It is important to note that the SMACH machine needs the definition of all the outcomes needed to pass from one state to another: in this way, if the execution of one state returned a transition that is not included, the machine does not return an error or does not remain stuck because not knowing what to do.
+The machine includes also one sub-machine since we have four main states and one of them can be split into two others to have a more modular architecture.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.reasoner">
+<span id="reasoner-module"></span><h2>Reasoner Module<a class="headerlink" href="#module-scripts.reasoner" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-reasoner"></span><p>This class is used to reason the changes in the program execution.
+The changes included are:</p>
+<ul class="simple">
+<li><p>actual robot position in the environment built;</p></li>
+<li><p>the choice of the next reachable location the robot will have to reach.</p></li>
+</ul>
+<p>All these are computed thanks to the use of the Helper object and a few private functions.
+The important thing the reasoner has to take into account is the hierarchy among the locations that it has to choose among, in particular:</p>
+<ul class="simple">
+<li><p>the robot should stay mainly in the corridors;</p></li>
+<li><p>as soon as a room becomes urgent the robot has to visit it if it is reachable by the actual robot position;</p></li>
+<li><p>the robot has to go to recharge itself in the proper recharging room as soon as the battery is low and the robot can reach that specific location.</p></li>
+</ul>
+<p>For this purpose, the recharging room is set as the most urgent among the other as soon as the battery is low so that it has priority for the robot as soon as it is reachable by it.
+The client is taken from the helper object.</p>
+<dl class="simple">
+<dt>Clients:</dt><dd><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">client</span></code>: aRMOR client to make the query request to the respective server to take the info from the actual situation of the robot and the location in the environment</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.reasoner.Reasoner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scripts.reasoner.</span></span><span class="sig-name descname"><span class="pre">Reasoner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">helper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/reasoner.html#Reasoner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.reasoner.Reasoner" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="scripts.reasoner.Reasoner._check_accessible_location">
+<span class="sig-name descname"><span class="pre">_check_accessible_location</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/reasoner.html#Reasoner._check_accessible_location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.reasoner.Reasoner._check_accessible_location" title="Permalink to this definition"></a></dt>
+<dd><p>The private function checks for the reachable locations of the robot when it is in a certain location.
+Its main functionality is to return the list of reachable locations that are needed: in particular, it has to follow the hierarchy of the program:</p>
+<ul class="simple">
+<li><p>urgent location (if any);</p></li>
+<li><p>corridors (if there are not any urgent and if there are any corridors reachable);</p></li>
+<li><p>general location (if none of the previous returned something)</p></li>
+</ul>
+<p>The choice is computed randomly among the list that is found and returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of string representing the amount of reachable location that can visit accordin to the hierarchy.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>location(List)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.reasoner.Reasoner._check_for_corridors">
+<span class="sig-name descname"><span class="pre">_check_for_corridors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_reachable_locations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/reasoner.html#Reasoner._check_for_corridors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.reasoner.Reasoner._check_for_corridors" title="Permalink to this definition"></a></dt>
+<dd><p>Private function to check if there are any corridors that can be reached by the robot from the actual position.
+The group of all the corridors is taken by a query to the aRMOR server by the client.
+However, this list includes all the corridors in the ontology so they have to be sorted according to the locations reachable by the robot, which is the parameter passed to the function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_reachable_locations</strong> (<em>List</em>) – list of all the reachable locations by the robot from its actual position</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of all the reachable corridors by the robot from its actual position</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_reachable_corridors(List)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.reasoner.Reasoner._check_for_recharging_room">
+<span class="sig-name descname"><span class="pre">_check_for_recharging_room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_reachable_locations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/reasoner.html#Reasoner._check_for_recharging_room"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.reasoner.Reasoner._check_for_recharging_room" title="Permalink to this definition"></a></dt>
+<dd><p>Private function to check the reachability of the recharging room from the actual position of the robot.
+The list of all the reachable locations is passed as a parameter and the function checks if the recharging room is present or not in the list.
+If yes it returns the name of this location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_reachable_locations</strong> (<em>List</em>) – list of all the reachable locations by the robot from its actual position</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>name of the recharging room</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>recharging_room(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.reasoner.Reasoner._check_for_urgent_locations">
+<span class="sig-name descname"><span class="pre">_check_for_urgent_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_reachable_locations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/reasoner.html#Reasoner._check_for_urgent_locations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.reasoner.Reasoner._check_for_urgent_locations" title="Permalink to this definition"></a></dt>
+<dd><p>Private function to check if there are any urgent locations that can be reached by the robot from the actual position.
+The group of all the urgent locations is taken by a query to the aRMOR server by the client.
+However this list includes all the locations that are currently urgent in the ontology so they have to be sorted according to the locations reachable by the robot, which is the parameter passed to the function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_reachable_locations</strong> (<em>List</em>) – list of all the reachable locations by the robot from its actual position</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of all the urgent locations reachable by the robot from its actual position</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_reachable_urgent(List)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.reasoner.Reasoner._check_recharge_location_available">
+<span class="sig-name descname"><span class="pre">_check_recharge_location_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/reasoner.html#Reasoner._check_recharge_location_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.reasoner.Reasoner._check_recharge_location_available" title="Permalink to this definition"></a></dt>
+<dd><p>Private function to check if the recharging room is available from the actual robot position.
+This is a function used when the battery is low to see if the robot can directly move to the recharging room or has to move to another location before reaching it.
+If it can reach then it is returned the name of the location otherwise an empty list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>name of the recharging room</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>name(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.reasoner.Reasoner._choose_destination">
+<span class="sig-name descname"><span class="pre">_choose_destination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_locations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/reasoner.html#Reasoner._choose_destination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.reasoner.Reasoner._choose_destination" title="Permalink to this definition"></a></dt>
+<dd><p>Private function to choose the actual location the robot has to reach.
+The location is chosen randomly from a list of reachable locations passed to the function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_locations</strong> (<em>List</em>) – list of all the reachable locations by the robot from its actual position</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>name of the location the robot has to reach</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_choice(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.reasoner.Reasoner.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/reasoner.html#Reasoner.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.reasoner.Reasoner.execute" title="Permalink to this definition"></a></dt>
+<dd><p>The function is executed every time the machine enters the state.
+It is responsible for returning a state and transitioning to change the state.
+It uses the mutex instantiated in the helper to manage the variable access.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>userdata</strong> – pointer to pass the data among the states of a State Machine</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string containing the label of the action performed and used to change the state in the machine.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>transition(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.recharge">
+<span id="recharge-module"></span><h2>Recharge Module<a class="headerlink" href="#module-scripts.recharge" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-recahrge"></span><p>This class represents the recharging state of the finite state machine. This state is executed every time the battery of the robot is low and the robot is located in the recharging room.
+In particular, if the robot is in a location and it can reach the recharging room then the FSM enters this state, brings the robot to the recharging room, and then recharges it.
+If the robot is in a location and it cannot reach the recharging room this state is not executed because the robot could not physically enter the recharging location.
+In the end, if the robot is already in the recharging location then the recharging state just recharges the robot and returns an executive action that allows the program to know the robot can start again moving randomly.
+The recharging method takes more or less 5 seconds to recharge the robot completely to 100% before letting it go away again.
+The movement of the robot is performed thanks to the <a class="reference internal" href="#module-planner" title="planner: Class for the Planner server to compute the path (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">planner</span></code></a> and the <a class="reference internal" href="#module-controller" title="controller: Class for the Controller server to compute the path (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">controller</span></code></a> through a request to the servers by the clients used.
+The location of the robot is checked by a query by the aRMOR client and its respective server.
+The clients are taken from the helper object initialized in the state.</p>
+<dl>
+<dt>Clients:</dt><dd><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">client</span></code>: aRMOR client used to update the timestamp of the robot and of the location the robot has just visited</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">planner_client</span></code>: client from which it is taken the goal, which means the path just computed to be passed to the controller.</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">controller_client</span></code>: client that requests the respective server to move the robot through the path from the starting to the end position.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.recharge.Recharge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scripts.recharge.</span></span><span class="sig-name descname"><span class="pre">Recharge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">helper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/recharge.html#Recharge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.recharge.Recharge" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="scripts.recharge.Recharge._check_rob_pos">
+<span class="sig-name descname"><span class="pre">_check_rob_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/recharge.html#Recharge._check_rob_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.recharge.Recharge._check_rob_pos" title="Permalink to this definition"></a></dt>
+<dd><p>A private function that checks the robot position with a query by the aRMOR client to the respective server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>actual location of the robot</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_location(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.recharge.Recharge._plan_and_go_to_recharge">
+<span class="sig-name descname"><span class="pre">_plan_and_go_to_recharge</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/recharge.html#Recharge._plan_and_go_to_recharge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.recharge.Recharge._plan_and_go_to_recharge" title="Permalink to this definition"></a></dt>
+<dd><p>A private function that is used to plan the path to the recharging location and move the robot to that position before recharging it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.recharge.Recharge._recharging_method">
+<span class="sig-name descname"><span class="pre">_recharging_method</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/recharge.html#Recharge._recharging_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.recharge.Recharge._recharging_method" title="Permalink to this definition"></a></dt>
+<dd><p>A private function that performs the recharging on the robot if and only if it is located in the recharging room.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.recharge.Recharge.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/recharge.html#Recharge.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.recharge.Recharge.execute" title="Permalink to this definition"></a></dt>
+<dd><p>The function is executed every time the machine enters the state.
+It is responsible for returning a state and transitioning to change the state.
+It uses the mutex instantiated in the helper to manage the variable access.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>userdata</strong> – pointer to pass the data among the states of a State Machine</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string containing the label of the action performed and used to change the state in the machine.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>transition(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.plan_path_to_location">
+<span id="plan-path-to-location-module"></span><h2>Plan Path To Location Module<a class="headerlink" href="#module-scripts.plan_path_to_location" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-plan_path_to_location"></span><p>This class is a state of the sub-state machine <em>move random</em>. This class aim to compute a plan of <em>n</em> points from the actual position of the robot to the target location given by the reasoner.
+The number of points is a parameter specified in the <a class="reference internal" href="utilities.html#module-name_mapper" title="name_mapper: Class for the Name Mapper module (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">name_mapper</span></code></a> file.
+The class calls the <code class="xref py py-func docutils literal notranslate"><span class="pre">plan_location()</span></code> function from the helper object, previously initialized, which uses the <a class="reference internal" href="#module-planner" title="planner: Class for the Planner server to compute the path (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">planner</span></code></a> server to compute the path.
+As soon as the server gives the client the response with the result of the path the sub-machine passes to the next state.
+The client is taken from the helper object.</p>
+<dl class="simple">
+<dt>Clients:</dt><dd><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">planner_client</span></code>: client that makes the request to the respective server to take the path from the starting to the end position for the robot</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.plan_path_to_location.PlanPathToLocation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scripts.plan_path_to_location.</span></span><span class="sig-name descname"><span class="pre">PlanPathToLocation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">helper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/plan_path_to_location.html#PlanPathToLocation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.plan_path_to_location.PlanPathToLocation" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="scripts.plan_path_to_location.PlanPathToLocation.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/plan_path_to_location.html#PlanPathToLocation.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.plan_path_to_location.PlanPathToLocation.execute" title="Permalink to this definition"></a></dt>
+<dd><p>The function is executed every time the machine enters the state.
+It is responsible for returning a state and transitioning to change the state.
+It uses the mutex instantiated in the helper to manage the variable access.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>userdata</strong> – pointer to pass the data among the states of a State Machine</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string containing the label of the action performed and used to change state in the sub-machine.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>transition(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.go_to_location_to_visit">
+<span id="go-to-location-to-visit-module"></span><h2>Go To Location To Visit Module<a class="headerlink" href="#module-scripts.go_to_location_to_visit" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-go_to_location_to_visit"></span><p>This class is a state of the sub-state machine <em>move randomly</em>. This class has aim to move the robot through the path computed in the previous state.
+The path is taken from the <a class="reference internal" href="#module-planner" title="planner: Class for the Planner server to compute the path (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">planner</span></code></a> client by taking its result provided by the respective server and then it is passed to the <a class="reference internal" href="#module-controller" title="controller: Class for the Controller server to compute the path (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">controller</span></code></a> ones. This uses the <a class="reference internal" href="#module-controller" title="controller: Class for the Controller server to compute the path (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">controller</span></code></a> to make the robot move through the points of the path.
+This state is a little trivial since it is used both to move the robot from one location to another both to drive it to the recharging room when necessary and when possible.
+Due to this as soon as the robot has a location that has to reach, this location is reached, and then, depending on the variable shared by the Helper, it can be retrieved if the move was just a random movement or it was needed to reach a location from which check again the possibility to reach the recharging room.
+The clients are taken from the helper object.</p>
+<dl>
+<dt>Clients:</dt><dd><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">client</span></code>: aRMOR client used to update the timestamp of the robot and of the location the robot has just visited</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">planner_client</span></code>: client from which it is taken the goal, which means the path just computed to be passed to the controller.</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">controller_client</span></code>: client that makes the request to the respective server to move the robot through the path from the starting to the end position.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.go_to_location_to_visit.GoToLocationToVisit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scripts.go_to_location_to_visit.</span></span><span class="sig-name descname"><span class="pre">GoToLocationToVisit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">helper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/go_to_location_to_visit.html#GoToLocationToVisit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.go_to_location_to_visit.GoToLocationToVisit" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="scripts.go_to_location_to_visit.GoToLocationToVisit.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/go_to_location_to_visit.html#GoToLocationToVisit.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.go_to_location_to_visit.GoToLocationToVisit.execute" title="Permalink to this definition"></a></dt>
+<dd><p>The function is executed every time the machine enters the state.
+It is responsible for returning a state and transitioning to change the state.
+It uses the mutex instantiated in the helper to manage the variable access.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>userdata</strong> – pointer to pass the data among the states of a State Machine</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string containing the label of the action performed and used to change the state in the sub-machine and return to the upper one.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>transition(String)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.planner">
+<span id="planner-server-module"></span><h2>Planner Server Module<a class="headerlink" href="#module-scripts.planner" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-planner"></span><p>This class is the server used by the FSM to compute the path for the robot from a starting position to a target one.
+Each position in the environment used is associated with a point coordinate [float x, float y] according to the list in the <a class="reference internal" href="utilities.html#module-name_mapper" title="name_mapper: Class for the Name Mapper module (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">name_mapper</span></code></a> file.
+The plan is computed as a linear space on ‘n’ points between the two coordinates (the number of points is set in the same file as before).
+The server computes the path and then publishes the result. In case the process is interrupted due to some signals (a battery low for example), then it returns nothing because of the preemption.</p>
+<dl class="simple">
+<dt>Servers:</dt><dd><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">motion/planner</span></code>: server used to plan the path between the two positions passed as goal input to the server.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.planner.PlaningAction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scripts.planner.</span></span><span class="sig-name descname"><span class="pre">PlaningAction</span></span><a class="reference internal" href="_modules/scripts/planner.html#PlaningAction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.planner.PlaningAction" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="scripts.planner.PlaningAction.execute_callback">
+<span class="sig-name descname"><span class="pre">execute_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">goal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/planner.html#PlaningAction.execute_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.planner.PlaningAction.execute_callback" title="Permalink to this definition"></a></dt>
+<dd><p>The function is executed every time the machine needs to compute a plan from two locations.
+The callback is invoked when a client set a goal to the <a class="reference internal" href="#module-planner" title="planner: Class for the Planner server to compute the path (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">planner</span></code></a> server.
+This function will return a list of points (the plan) where the first point is the current robot position (passed as goal.start parameter), while the last point is the <em>target</em> position (passed as <code class="xref py py-attr docutils literal notranslate"><span class="pre">goal.target</span></code> parameter).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.controller">
+<span id="controller-server-module"></span><h2>Controller Server Module<a class="headerlink" href="#module-scripts.controller" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-controller"></span><p>This class is the server used by the FSM to simulate the movement of the robot from a starting position to a target one.
+The path to follow is passed by the client. The controller starts as soon as the planner ends computing the path.
+The server simulates the movement of the robot and then publishes the result. In case the process is interrupted due to some signals (a battery low for example), then it returns nothing because of the preemption.</p>
+<dl class="simple">
+<dt>Servers:</dt><dd><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">motion/controller</span></code>: server used to simulate the movement of the robot.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.controller.ControllingAction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scripts.controller.</span></span><span class="sig-name descname"><span class="pre">ControllingAction</span></span><a class="reference internal" href="_modules/scripts/controller.html#ControllingAction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.controller.ControllingAction" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="scripts.controller.ControllingAction.active_callback">
+<span class="sig-name descname"><span class="pre">active_callback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/controller.html#ControllingAction.active_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.controller.ControllingAction.active_callback" title="Permalink to this definition"></a></dt>
+<dd><p>The function that is executed when the communication starts.
+It simply increments a goal counter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.controller.ControllingAction.done_callback">
+<span class="sig-name descname"><span class="pre">done_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/controller.html#ControllingAction.done_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.controller.ControllingAction.done_callback" title="Permalink to this definition"></a></dt>
+<dd><p>The function is executed when the communication ends.
+It checks the status of the action client and it prints a message relating to the status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>status</strong> – actual status of the action server</p></li>
+<li><p><strong>result</strong> – result to return</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.controller.ControllingAction.execute_callback">
+<span class="sig-name descname"><span class="pre">execute_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">goal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/controller.html#ControllingAction.execute_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.controller.ControllingAction.execute_callback" title="Permalink to this definition"></a></dt>
+<dd><p>The function is executed every time the machine needs to simulate the movement of the robot between two locations.
+The callback is invoked when a client sets a goal to the <a class="reference internal" href="#module-controller" title="controller: Class for the Controller server to compute the path (ROS)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">controller</span></code></a> server.
+This function requires a list of via points (the plan), and it simulates a movement through each point with a fixed delay.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.controller.ControllingAction.feedback_callback">
+<span class="sig-name descname"><span class="pre">feedback_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feedback</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/controller.html#ControllingAction.feedback_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.controller.ControllingAction.feedback_callback" title="Permalink to this definition"></a></dt>
+<dd><p>The function that is executed when a feedback is received.
+It simply increments a feedback counter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>feedback</strong> – feedack of the action server</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.controller.ControllingAction.move_to_goal">
+<span class="sig-name descname"><span class="pre">move_to_goal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/controller.html#ControllingAction.move_to_goal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.controller.ControllingAction.move_to_goal" title="Permalink to this definition"></a></dt>
+<dd><p>Function to move the robot to a specific goal set by the planner.
+The function takes the x and y coordinates of the goal and publishes through an action client to the server the coordinates the robot has to reach</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – x coordinate of the goal</p></li>
+<li><p><strong>y</strong> – y coordinate of the goal</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to EXPROBLAB_Assignment2’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="src.html" class="btn btn-neutral float-right" title="src" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
