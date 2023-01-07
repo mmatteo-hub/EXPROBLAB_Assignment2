@@ -18,8 +18,6 @@ It is divided as follows:
     * busy paramter: value to define the busy waiting that the robot has to perform before starting the plan to another location;
     * number of points: value that define the number of points the planner module has to compute for each path required;
     * recharging room: string name of the recharging room. It is needed in particular when the robot has to check the availability of this particualr location when it has to go to the recharge state.
-* rooms: name of all locations in the ontology;
-* coordinates: x and y coordinate of each location. Here it is needed a  match one to one with the names above.
 
 """
 
@@ -59,20 +57,13 @@ NODE_ROBOT_STATE = 'robot-state'
 
 ##########
 # Parameter for the battery threshold (when it gets low) in seconds
-BATTERY_THRESHOLD = 1200 #[s]
+BATTERY_THRESHOLD = 1800 #[s]
 # Parameter to simulate the busy waiting of the robot in a specific location (in seconds)
 BUSY_PARAMETER = 5 #[s]
 # Parameter to know the number of points needed in the path
 NUMBER_OF_POINTS_PATH = 10
 # Parameter to indicate the name of the recharging room
 RECHARGING_ROOM = 'E'
-
-##########
-# List of all the locations in the onotlogy
-ROOMS = ['E', 'C1', 'C2', 'R1', 'R2', 'R3', 'R4']
-# List of all the coordinates of the locations in the ontology
-# IMPORTANT: Follow a one to one relation between the name and the coordinates
-COORDINATES = [[0.0,0.0], [2.0,0.0], [3.0,0.0], [1.0,0.0], [1.0,1.0], [4.0,0.0], [4.0,1.0]]
 
 # Function used to label each log with a producer tag.
 def tag_log(msg, producer_tag):
