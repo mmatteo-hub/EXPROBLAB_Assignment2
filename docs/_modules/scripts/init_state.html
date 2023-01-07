@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.init_state &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripts.html">scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.init_state</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.init_state</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: init_state</span>
+<span class="sd">	:platform: ROS</span>
+<span class="sd">	:synopsis: Class for the InitState state of the finite state machine</span>
+
+<span class="sd">.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it</span>
+
+<span class="sd">This class represents the initial state of the state machine. It is the first state the program is into and it is not executed any longer during its entire execution.</span>
+<span class="sd">It is responsible for instantiating a type helper to use the useful functions there provided. Then it uses a private function to start modifying the ontology given as a reference.</span>
+<span class="sd">It retrieves the parameters from the list passed through the helper and then it adds all the parameters to the locations, and doors so that the reasoner will be able to know which one communicates with.</span>
+<span class="sd">it has to wait until the list is not empty, which means that the previous node has finished the monitoring action and has published.</span>
+<span class="sd">It later sets that all the elements are different so that there cannot be ambiguities.</span>
+<span class="sd">At the end of this process, it also retrieves the actual time in the execution and it is added to the properties of the entities so that it can be modified later when necessary.</span>
+<span class="sd">The execution ends with a return that allows the main program to pass to the next state of the finite state machine.</span>
+<span class="sd">The steps are computed thanks to the use of the aRMOR client that provides a query to the respective server to modify and use the parameters.</span>
+<span class="sd">The client is taken from the helper object.</span>
+
+<span class="sd">Clients:</span>
+<span class="sd">	:attr:`client`: aRMOR client used from the helper entity to send a request to the respective server</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">roslib</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">actionlib</span>
+<span class="kn">import</span> <span class="nn">smach</span>
+<span class="kn">import</span> <span class="nn">smach_ros</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">realpath</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2</span> <span class="kn">import</span> <span class="n">name_mapper</span> <span class="k">as</span> <span class="n">nm</span>
+
+<span class="kn">from</span> <span class="nn">armor_api.armor_client</span> <span class="kn">import</span> <span class="n">ArmorClient</span>
+
+<div class="viewcode-block" id="InitState"><a class="viewcode-back" href="../../scripts.html#scripts.init_state.InitState">[docs]</a><span class="k">class</span> <span class="nc">InitState</span><span class="p">(</span><span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">helper</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The function is used to initialize the state of the machine.</span>
+<span class="sd">		In this step, there is also the declaration of all the outcomes that the state can have.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			helper(Helper): helper object that allows the user to use shared elements among the scripts.</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			none</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span> <span class="o">=</span> <span class="n">helper</span>
+		<span class="c1"># initialisation function, it should not wait</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+								<span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">],</span>
+								<span class="n">input_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;init_state_counter_in&#39;</span><span class="p">],</span>
+								<span class="n">output_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;init_state_counter_out&#39;</span><span class="p">])</span>
+								
+<div class="viewcode-block" id="InitState.execute"><a class="viewcode-back" href="../../scripts.html#scripts.init_state.InitState.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userdata</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The function is executed every time the machine enters the state.</span>
+<span class="sd">		It is responsible for returning a state and transitioning to change the state.</span>
+<span class="sd">		It uses the mutex instantiated in the helper to manage the variable access.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			userdata: pointer to pass the data among the states of a State Machine</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			transition(String): string containing the label of the action performed and used to change the state in the machine.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># function called when exiting from the node, it can be blacking</span>
+		<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s1">&#39;Executing state &#39;</span> <span class="o">+</span> <span class="n">nm</span><span class="o">.</span><span class="n">INIT_STATE</span> <span class="o">+</span> <span class="s1">&#39; (users = </span><span class="si">%f</span><span class="s1">)&#39;</span><span class="o">%</span><span class="n">userdata</span><span class="o">.</span><span class="n">init_state_counter_in</span><span class="p">)</span>
+		<span class="n">userdata</span><span class="o">.</span><span class="n">init_state_counter_out</span> <span class="o">=</span> <span class="n">userdata</span><span class="o">.</span><span class="n">init_state_counter_in</span> <span class="o">+</span> <span class="mi">1</span>
+		<span class="c1"># initialize the battery timestamp with the current time value</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">battery_timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+		
+		<span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_ontology_initialization</span><span class="p">()</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span>
+				<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span>
+			<span class="k">finally</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+			<span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span></div>
+			
+<div class="viewcode-block" id="InitState._ontology_initialization"><a class="viewcode-back" href="../../scripts.html#scripts.init_state.InitState._ontology_initialization">[docs]</a>	<span class="k">def</span> <span class="nf">_ontology_initialization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The function is used to store all the requests to the aRMOR server, through the client, to modify the ontology.</span>
+<span class="sd">		In particular, it uses the information taken from the list stored in the array and it continues by adding entities and properties.</span>
+<span class="sd">		It adds entities, it adds them properties, doors and it adds timestamp.</span>
+<span class="sd">		When it ends it returns to the execute function and it changes state.</span>
+<span class="sd">				</span>
+<span class="sd">		Args:</span>
+<span class="sd">			none</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			none</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">path</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+		<span class="n">path</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/../topology/&quot;</span>
+
+		<span class="c1"># open ontology</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">load_ref_from_file</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;topological_map.owl&quot;</span><span class="p">,</span> <span class="s2">&quot;http://bnc/exp-rob-lab/2022-23&quot;</span><span class="p">,</span>
+										<span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;PELLET&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">mount_on_ref</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">set_log_to_terminal</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+		<span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">markerArr</span><span class="p">:</span> <span class="c1"># waiting for the .cpp node to publish the marker list</span>
+			<span class="k">pass</span>
+
+		<span class="c1"># method to build the ontology</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_server_request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">markerArr</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="InitState._server_request"><a class="viewcode-back" href="../../scripts.html#scripts.init_state.InitState._server_request">[docs]</a>	<span class="k">def</span> <span class="nf">_server_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lst</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The function is used to send the request to the server to retrieve information from the ArUco ID detected.</span>
+<span class="sd">		The function sends a request for each element of the list, connects it through the aRMOR by adding the doors and stores the name and the coordinates</span>
+<span class="sd">		in two different lists with a one-to-to relationship between them</span>
+<span class="sd">		Then it sets the initial position of the robot as the E room and it performs the disjoint function to distinguish all the entities and sets the timestamp</span>
+<span class="sd">		for the first visit at the actual time for each room.</span>
+<span class="sd">				</span>
+<span class="sd">		Args:</span>
+<span class="sd">			lst: list of all the markers ID detected</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			none</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+			<span class="n">_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">marker_client</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">_res</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+				<span class="c1"># add door to the ontology</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">manipulation</span><span class="o">.</span><span class="n">add_objectprop_to_ind</span><span class="p">(</span><span class="s1">&#39;hasDoor&#39;</span><span class="p">,</span> <span class="n">_res</span><span class="o">.</span><span class="n">room</span><span class="p">,</span> <span class="n">el</span><span class="o">.</span><span class="n">through_door</span><span class="p">)</span>
+				<span class="c1"># add room and door if they are not already present</span>
+				<span class="k">if</span> <span class="n">_res</span><span class="o">.</span><span class="n">room</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">rooms</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">rooms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_res</span><span class="o">.</span><span class="n">room</span><span class="p">)</span>
+					<span class="n">_coord_x_y</span> <span class="o">=</span> <span class="p">[]</span>
+					<span class="n">_coord_x_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_res</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+					<span class="n">_coord_x_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_res</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">rooms_coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_coord_x_y</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">el</span><span class="o">.</span><span class="n">through_door</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">doors</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">doors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="o">.</span><span class="n">through_door</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">manipulation</span><span class="o">.</span><span class="n">add_objectprop_to_ind</span><span class="p">(</span><span class="s1">&#39;isIn&#39;</span><span class="p">,</span> <span class="s1">&#39;Robot1&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">)</span>
+
+		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TOT: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">rooms</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">doors</span><span class="p">))</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;DISJOINT&#39;</span><span class="p">,</span> <span class="s1">&#39;IND&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">rooms</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">doors</span><span class="p">)</span>
+
+		<span class="c1"># take the current time</span>
+		<span class="n">_actual_time</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+		<span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">rooms</span><span class="p">:</span>
+			<span class="c1"># add the timestamp</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">manipulation</span><span class="o">.</span><span class="n">add_dataprop_to_ind</span><span class="p">(</span><span class="s1">&#39;visitedAt&#39;</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="s1">&#39;Long&#39;</span><span class="p">,</span> <span class="n">_actual_time</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

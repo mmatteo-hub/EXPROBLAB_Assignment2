@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.reasoner &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripts.html">scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.reasoner</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.reasoner</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: reasoner</span>
+<span class="sd">	:platform: ROS</span>
+<span class="sd">	:synopsis: Class for Reason state of the finite state machine</span>
+<span class="sd">	</span>
+<span class="sd">.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it</span>
+
+<span class="sd">This class is used to reason the changes in the program execution.</span>
+<span class="sd">The changes included are:</span>
+
+<span class="sd">* actual robot position in the environment built;</span>
+<span class="sd">* the choice of the next reachable location the robot will have to reach.</span>
+
+<span class="sd">All these are computed thanks to the use of the Helper object and a few private functions.</span>
+<span class="sd">The important thing the reasoner has to take into account is the hierarchy among the locations that it has to choose among, in particular:</span>
+
+<span class="sd">* the robot should stay mainly in the corridors;</span>
+<span class="sd">* as soon as a room becomes urgent the robot has to visit it if it is reachable by the actual robot position;</span>
+<span class="sd">* the robot has to go to recharge itself in the proper recharging room as soon as the battery is low and the robot can reach that specific location.</span>
+
+<span class="sd">For this purpose, the recharging room is set as the most urgent among the other as soon as the battery is low so that it has priority for the robot as soon as it is reachable by it.</span>
+<span class="sd">The client is taken from the helper object.</span>
+
+<span class="sd">Clients:</span>
+<span class="sd">	:attr:`client`: aRMOR client to make the query request to the respective server to take the info from the actual situation of the robot and the location in the environment</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">roslib</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">actionlib</span>
+<span class="kn">import</span> <span class="nn">smach</span>
+<span class="kn">import</span> <span class="nn">smach_ros</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2</span> <span class="kn">import</span> <span class="n">name_mapper</span> <span class="k">as</span> <span class="n">nm</span>
+
+<div class="viewcode-block" id="Reasoner"><a class="viewcode-back" href="../../scripts.html#scripts.reasoner.Reasoner">[docs]</a><span class="k">class</span> <span class="nc">Reasoner</span><span class="p">(</span><span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">helper</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		This function is used to initialize the Reasoner state for the finite state machine.</span>
+<span class="sd">		It is used also as the helper object imported from the Helper class to use the shared variables and the mutex.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			helper(Helper): object that helps the sharing of information relating the shared variables and the use of mutex among the states of the machine</span>
+<span class="sd">		</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			none</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span> <span class="o">=</span> <span class="n">helper</span>
+				
+		<span class="c1"># initialisation function, it should not wait</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+								<span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">],</span>
+								<span class="n">input_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;reasoner_counter_in&#39;</span><span class="p">],</span>
+								<span class="n">output_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;reasoner_counter_out&#39;</span><span class="p">])</span>
+		
+<div class="viewcode-block" id="Reasoner.execute"><a class="viewcode-back" href="../../scripts.html#scripts.reasoner.Reasoner.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userdata</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The function is executed every time the machine enters the state.</span>
+<span class="sd">		It is responsible for returning a state and transitioning to change the state.</span>
+<span class="sd">		It uses the mutex instantiated in the helper to manage the variable access.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			userdata: pointer to pass the data among the states of a State Machine</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			transition(String): string containing the label of the action performed and used to change the state in the machine.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># function called when exiting from the node, it can be blacking</span>
+		<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s1">&#39;Executing state &#39;</span> <span class="o">+</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span> <span class="o">+</span> <span class="s1">&#39; (users = </span><span class="si">%f</span><span class="s1">)&#39;</span><span class="o">%</span><span class="n">userdata</span><span class="o">.</span><span class="n">reasoner_counter_in</span><span class="p">)</span>
+		<span class="n">userdata</span><span class="o">.</span><span class="n">reasoner_counter_out</span> <span class="o">=</span> <span class="n">userdata</span><span class="o">.</span><span class="n">reasoner_counter_in</span> <span class="o">+</span> <span class="mi">1</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">reason_changes</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">check_battery</span><span class="p">()</span>
+		<span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">choice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_recharge_location_available</span><span class="p">()</span>
+					<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">choice</span> <span class="o">!=</span> <span class="p">[]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">objectprop_b2_ind</span><span class="p">(</span><span class="s1">&#39;isIn&#39;</span><span class="p">,</span><span class="s1">&#39;Robot1&#39;</span><span class="p">),</span> <span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span><span class="p">:</span>
+						<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span>
+					<span class="k">else</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_CHECK</span>
+						
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_CHECK</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">choice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_accessible_location</span><span class="p">()</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">old_loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">objectprop_b2_ind</span><span class="p">(</span><span class="s1">&#39;isIn&#39;</span><span class="p">,</span><span class="s1">&#39;Robot1&#39;</span><span class="p">),</span> <span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+					<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span>
+			<span class="k">finally</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+			<span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Reasoner._check_accessible_location"><a class="viewcode-back" href="../../scripts.html#scripts.reasoner.Reasoner._check_accessible_location">[docs]</a>	<span class="k">def</span> <span class="nf">_check_accessible_location</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The private function checks for the reachable locations of the robot when it is in a certain location.</span>
+<span class="sd">		Its main functionality is to return the list of reachable locations that are needed: in particular, it has to follow the hierarchy of the program:</span>
+<span class="sd">		</span>
+<span class="sd">		* urgent location (if any);</span>
+<span class="sd">		* corridors (if there are not any urgent and if there are any corridors reachable);</span>
+<span class="sd">		* general location (if none of the previous returned something)</span>
+<span class="sd">		</span>
+<span class="sd">		The choice is computed randomly among the list that is found and returned.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			none</span>
+<span class="sd">		</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			location(List): a list of string representing the amount of reachable location that can visit accordin to the hierarchy.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># query to find the entire group of total locations reachable</span>
+		<span class="n">_reachable_locations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">objectprop_b2_ind</span><span class="p">(</span><span class="s1">&#39;canReach&#39;</span><span class="p">,</span><span class="s1">&#39;Robot1&#39;</span><span class="p">),</span> <span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;REACHABLE &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">_reachable_locations</span><span class="p">))</span>
+		<span class="c1"># function to return only the corridors reachable</span>
+		<span class="n">_reachable_corridors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_for_corridors</span><span class="p">(</span><span class="n">_reachable_locations</span><span class="p">)</span>
+		<span class="c1"># function to return only the urgent locations reachable</span>
+		<span class="n">_reachable_urgent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_for_urgent_locations</span><span class="p">(</span><span class="n">_reachable_locations</span><span class="p">)</span>
+		
+		<span class="c1"># return to switch among the different lists to return the most prioritized one</span>
+		<span class="k">if</span> <span class="n">_reachable_urgent</span> <span class="o">!=</span> <span class="p">[]:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_choose_destination</span><span class="p">(</span><span class="n">_reachable_urgent</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="n">_reachable_corridors</span> <span class="o">!=</span> <span class="p">[]:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_choose_destination</span><span class="p">(</span><span class="n">_reachable_corridors</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="n">_reachable_locations</span> <span class="o">!=</span> <span class="p">[]:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_choose_destination</span><span class="p">(</span><span class="n">_reachable_locations</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;No locations reachable from </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">choice</span><span class="p">)</span><span class="si">}</span><span class="s1"> &#39;</span>
+			<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span><span class="p">))</span></div>
+			
+<div class="viewcode-block" id="Reasoner._check_recharge_location_available"><a class="viewcode-back" href="../../scripts.html#scripts.reasoner.Reasoner._check_recharge_location_available">[docs]</a>	<span class="k">def</span> <span class="nf">_check_recharge_location_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Private function to check if the recharging room is available from the actual robot position.</span>
+<span class="sd">		This is a function used when the battery is low to see if the robot can directly move to the recharging room or has to move to another location before reaching it.</span>
+<span class="sd">		If it can reach then it is returned the name of the location otherwise an empty list.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			none</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			name(String): name of the recharging room</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">_reachable_E_room</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_for_recharging_room</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">objectprop_b2_ind</span><span class="p">(</span><span class="s1">&#39;canReach&#39;</span><span class="p">,</span><span class="s1">&#39;Robot1&#39;</span><span class="p">),</span> <span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">))</span>
+		<span class="k">if</span> <span class="n">_reachable_E_room</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span>
+		<span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="p">[]</span></div>
+			
+<div class="viewcode-block" id="Reasoner._check_for_corridors"><a class="viewcode-back" href="../../scripts.html#scripts.reasoner.Reasoner._check_for_corridors">[docs]</a>	<span class="k">def</span> <span class="nf">_check_for_corridors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_reachable_locations</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Private function to check if there are any corridors that can be reached by the robot from the actual position.</span>
+<span class="sd">		The group of all the corridors is taken by a query to the aRMOR server by the client.</span>
+<span class="sd">		However, this list includes all the corridors in the ontology so they have to be sorted according to the locations reachable by the robot, which is the parameter passed to the function.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			_reachable_locations(List): list of all the reachable locations by the robot from its actual position</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			_reachable_corridors(List): list of all the reachable corridors by the robot from its actual position</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">_corridors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">ind_b2_class</span><span class="p">(</span><span class="s1">&#39;CORRIDOR&#39;</span><span class="p">),</span> <span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">)</span>
+		<span class="n">_reachable_corridors</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_corridors</span><span class="p">)):</span>
+			<span class="k">if</span><span class="p">(</span><span class="n">_corridors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">_reachable_locations</span><span class="p">):</span>
+				<span class="n">_reachable_corridors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_corridors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+				
+		<span class="k">return</span> <span class="n">_reachable_corridors</span></div>
+		
+<div class="viewcode-block" id="Reasoner._check_for_urgent_locations"><a class="viewcode-back" href="../../scripts.html#scripts.reasoner.Reasoner._check_for_urgent_locations">[docs]</a>	<span class="k">def</span> <span class="nf">_check_for_urgent_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_reachable_locations</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Private function to check if there are any urgent locations that can be reached by the robot from the actual position.</span>
+<span class="sd">		The group of all the urgent locations is taken by a query to the aRMOR server by the client.</span>
+<span class="sd">		However this list includes all the locations that are currently urgent in the ontology so they have to be sorted according to the locations reachable by the robot, which is the parameter passed to the function.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			_reachable_locations(List): list of all the reachable locations by the robot from its actual position</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			_reachable_urgent(List): list of all the urgent locations reachable by the robot from its actual position</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">_urgent_locations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">ind_b2_class</span><span class="p">(</span><span class="s1">&#39;URGENT&#39;</span><span class="p">),</span> <span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">)</span>
+		<span class="n">_reachable_urgent</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_urgent_locations</span><span class="p">)):</span>
+			<span class="k">if</span><span class="p">(</span><span class="n">_urgent_locations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">_reachable_locations</span><span class="p">):</span>
+				<span class="n">_reachable_urgent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_urgent_locations</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+				
+		<span class="k">return</span> <span class="n">_reachable_urgent</span></div>
+		
+<div class="viewcode-block" id="Reasoner._check_for_recharging_room"><a class="viewcode-back" href="../../scripts.html#scripts.reasoner.Reasoner._check_for_recharging_room">[docs]</a>	<span class="k">def</span> <span class="nf">_check_for_recharging_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_reachable_locations</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Private function to check the reachability of the recharging room from the actual position of the robot.</span>
+<span class="sd">		The list of all the reachable locations is passed as a parameter and the function checks if the recharging room is present or not in the list.</span>
+<span class="sd">		If yes it returns the name of this location.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			_reachable_locations(List): list of all the reachable locations by the robot from its actual position</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			recharging_room(String): name of the recharging room</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_reachable_locations</span><span class="p">)):</span>
+			<span class="k">if</span> <span class="n">_reachable_locations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span><span class="p">:</span>
+				<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_ROOM</span></div>
+			
+<div class="viewcode-block" id="Reasoner._choose_destination"><a class="viewcode-back" href="../../scripts.html#scripts.reasoner.Reasoner._choose_destination">[docs]</a>	<span class="k">def</span> <span class="nf">_choose_destination</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_locations</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Private function to choose the actual location the robot has to reach.</span>
+<span class="sd">		The location is chosen randomly from a list of reachable locations passed to the function.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			_locations(List): list of all the reachable locations by the robot from its actual position</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			_choice(String): name of the location the robot has to reach</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">_locations</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
