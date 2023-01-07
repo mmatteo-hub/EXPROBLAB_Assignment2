@@ -99,8 +99,8 @@ class GoToLocationToVisit(smach.State):
 						msg.data = 3.14 * self._helper.joint1_angle;
 						#publish the angle
 						self._helper.vel_publisher.publish(msg)
-						# wait 10 seconda before continuing
-						rospy.sleep(10)
+						# wait 30 seconda before continuing
+						rospy.sleep(30)
 					
 					# if the reasoner is checking for the recharging room but it cannot reach it directly because in a location no directly connected to the recharging one,
 					# then it move the robot into another location and try to reach the recharging room from this new one
