@@ -36,6 +36,7 @@
       <geometry>
         <mesh filename="package://EXPROBLAB_Assignment2/meshes/box.stl" scale="${scale_bot*0.001} ${scale_bot*0.001} ${scale_bot*0.001}" />
       </geometry>
+      <material name="White"/>
     </visual>
 
   </link>
@@ -359,7 +360,7 @@
       <geometry>
         <mesh filename="package://EXPROBLAB_Assignment2/meshes/rplidar.stl" scale="${scale_bot*0.001} ${scale_bot*0.001} ${scale_bot*0.001}" />
       </geometry>
-      <material name="Black"/>
+      <material name="White"/>
     </visual>
 
     <inertial>
