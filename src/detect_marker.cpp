@@ -195,7 +195,7 @@ void MarkerDetectClass::_marker_find()
     }
     else
     {
-      msg.data = 0.0;
+      msg.data = -3.14;
       joint_1_pose_pub.publish(msg);
 
       msg.data = 0.0;
