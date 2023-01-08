@@ -117,7 +117,7 @@ The resultant ontology of the in this assignment is the following:
 The environment is built according to the information taken by the robot. <br>
 Rooms' name and their coordinates are stored in two different arrays with a one-to-one relationship thus allowing the program to find them easily during the execution.
 
-## Robot
+## <img src="https://user-images.githubusercontent.com/62358773/211192186-68e2c7ec-1588-4ad5-8a04-0e72d53747d1.png" width="5%" height="5%"> Robot
 The robot is an assembly of different existing urdf re-adapted to this task. In particular, there are two robots:
  - [ROSbot](https://husarion.com), from which it was taken the entire model
  - [KUKA](https://www.kuka.com/it-it/prodotti-servizi/sistemi-robot/robot-industriali), from which it was only taken the arm.
