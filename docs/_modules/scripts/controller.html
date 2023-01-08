@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.controller &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripts.html">scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.controller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.controller</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: controller</span>
+<span class="sd">	:platform: ROS</span>
+<span class="sd">	:synopsis: Class for the Controller server to compute the path</span>
+
+<span class="sd">.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it</span>
+
+<span class="sd">This class is the server used by the FSM to simulate the movement of the robot from a starting position to a target one.	</span>
+<span class="sd">The path to follow is passed by the client. The controller starts as soon as the planner ends computing the path.</span>
+<span class="sd">The server simulates the movement of the robot and then publishes the result. In case the process is interrupted due to some signals (a battery low for example), then it returns nothing because of the preemption.</span>
+
+<span class="sd">Servers:</span>
+<span class="sd">	:attr:`motion/controller`: server used to simulate the movement of the robot.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">actionlib</span>
+<span class="c1"># Import constant name defined to structure the architecture.</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2</span> <span class="kn">import</span> <span class="n">name_mapper</span> <span class="k">as</span> <span class="n">nm</span>
+<span class="c1"># Import the ActionServer implementation used.</span>
+<span class="kn">from</span> <span class="nn">actionlib</span> <span class="kn">import</span> <span class="n">SimpleActionServer</span>
+<span class="c1"># Import custom message, actions and services.</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2.msg</span> <span class="kn">import</span> <span class="n">ControlFeedback</span><span class="p">,</span> <span class="n">ControlResult</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2.srv</span> <span class="kn">import</span> <span class="n">SetPose</span>
+<span class="kn">import</span> <span class="nn">EXPROBLAB_Assignment2</span>  <span class="c1"># This is required to pass the ControlAction` type for instantiating the `SimpleActionServer`.</span>
+<span class="kn">from</span> <span class="nn">helper</span> <span class="kn">import</span> <span class="n">Helper</span>
+<span class="kn">from</span> <span class="nn">armor_api.armor_client</span> <span class="kn">import</span> <span class="n">ArmorClient</span>
+<span class="kn">from</span> <span class="nn">move_base_msgs.msg</span> <span class="kn">import</span> <span class="n">MoveBaseAction</span><span class="p">,</span> <span class="n">MoveBaseGoal</span>
+
+<span class="c1"># A tag for identifying logs producer.</span>
+<span class="n">LOG_TAG</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">NODE_CONTROLLER</span>
+
+
+<span class="c1"># An action server to simulate motion controlling.</span>
+<div class="viewcode-block" id="ControllingAction"><a class="viewcode-back" href="../../scripts.html#scripts.controller.ControllingAction">[docs]</a><span class="k">class</span> <span class="nc">ControllingAction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is used to initialize the Controller server</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Instantiate and start the action server based on the `SimpleActionServer` class.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_as</span> <span class="o">=</span> <span class="n">SimpleActionServer</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">ACTION_CONTROLLER</span><span class="p">,</span>
+                                        <span class="n">EXPROBLAB_Assignment2</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">ControlAction</span><span class="p">,</span>
+                                        <span class="n">execute_cb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">execute_callback</span><span class="p">,</span>
+                                        <span class="n">auto_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># controller for movig the robot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">move_client</span> <span class="o">=</span> <span class="n">actionlib</span><span class="o">.</span><span class="n">SimpleActionClient</span><span class="p">(</span><span class="s1">&#39;/move_base&#39;</span><span class="p">,</span> <span class="n">MoveBaseAction</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">goal_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feedback_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="c1"># Log information.</span>
+        <span class="n">log_msg</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;`</span><span class="si">{</span><span class="n">nm</span><span class="o">.</span><span class="n">ACTION_CONTROLLER</span><span class="si">}</span><span class="s1">` Action Server initialised. It will navigate trough the plan with a fixed delay &#39;</span> 
+                   <span class="sa">f</span><span class="s1">&#39;between each via point spanning in [</span><span class="si">{</span><span class="n">nm</span><span class="o">.</span><span class="n">NUMBER_OF_POINTS_PATH</span><span class="si">}</span><span class="s1">).&#39;</span><span class="p">)</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ControllingAction.execute_callback"><a class="viewcode-back" href="../../scripts.html#scripts.controller.ControllingAction.execute_callback">[docs]</a>    <span class="k">def</span> <span class="nf">execute_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">goal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The function is executed every time the machine needs to simulate the movement of the robot between two locations.</span>
+<span class="sd">        The callback is invoked when a client sets a goal to the :mod:`controller` server.</span>
+<span class="sd">        This function requires a list of via points (the plan), and it simulates a movement through each point with a fixed delay.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check if the provided plan is processable. If not, this service will be aborted.</span>
+        <span class="k">if</span> <span class="n">goal</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">goal</span><span class="o">.</span><span class="n">via_points</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">goal</span><span class="o">.</span><span class="n">via_points</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">logerr</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="s1">&#39;No via points provided! This service will be aborted!&#39;</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">set_aborted</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Construct the feedback and loop for each via point.</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">ControlFeedback</span><span class="p">()</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="s1">&#39;Server is controlling...&#39;</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+            
+        <span class="c1"># Check that the client did not cancel this service.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">is_preempt_requested</span><span class="p">():</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="s1">&#39;Service has been cancelled by the client!&#39;</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+            <span class="c1"># Actually cancel this service.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">set_preempted</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Wait before to reach the following via point. This is just for testing purposes.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">move_to_goal</span><span class="p">(</span><span class="n">goal</span><span class="o">.</span><span class="n">via_points</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">goal</span><span class="o">.</span><span class="n">via_points</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Log current robot position.</span>
+        <span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Reaching point (</span><span class="si">{</span><span class="n">goal</span><span class="o">.</span><span class="n">via_points</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">goal</span><span class="o">.</span><span class="n">via_points</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s1">).&#39;</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+
+        <span class="c1"># Publish a feedback to the client to simulate that a via point has been reached. </span>
+        <span class="n">feedback</span><span class="o">.</span><span class="n">reached_point</span> <span class="o">=</span> <span class="n">goal</span><span class="o">.</span><span class="n">via_points</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">publish_feedback</span><span class="p">(</span><span class="n">feedback</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_active</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+        <span class="c1"># set the client not active and cancel the goal reached</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">move_client</span><span class="o">.</span><span class="n">cancel_goal</span><span class="p">()</span>
+            
+        <span class="c1"># Log current robot position.</span>
+        <span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Reached point (</span><span class="si">{</span><span class="n">goal</span><span class="o">.</span><span class="n">via_points</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">goal</span><span class="o">.</span><span class="n">via_points</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s1">).&#39;</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+
+        <span class="c1"># Publish the results to the client.</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">ControlResult</span><span class="p">()</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">reached_point</span> <span class="o">=</span> <span class="n">feedback</span><span class="o">.</span><span class="n">reached_point</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="s1">&#39;Motion control successes.&#39;</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">set_succeeded</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span>  <span class="c1"># Succeeded.</span></div>
+
+<div class="viewcode-block" id="ControllingAction.active_callback"><a class="viewcode-back" href="../../scripts.html#scripts.controller.ControllingAction.active_callback">[docs]</a>    <span class="k">def</span> <span class="nf">active_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The function that is executed when the communication starts.</span>
+<span class="sd">        It simply increments a goal counter</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">goal_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;Goal &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">goal_counter</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ControllingAction.feedback_callback"><a class="viewcode-back" href="../../scripts.html#scripts.controller.ControllingAction.feedback_callback">[docs]</a>    <span class="k">def</span> <span class="nf">feedback_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feedback</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The function that is executed when a feedback is received.</span>
+<span class="sd">        It simply increments a feedback counter</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            feedback: feedack of the action server</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feedback_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feedback_counter</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;Feedback &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feedback_counter</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ControllingAction.done_callback"><a class="viewcode-back" href="../../scripts.html#scripts.controller.ControllingAction.done_callback">[docs]</a>    <span class="k">def</span> <span class="nf">done_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The function is executed when the communication ends.</span>
+<span class="sd">        It checks the status of the action client and it prints a message relating to the status.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            status: actual status of the action server</span>
+<span class="sd">            result: result to return</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="kc">False</span>   <span class="c1"># The action client communication is not active.</span>
+
+        <span class="c1"># Prints on the info window the status returned by the action server communication.</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;Goal received a cancel request.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;Goal reached.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;Goal aborted.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;Goal rejected.&quot;</span><span class="p">)</span>
+            <span class="k">return</span></div>
+
+<div class="viewcode-block" id="ControllingAction.move_to_goal"><a class="viewcode-back" href="../../scripts.html#scripts.controller.ControllingAction.move_to_goal">[docs]</a>    <span class="k">def</span> <span class="nf">move_to_goal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to move the robot to a specific goal set by the planner.</span>
+<span class="sd">        The function takes the x and y coordinates of the goal and publishes through an action client to the server the coordinates the robot has to reach</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: x coordinate of the goal</span>
+<span class="sd">            y: y coordinate of the goal</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">move_client</span><span class="o">.</span><span class="n">wait_for_server</span><span class="p">()</span>
+
+        <span class="n">goal</span> <span class="o">=</span> <span class="n">MoveBaseGoal</span><span class="p">()</span>
+
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="s2">&quot;map&quot;</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">goal</span><span class="o">.</span><span class="n">target_pose</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">move_client</span><span class="o">.</span><span class="n">send_goal</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">done_callback</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_callback</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feedback_callback</span><span class="p">)</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;Goal Published&quot;</span><span class="p">)</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># Initialise the node, its action server, and wait.   </span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">NODE_CONTROLLER</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">rospy</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">ControllingAction</span><span class="p">()</span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

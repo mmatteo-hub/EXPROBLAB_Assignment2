@@ -8,19 +8,19 @@
 .. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it
 
 This script is used to define the structure of the finite state machine. Here it is initialized with all its states and their respective transitions.
-For each state it is defined how to behave for each transition received so that the machine cannot be stuck or have errors in the changes.
-At the beginning of the execution it is also instantiated a helper entity that is passed to each state as parameter to make it easier in some cases to use functions and shared variables. This entity is an attribute of the respective Class :mod:`helper`.
-However, the main role of the helper is the sharing of the mutex that is used to access the shared variables without having troubles doing it. The mutex used is of course just one to try to have a perfect syncronization among the state and the reading/writing processes.
-The finite state machine that has been created is composed of four main states: :mod:`ìnit_state`, :mod:`reasoner`, *move randomly*, which is in fact a sub machine, and :mod:`recharge`.
-Of course these states include many different tasks so the decision of using a sub-machine allows us to have a more modular code and a more reactive program since the execution cores of the states are not so long.
+For each state, it is defined how to behave for each transition received so that the machine cannot be stuck or have errors in the changes.
+At the beginning of the execution, it is also instantiated a helper entity that is passed to each state as a parameter to make it easier in some cases to use functions and shared variables. This entity is an attribute of the respective Class :mod:`helper`.
+However, the main role of the helper is the sharing of the mutex that is used to access the shared variables without having trouble doing it. The mutex used is of course just one to try to have a perfect synchronization among the state and the reading/writing processes.
+The finite state machine that has been created is composed of four main states: :mod:`ìnit_state`, :mod:`reasoner`, *move randomly*, which is in fact a submachine, and :mod:`recharge`.
+Of course, these states include many different tasks so the decision of using a sub-machine allows us to have a more modular code and a more reactive program since the execution cores of the states are not so long.
 The machine is divided as follows:
 
-* initialization phase: responsible of initialising the ontology of the environment;
-* reason state: responsible of reasoning all the changes happened and computing the new location the robot has to visit (according to some statements);
+* initialization phase: responsible of initializing the ontology of the environment;
+* reason state: responsible for reasoning all the changes that happened and computing the new location the robot has to visit (according to some statements);
 * move random state: divided into :mod:`plan_path_to_location` and :mod:`go_to_location_to_visit`:
-	* The first is responsible of computing a path from the actual robot position to the target position computed by the reasoner;
-	* the second is responsible of moving the robot through the points of the path just computed.
-* recharge state: it is responsible of recharging the robot battery. The robot can be recharged if and only if it is in the correct recharging room so there are some steps to make the robot arrive there before being recharged.
+	* The first is responsible for computing a path from the actual robot position to the target position computed by the reasoner;
+	* The second is responsible for moving the robot through the points of the path just computed.
+* recharge state: it is responsible for recharging the robot battery. The robot can be recharged if and only if it is in the correct recharging room so there are some steps to make the robot arrive there before being recharged.
 
 Servers:
 	:attr:`sis`: this is the name that the variable of the ROS server has in the program. It is necessary for the smach ROS state machine and it is responsible of the execution of each state and their transitions.
@@ -45,8 +45,8 @@ def main():
 	"""
 	This function initializes the finite state machine node, called _smach_finite_state_machine_.
 	It also creates the helper object to make it easier to access shared variables and use some functions.
-	It is important to note that the SMACH machine needs the definition of all the outcomes needed to pass from one state to another: in this way if the execute of one state returned a transition that is not included, the machine does not return an error or does not remain stuck because not knowing what to do.
-	The machine includes also one sub-machine, since we have four main states and one of them can be split into tow others to have a more modular architecture.
+	It is important to note that the SMACH machine needs the definition of all the outcomes needed to pass from one state to another: in this way, if the execution of one state returned a transition that is not included, the machine does not return an error or does not remain stuck because not knowing what to do.
+	The machine includes also one sub-machine since we have four main states and one of them can be split into two others to have a more modular architecture.
 	"""
 	rospy.init_node('smach_finite_state_machine')
 	

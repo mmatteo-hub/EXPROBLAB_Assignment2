@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.go_to_location_to_visit &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripts.html">scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.go_to_location_to_visit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.go_to_location_to_visit</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: go_to_location_to_visit</span>
+<span class="sd">	:platform: ROS</span>
+<span class="sd">	:synopsis: Class for the GoToLocationToVisit state of the sub-finite state machine</span>
+<span class="sd">	</span>
+<span class="sd">.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it</span>
+
+<span class="sd">This class is a state of the sub-state machine *move randomly*. This class has aim to move the robot through the path computed in the previous state.</span>
+<span class="sd">The path is taken from the :mod:`planner` client by taking its result provided by the respective server and then it is passed to the :mod:`controller` ones. This uses the :mod:`controller` to make the robot move through the points of the path.</span>
+<span class="sd">This state is a little trivial since it is used both to move the robot from one location to another both to drive it to the recharging room when necessary and when possible.</span>
+<span class="sd">Due to this as soon as the robot has a location that has to reach, this location is reached, and then, depending on the variable shared by the Helper, it can be retrieved if the move was just a random movement or it was needed to reach a location from which check again the possibility to reach the recharging room.</span>
+<span class="sd">The clients are taken from the helper object.</span>
+
+<span class="sd">Clients:</span>
+<span class="sd">	:attr:`client`: aRMOR client used to update the timestamp of the robot and of the location the robot has just visited</span>
+<span class="sd">	</span>
+<span class="sd">	:attr:`planner_client`: client from which it is taken the goal, which means the path just computed to be passed to the controller.</span>
+<span class="sd">	</span>
+<span class="sd">	:attr:`controller_client`: client that makes the request to the respective server to move the robot through the path from the starting to the end position.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">roslib</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">actionlib</span>
+<span class="kn">import</span> <span class="nn">smach</span>
+<span class="kn">import</span> <span class="nn">smach_ros</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">actionlib_msgs.msg</span> <span class="kn">import</span> <span class="n">GoalStatus</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2</span> <span class="kn">import</span> <span class="n">name_mapper</span> <span class="k">as</span> <span class="n">nm</span>
+<span class="kn">from</span> <span class="nn">std_msgs.msg</span> <span class="kn">import</span> <span class="n">Float64</span>
+
+<div class="viewcode-block" id="GoToLocationToVisit"><a class="viewcode-back" href="../../scripts.html#scripts.go_to_location_to_visit.GoToLocationToVisit">[docs]</a><span class="k">class</span> <span class="nc">GoToLocationToVisit</span><span class="p">(</span><span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">helper</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The function is used to initialize the state of the sub-machine.</span>
+<span class="sd">		In this step, there is also the declaration of all the outcomes that the state can have.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			helper(Helper): helper object that allows the user to use shared elements among the scripts.</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			none</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span> <span class="o">=</span> <span class="n">helper</span>
+		<span class="c1"># initialisation function, it should not wait</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+								<span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">],</span>
+								<span class="n">input_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;go_to_location_to_visit_counter_in&#39;</span><span class="p">],</span>
+								<span class="n">output_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;go_to_location_to_visit_counter_out&#39;</span><span class="p">])</span>
+		
+<div class="viewcode-block" id="GoToLocationToVisit.execute"><a class="viewcode-back" href="../../scripts.html#scripts.go_to_location_to_visit.GoToLocationToVisit.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userdata</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The function is executed every time the machine enters the state.</span>
+<span class="sd">		It is responsible for returning a state and transitioning to change the state.</span>
+<span class="sd">		It uses the mutex instantiated in the helper to manage the variable access.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			userdata: pointer to pass the data among the states of a State Machine</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			transition(String): string containing the label of the action performed and used to change the state in the sub-machine and return to the upper one.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># function called when exiting from the node, it can be blacking</span>
+		<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s1">&#39;Executing state &#39;</span> <span class="o">+</span> <span class="n">nm</span><span class="o">.</span><span class="n">GO_TO_LOCATION_TO_VISIT</span> <span class="o">+</span> <span class="s1">&#39; (users = </span><span class="si">%f</span><span class="s1">)&#39;</span><span class="o">%</span><span class="n">userdata</span><span class="o">.</span><span class="n">go_to_location_to_visit_counter_in</span><span class="p">)</span>
+		<span class="n">userdata</span><span class="o">.</span><span class="n">go_to_location_to_visit_counter_out</span> <span class="o">=</span> <span class="n">userdata</span><span class="o">.</span><span class="n">go_to_location_to_visit_counter_in</span> <span class="o">+</span> <span class="mi">1</span>
+		
+		<span class="c1"># send the goal to the controller client</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">controller_client</span><span class="o">.</span><span class="n">send_goal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">planner_client</span><span class="o">.</span><span class="n">get_result</span><span class="p">())</span>
+		<span class="c1"># waiting the client to finish the computation</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">controller_client</span><span class="o">.</span><span class="n">wait_for_result</span><span class="p">()</span>
+		
+		<span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">controller_client</span><span class="o">.</span><span class="n">cancel_goal</span><span class="p">()</span>
+					<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">planner_client</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="o">==</span> <span class="n">GoalStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">manipulation</span><span class="o">.</span><span class="n">replace_objectprop_b2_ind</span><span class="p">(</span><span class="s1">&#39;isIn&#39;</span><span class="p">,</span> <span class="s1">&#39;Robot1&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">choice</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">old_loc</span><span class="p">))</span>
+					
+					<span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Moved the robot from </span><span class="se">\033</span><span class="s1">[0;35;49m&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">old_loc</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m to </span><span class="se">\033</span><span class="s1">[0;36;49m&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">choice</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+					<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">GO_TO_LOCATION_TO_VISIT</span><span class="p">))</span>
+					
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">update_timestamp</span><span class="p">()</span>
+					
+					<span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">controller_client</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="o">==</span> <span class="n">GoalStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">):</span>
+						<span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Doing something in the location </span><span class="se">\033</span><span class="s1">[0;36;49m&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">choice</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+						<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">GO_TO_LOCATION_TO_VISIT</span><span class="p">))</span>
+						<span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">BUSY_PARAMETER</span><span class="p">)</span>
+
+						<span class="c1"># make the robot turn on the spot by publishing angular velocity</span>
+						<span class="n">msg</span> <span class="o">=</span> <span class="n">Float64</span><span class="p">()</span>
+						<span class="c1"># change the angle direction</span>
+						<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">joint1_angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">joint1_angle</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+						<span class="c1"># set the angle direction</span>
+						<span class="n">msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="mf">3.14</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">joint1_angle</span><span class="p">;</span>
+						<span class="c1">#publish the angle</span>
+						<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">vel_publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+						<span class="c1"># wait 30 seconda before continuing</span>
+						<span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+					
+					<span class="c1"># if the reasoner is checking for the recharging room but cannot reach it directly because in a location no directly connected to the recharging one,</span>
+					<span class="c1"># then it moves the robot into another location and tries to reach the recharging room from this new one</span>
+					<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGING_CHECK</span><span class="p">:</span>
+						<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span>
+					<span class="k">else</span><span class="p">:</span>
+						<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span>
+						<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span>
+			<span class="k">finally</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+			<span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

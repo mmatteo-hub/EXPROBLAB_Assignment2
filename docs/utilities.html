@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>utilities &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="src" href="src.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src.html">src</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-utilities.EXPROBLAB_Assignment1.name_mapper">Utilities Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#utilities.EXPROBLAB_Assignment1.name_mapper.tag_log"><code class="docutils literal notranslate"><span class="pre">tag_log()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>utilities</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/utilities.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="utilities">
+<h1>utilities<a class="headerlink" href="#utilities" title="Permalink to this heading"></a></h1>
+<div class="section" id="module-utilities.EXPROBLAB_Assignment1.name_mapper">
+<span id="utilities-module"></span><h2>Utilities Module<a class="headerlink" href="#module-utilities.EXPROBLAB_Assignment1.name_mapper" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-name_mapper"></span><p>This scripts is used in the package to define all the names of the variables used. It is a way to use a variable instead of the total name thus avoiding spelling problems while writing it.
+It is divided as follows:</p>
+<ul class="simple">
+<li><p>name of the state if the Finite State Machine and of the Sub Finite State Machine;</p></li>
+<li><p>name of all the transition used: there are also some parameters that are not properly transition but they are used to modify the value of the shared variable of the helper to guarantee the correct flow in the program;</p></li>
+<li><p>name of the action, planner and controller, used in the program;</p></li>
+<li><dl class="simple">
+<dt>parameters for the robot behaviour:</dt><dd><ul>
+<li><p>battery threshold: value after which the robot has to be recharged;</p></li>
+<li><p>busy paramter: value to define the busy waiting that the robot has to perform before starting the plan to another location;</p></li>
+<li><p>number of points: value that define the number of points the planner module has to compute for each path required;</p></li>
+<li><p>recharging room: string name of the recharging room. It is needed in particular when the robot has to check the availability of this particualr location when it has to go to the recharge state.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>rooms: name of all locations in the ontology;</p></li>
+<li><p>coordinates: x and y coordinate of each location. Here it is needed a  match one to one with the names above.</p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="utilities.EXPROBLAB_Assignment1.name_mapper.tag_log">
+<span class="sig-prename descclassname"><span class="pre">utilities.EXPROBLAB_Assignment1.name_mapper.</span></span><span class="sig-name descname"><span class="pre">tag_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">producer_tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utilities/EXPROBLAB_Assignment1/name_mapper.html#tag_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utilities.EXPROBLAB_Assignment1.name_mapper.tag_log" title="Permalink to this definition"></a></dt>
+<dd><p>This function is used to generate the log tag that is shown in the FSM while running.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Args:</dt><dd><p>msg(String): message to be visualized
+producer_tag(String): name of the state that has to send the log message</p>
+</dd>
+<dt>Returns:</dt><dd><p>log_msg(String): message for the log</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="src.html" class="btn btn-neutral float-left" title="src" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

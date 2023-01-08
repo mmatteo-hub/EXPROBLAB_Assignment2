@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>utilities.EXPROBLAB_Assignment1.name_mapper &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scripts.html">scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../src.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utilities.html">utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>utilities.EXPROBLAB_Assignment1.name_mapper</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for utilities.EXPROBLAB_Assignment1.name_mapper</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: name_mapper</span>
+<span class="sd">    :platform: ROS</span>
+<span class="sd">    :synopsis: Class for the Name Mapper module</span>
+<span class="sd">    </span>
+<span class="sd">.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it</span>
+
+<span class="sd">This scripts is used in the package to define all the names of the variables used. It is a way to use a variable instead of the total name thus avoiding spelling problems while writing it.</span>
+<span class="sd">It is divided as follows:</span>
+
+<span class="sd">* name of the state if the Finite State Machine and of the Sub Finite State Machine;</span>
+<span class="sd">* name of all the transition used: there are also some parameters that are not properly transition but they are used to modify the value of the shared variable of the helper to guarantee the correct flow in the program;</span>
+<span class="sd">* name of the action, planner and controller, used in the program;</span>
+<span class="sd">* parameters for the robot behaviour:</span>
+<span class="sd">    * battery threshold: value after which the robot has to be recharged;</span>
+<span class="sd">    * busy paramter: value to define the busy waiting that the robot has to perform before starting the plan to another location;</span>
+<span class="sd">    * number of points: value that define the number of points the planner module has to compute for each path required;</span>
+<span class="sd">    * recharging room: string name of the recharging room. It is needed in particular when the robot has to check the availability of this particualr location when it has to go to the recharge state.</span>
+<span class="sd">* rooms: name of all locations in the ontology;</span>
+<span class="sd">* coordinates: x and y coordinate of each location. Here it is needed a  match one to one with the names above.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="c1"># File needed to define some variables that are used multiple times in the program.</span>
+<span class="c1"># In this way thei can be accessed as a field of this file, thus avoiding error in strings writing.</span>
+
+<span class="c1">##########</span>
+<span class="c1"># Definition of the states name of the Finite State Machine and its sub-machine</span>
+
+<span class="n">INIT_STATE</span> <span class="o">=</span> <span class="s1">&#39;INIT_STATE&#39;</span>
+<span class="n">RECHARGE</span> <span class="o">=</span> <span class="s1">&#39;RECHARGE&#39;</span>
+<span class="n">REASONER</span> <span class="o">=</span> <span class="s1">&#39;REASONER&#39;</span>
+<span class="n">PLAN_PATH_TO_LOCATION</span> <span class="o">=</span> <span class="s1">&#39;PLAN_PATH_TO_LOCATION&#39;</span>
+<span class="n">GO_TO_LOCATION_TO_VISIT</span> <span class="o">=</span> <span class="s1">&#39;GO_TO_LOCATION_TO_VISIT&#39;</span>
+<span class="n">MOVE_RANDOM</span> <span class="o">=</span> <span class="s1">&#39;MOVE_RANDOM&#39;</span>
+
+<span class="c1">##########</span>
+<span class="c1"># Definition of the action needed to change state or to check the shared vriable for adopting the FSM behaviour</span>
+
+<span class="n">BATTERY_OK</span> <span class="o">=</span> <span class="s1">&#39;BATTERY_OK&#39;</span>
+<span class="n">BATTERY_LOW</span> <span class="o">=</span> <span class="s1">&#39;BATTERY_LOW&#39;</span>
+<span class="n">LOADED_ONTOLOGY</span> <span class="o">=</span> <span class="s1">&#39;LOADED_ONTOLOGY&#39;</span>
+<span class="n">REASONED</span> <span class="o">=</span> <span class="s1">&#39;REASONED&#39;</span>
+<span class="n">PLANNED_PATH</span> <span class="o">=</span> <span class="s1">&#39;PLANNED_PATH&#39;</span>
+<span class="n">LOCATION_REACHED</span> <span class="o">=</span> <span class="s1">&#39;LOCATION_REACHED&#39;</span>
+<span class="n">RECHARGING_CHECK</span> <span class="o">=</span> <span class="s1">&#39;RECHARGING_CHECK&#39;</span>
+
+<span class="c1">##########</span>
+<span class="c1"># Name of the Action Servers and Clients used in the program </span>
+
+<span class="n">ACTION_PLANNER</span> <span class="o">=</span> <span class="s1">&#39;motion/planner&#39;</span>
+<span class="n">ACTION_CONTROLLER</span> <span class="o">=</span> <span class="s1">&#39;motion/controller&#39;</span>
+<span class="n">NODE_PLANNER</span> <span class="o">=</span> <span class="s1">&#39;planner&#39;</span>
+<span class="n">NODE_CONTROLLER</span> <span class="o">=</span> <span class="s1">&#39;controller&#39;</span>
+<span class="n">NODE_ROBOT_STATE</span> <span class="o">=</span> <span class="s1">&#39;robot-state&#39;</span>
+
+<span class="c1">##########</span>
+<span class="c1"># Parameter for the battery threshold (when it gets low) in seconds</span>
+<span class="n">BATTERY_THRESHOLD</span> <span class="o">=</span> <span class="mi">60</span> <span class="c1">#[s]</span>
+<span class="c1"># Parameter to simulate the busy waiting of the robot in a specific location (in seconds)</span>
+<span class="n">BUSY_PARAMETER</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1">#[s]</span>
+<span class="c1"># Parameter to know the number of points needed in the path</span>
+<span class="n">NUMBER_OF_POINTS_PATH</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="c1"># Parameter to indicate the name of the recharging room</span>
+<span class="n">RECHARGING_ROOM</span> <span class="o">=</span> <span class="s1">&#39;E&#39;</span>
+
+<span class="c1">##########</span>
+<span class="c1"># List of all the locations in the onotlogy</span>
+<span class="n">ROOMS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;R1&#39;</span><span class="p">,</span> <span class="s1">&#39;R2&#39;</span><span class="p">,</span> <span class="s1">&#39;R3&#39;</span><span class="p">,</span> <span class="s1">&#39;R4&#39;</span><span class="p">]</span>
+<span class="c1"># List of all the coordinates of the locations in the ontology</span>
+<span class="c1"># IMPORTANT: Follow a one to one relation between the name and the coordinates</span>
+<span class="n">COORDINATES</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]]</span>
+
+<span class="c1"># Function used to label each log with a producer tag.</span>
+<div class="viewcode-block" id="tag_log"><a class="viewcode-back" href="../../../utilities.html#utilities.EXPROBLAB_Assignment1.name_mapper.tag_log">[docs]</a><span class="k">def</span> <span class="nf">tag_log</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">producer_tag</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function is used to generate the log tag that is shown in the FSM while running.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg(String): message to be visualized</span>
+<span class="sd">            producer_tag(String): name of the state that has to send the log message</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            log_msg(String): message for the log</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s1">&#39;@</span><span class="si">%s</span><span class="s1">&gt;&gt; </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">producer_tag</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

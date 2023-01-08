@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.fsm &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripts.html">scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.fsm</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.fsm</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: fsm</span>
+<span class="sd">	:platform: ROS</span>
+<span class="sd">	:synopsis: Script for the initialization of the Finite State Machine.</span>
+
+<span class="sd">.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it</span>
+
+<span class="sd">This script is used to define the structure of the finite state machine. Here it is initialized with all its states and their respective transitions.</span>
+<span class="sd">For each state, it is defined how to behave for each transition received so that the machine cannot be stuck or have errors in the changes.</span>
+<span class="sd">At the beginning of the execution, it is also instantiated a helper entity that is passed to each state as a parameter to make it easier in some cases to use functions and shared variables. This entity is an attribute of the respective Class :mod:`helper`.</span>
+<span class="sd">However, the main role of the helper is the sharing of the mutex that is used to access the shared variables without having trouble doing it. The mutex used is of course just one to try to have a perfect synchronization among the state and the reading/writing processes.</span>
+<span class="sd">The finite state machine that has been created is composed of four main states: :mod:`ìnit_state`, :mod:`reasoner`, *move randomly*, which is in fact a submachine, and :mod:`recharge`.</span>
+<span class="sd">Of course, these states include many different tasks so the decision of using a sub-machine allows us to have a more modular code and a more reactive program since the execution cores of the states are not so long.</span>
+<span class="sd">The machine is divided as follows:</span>
+
+<span class="sd">* initialization phase: responsible of initializing the ontology of the environment;</span>
+<span class="sd">* reason state: responsible for reasoning all the changes that happened and computing the new location the robot has to visit (according to some statements);</span>
+<span class="sd">* move random state: divided into :mod:`plan_path_to_location` and :mod:`go_to_location_to_visit`:</span>
+<span class="sd">	* The first is responsible for computing a path from the actual robot position to the target position computed by the reasoner;</span>
+<span class="sd">	* The second is responsible for moving the robot through the points of the path just computed.</span>
+<span class="sd">* recharge state: it is responsible for recharging the robot battery. The robot can be recharged if and only if it is in the correct recharging room so there are some steps to make the robot arrive there before being recharged.</span>
+
+<span class="sd">Servers:</span>
+<span class="sd">	:attr:`sis`: this is the name that the variable of the ROS server has in the program. It is necessary for the smach ROS state machine and it is responsible of the execution of each state and their transitions.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">roslib</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">smach</span>
+<span class="kn">import</span> <span class="nn">smach_ros</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">actionlib</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2</span> <span class="kn">import</span> <span class="n">name_mapper</span> <span class="k">as</span> <span class="n">nm</span>
+<span class="kn">from</span> <span class="nn">helper</span> <span class="kn">import</span> <span class="n">Helper</span>
+<span class="kn">from</span> <span class="nn">init_state</span> <span class="kn">import</span> <span class="n">InitState</span>
+<span class="kn">from</span> <span class="nn">reasoner</span> <span class="kn">import</span> <span class="n">Reasoner</span>
+<span class="kn">from</span> <span class="nn">recharge</span> <span class="kn">import</span> <span class="n">Recharge</span>
+<span class="kn">from</span> <span class="nn">plan_path_to_location</span> <span class="kn">import</span> <span class="n">PlanPathToLocation</span>
+<span class="kn">from</span> <span class="nn">go_to_location_to_visit</span> <span class="kn">import</span> <span class="n">GoToLocationToVisit</span>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../scripts.html#scripts.fsm.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	This function initializes the finite state machine node, called _smach_finite_state_machine_.</span>
+<span class="sd">	It also creates the helper object to make it easier to access shared variables and use some functions.</span>
+<span class="sd">	It is important to note that the SMACH machine needs the definition of all the outcomes needed to pass from one state to another: in this way, if the execution of one state returned a transition that is not included, the machine does not return an error or does not remain stuck because not knowing what to do.</span>
+<span class="sd">	The machine includes also one sub-machine since we have four main states and one of them can be split into two others to have a more modular architecture.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;smach_finite_state_machine&#39;</span><span class="p">)</span>
+	
+	<span class="c1"># Define an helper</span>
+	<span class="n">_helper</span> <span class="o">=</span> <span class="n">Helper</span><span class="p">()</span>
+	
+	<span class="c1"># Create a top level SMACH state machine</span>
+	<span class="n">sm</span> <span class="o">=</span> <span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="p">(</span><span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">])</span>
+	<span class="c1"># Create a lower level SMACH state machine</span>
+	<span class="n">sm_sub</span> <span class="o">=</span> <span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="p">(</span><span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">])</span>
+	
+	<span class="n">sm</span><span class="o">.</span><span class="n">userdata</span><span class="o">.</span><span class="n">sm_counter</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="n">sm_sub</span><span class="o">.</span><span class="n">userdata</span><span class="o">.</span><span class="n">sm_counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+	<span class="c1"># Open the container</span>
+	<span class="k">with</span> <span class="n">sm</span><span class="p">:</span>
+		<span class="c1"># Add states to the container</span>
+		<span class="c1"># Initialization State</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">INIT_STATE</span><span class="p">,</span> <span class="n">InitState</span><span class="p">(</span><span class="n">_helper</span><span class="p">),</span>
+								<span class="n">transitions</span><span class="o">=</span><span class="p">{</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">INIT_STATE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">INIT_STATE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">INIT_STATE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">INIT_STATE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">INIT_STATE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">INIT_STATE</span><span class="p">},</span>
+								<span class="n">remapping</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;init_state_counter_in&#39;</span><span class="p">:</span><span class="s1">&#39;sm_counter&#39;</span><span class="p">,</span>
+										   <span class="s1">&#39;init_state_counter_out&#39;</span><span class="p">:</span><span class="s1">&#39;sm_counter&#39;</span><span class="p">})</span>
+		
+		<span class="c1"># Recharge State</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">,</span> <span class="n">Recharge</span><span class="p">(</span><span class="n">_helper</span><span class="p">),</span>
+								<span class="n">transitions</span><span class="o">=</span><span class="p">{</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">},</span>
+								<span class="n">remapping</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;recharge_counter_in&#39;</span><span class="p">:</span><span class="s1">&#39;sm_counter&#39;</span><span class="p">,</span>
+										   <span class="s1">&#39;recharge_counter_out&#39;</span><span class="p">:</span><span class="s1">&#39;sm_counter&#39;</span><span class="p">})</span>
+		
+		<span class="c1"># Reasoner State	   </span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span><span class="p">,</span> <span class="n">Reasoner</span><span class="p">(</span><span class="n">_helper</span><span class="p">),</span>
+								<span class="n">transitions</span><span class="o">=</span><span class="p">{</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span><span class="p">,</span>
+											 <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span><span class="p">},</span>
+								<span class="n">remapping</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;reasoner_counter_in&#39;</span><span class="p">:</span><span class="s1">&#39;sm_counter&#39;</span><span class="p">,</span>
+										   <span class="s1">&#39;reasoner_counter_out&#39;</span><span class="p">:</span><span class="s1">&#39;sm_counter&#39;</span><span class="p">})</span>
+		
+		<span class="k">with</span> <span class="n">sm_sub</span><span class="p">:</span>
+			<span class="c1"># Add states to the container</span>
+			<span class="c1"># Plan path to the location Stae</span>
+			<span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">PLAN_PATH_TO_LOCATION</span><span class="p">,</span> <span class="n">PlanPathToLocation</span><span class="p">(</span><span class="n">_helper</span><span class="p">),</span>
+									<span class="n">transitions</span><span class="o">=</span><span class="p">{</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLAN_PATH_TO_LOCATION</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLAN_PATH_TO_LOCATION</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLAN_PATH_TO_LOCATION</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">GO_TO_LOCATION_TO_VISIT</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLAN_PATH_TO_LOCATION</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLAN_PATH_TO_LOCATION</span><span class="p">},</span>
+									<span class="n">remapping</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;plan_path_to_location_counter_in&#39;</span><span class="p">:</span><span class="s1">&#39;sm_counter&#39;</span><span class="p">,</span>
+											   <span class="s1">&#39;plan_path_to_location_counter_out&#39;</span><span class="p">:</span><span class="s1">&#39;sm_counter&#39;</span><span class="p">})</span>
+			
+			<span class="c1"># Go to the location State		</span>
+			<span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">GO_TO_LOCATION_TO_VISIT</span><span class="p">,</span> <span class="n">GoToLocationToVisit</span><span class="p">(</span><span class="n">_helper</span><span class="p">),</span>
+									<span class="n">transitions</span><span class="o">=</span><span class="p">{</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">GO_TO_LOCATION_TO_VISIT</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">GO_TO_LOCATION_TO_VISIT</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">GO_TO_LOCATION_TO_VISIT</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">GO_TO_LOCATION_TO_VISIT</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">},</span>
+									<span class="n">remapping</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;go_to_location_to_visit_counter_in&#39;</span><span class="p">:</span><span class="s1">&#39;sm_counter&#39;</span><span class="p">,</span>
+											   <span class="s1">&#39;go_to_location_to_visit_counter_out&#39;</span><span class="p">:</span><span class="s1">&#39;sm_counter&#39;</span><span class="p">})</span>	
+		
+		<span class="c1"># Move Random State including the plan to location and the go to location</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">StateMachine</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">,</span> <span class="n">sm_sub</span><span class="p">,</span>
+									<span class="n">transitions</span><span class="o">=</span><span class="p">{</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">RECHARGE</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONER</span><span class="p">,</span>
+												 <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">:</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">})</span>
+
+	<span class="c1"># Create and start the introspection server for visualization</span>
+	<span class="n">sis</span> <span class="o">=</span> <span class="n">smach_ros</span><span class="o">.</span><span class="n">IntrospectionServer</span><span class="p">(</span><span class="s1">&#39;server_name&#39;</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="s1">&#39;/SM_ROOT&#39;</span><span class="p">)</span>
+	<span class="n">sis</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+	<span class="c1"># Execute the state machine</span>
+	<span class="n">outcome</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+
+	<span class="c1"># Wait for ctrl-c to stop the application</span>
+	<span class="n">rospy</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+	<span class="n">sis</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
+
+<span class="c1">##########</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">main</span><span class="p">()</span>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

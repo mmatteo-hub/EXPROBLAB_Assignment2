@@ -20,11 +20,11 @@
  * /list_topic Topic in which it is published the list of all the markers detected by the robot
  * 
  * Description:
- * The node is used to detect the ArUco markers that are in the environment. In particular the robot is deployed in the E room and it has to remain still and detect
- * all the 7 markers around him. In order to do so, it is provided an arm with a cam to have a better field of view.
- * The arm is moved by publishing the angle of the respective 5 joints in order to cover 360 degrees and to detect all the markers correctly.
+ * The node is used to detect the ArUco markers that are in the environment. In particular, the robot is deployed in the E room and it has to remain still and detect
+ * all the 7 markers around him. To do so, it is provided an arm with a cam to have a better field of view.
+ * The arm is moved by publishing the angle of the respective 5 joints to cover 360 degrees and to detect all the markers correctly.
  * Once the robot has finished its detection phase it publishes through the dedicated topic the list of all the markers such that the FSM running on the robot can 
- * process the information and starting its patrolling behaviour
+ * process the information and start its patrolling behavior
 **/
 
 #include <ros/ros.h>
@@ -67,7 +67,7 @@ MarkerDetectClass::MarkerDetectClass(ros::NodeHandle* nodehandle):nh_(*nodehandl
  * 
  * \return
  * 
- * This is the constrctor of the MarkerDetectClass. It simpli initializes publishers and subscribers that will be used in the code
+ * This is the constructor of the MarkerDetectClass. It simply initializes publishers and subscribers that will be used in the code
 **/
   ROS_INFO("in class constructor of MarkerDetectClass");
   initializePublishers();
@@ -119,7 +119,7 @@ void MarkerDetectClass::cb_cam(const sensor_msgs::Image::ConstPtr& msg)
  * \return
  * 
  * This method is the callback of the camera, used by the respective subscriber.
- * It reads the information from the camera and thanks to the ArUco libraries processes it and detect the respective ArUco marker.
+ * It reads the information from the camera and thanks to the ArUco libraries processes it and detects the respective ArUco marker.
  * It prints on the terminal the detected marker ID.
 **/
   aruco::MarkerDetector mDetector_;
@@ -153,11 +153,11 @@ void MarkerDetectClass::_marker_find()
  * \return
  * 
  * This method is used to move the robot arm and to detect the markers.
- * In pariculare the robot arm is move looking at the ground from 0, the initial position it starts into, to 3.14, then on the other side so to -3.14.
- * In this way it looks to all markers placed on the ground.
+ * In particular the robot arm is move looking at the ground from 0, the initial position it starts into, to 3.14, then on the other side so to -3.14.
+ * In this way it looks at all markers placed on the ground.
  * With the same methodology it is performed the same action but looking upward, thus detecting the markers placed on the walls.
  * Once all the actions for detecting are performed the robot is put back into its "home" position, all angles to 0, and the resulting list is published on the topic.
- * To manage the timing, it is used a counter starting from 0 that is periodically incremented to allow the robot moving as long as needed to correctly monitor all the 
+ * To manage the timing, it is used a counter starting from 0 that is periodically incremented to allow the robot to move as long as needed to correctly monitor all the 
  * area.
  * 
  * All the angles are set in radians.
@@ -217,8 +217,8 @@ int main(int argc,char **argv)
  * 
  * \return
  * 
- * This is the main method. It is responsible of making the routing working correctly.
- * In order to monitor the duration of the arm movement the rate loop is set to 0.5 [Hz], so the loop is executed every 2 seconds.
+ * This is the main method. It is responsible for making the routing work correctly.
+ * To monitor the duration of the arm movement the rate loop is set to 0.5 [Hz], so the loop is executed every 2 seconds.
  * 
  * Once the arm finishes its monitoring action the list is put into an array and then published.
 **/

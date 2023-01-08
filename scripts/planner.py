@@ -7,13 +7,13 @@
 	
 .. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it
 
-This class is the server used by the FSM to compute the path for the robot from a starting position to a target one.	
-Each position in the environment used is associated to a point coordinate [float x, float y] according to the list in the :mod:`name_mapper` file.
+This class is the server used by the FSM to compute the path for the robot from a starting position to a target one.    
+Each position in the environment used is associated with a point coordinate [float x, float y] according to the list in the :mod:`name_mapper` file.
 The plan is computed as a linear space on 'n' points between the two coordinates (the number of points is set in the same file as before).
 The server computes the path and then publishes the result. In case the process is interrupted due to some signals (a battery low for example), then it returns nothing because of the preemption.
 
 Servers:
-	:attr:`motion/planner`: server used to plan the path between the two position passed as goal input to the server.
+    :attr:`motion/planner`: server used to plan the path between the two positions passed as goal input to the server.
 
 """
 
@@ -62,9 +62,9 @@ class PlaningAction(object):
         rospy.loginfo(nm.tag_log(log_msg, LOG_TAG))
     def execute_callback(self, goal):
         """
-        Function that is executed every time the machine needs to compute a plan from two locations.
-        The callback invoked when a client set a goal to the :mod:`planner` server.
-        This function will return a list of points (the plan) where the fist point is the current robot position (passed as goal.start parameter), while the last point is the *target* position (passed as :attr:`goal.target` parameter).
+        The function is executed every time the machine needs to compute a plan from two locations.
+        The callback is invoked when a client set a goal to the :mod:`planner` server.
+        This function will return a list of points (the plan) where the first point is the current robot position (passed as goal.start parameter), while the last point is the *target* position (passed as :attr:`goal.target` parameter).
 
         Args:
             none

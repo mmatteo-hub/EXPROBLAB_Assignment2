@@ -7,17 +7,17 @@
     
 .. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it
 
-This scripts is used in the package to define all the names of the variables used. It is a way to use a variable instead of the total name thus avoiding spelling problems while writing it.
+This script is used in the package to define all the names of the variables used. It is a way to use a variable instead of the total name thus avoiding spelling problems while writing it.
 It is divided as follows:
 
-* name of the state if the Finite State Machine and of the Sub Finite State Machine;
-* name of all the transition used: there are also some parameters that are not properly transition but they are used to modify the value of the shared variable of the helper to guarantee the correct flow in the program;
-* name of the action, planner and controller, used in the program;
-* parameters for the robot behaviour:
+* name of the state of the Finite State Machine and of the Sub Finite State Machine;
+* name of all the transitions used: some parameters are not properly transitioned but they are used to modify the value of the shared variable of the helper to guarantee the correct flow in the program;
+* name of the action, planner, and controller, used in the program;
+* parameters for the robot behavior:
     * battery threshold: value after which the robot has to be recharged;
-    * busy paramter: value to define the busy waiting that the robot has to perform before starting the plan to another location;
-    * number of points: value that define the number of points the planner module has to compute for each path required;
-    * recharging room: string name of the recharging room. It is needed in particular when the robot has to check the availability of this particualr location when it has to go to the recharge state.
+    * busy parameter: value to define the busy waiting that the robot has to perform before starting the plan to another location;
+    * number of points: value that defines the number of points the planner module has to compute for each path required;
+    * recharging room: string name of the recharging room. It is needed in particular when the robot has to check the availability of this particular location when it has to go to the recharge state.
 
 """
 

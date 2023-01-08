@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.planner &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripts.html">scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.planner</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.planner</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: planner</span>
+<span class="sd">	:platform: ROS</span>
+<span class="sd">	:synopsis: Class for the Planner server to compute the path</span>
+<span class="sd">	</span>
+<span class="sd">.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it</span>
+
+<span class="sd">This class is the server used by the FSM to compute the path for the robot from a starting position to a target one.    </span>
+<span class="sd">Each position in the environment used is associated with a point coordinate [float x, float y] according to the list in the :mod:`name_mapper` file.</span>
+<span class="sd">The plan is computed as a linear space on &#39;n&#39; points between the two coordinates (the number of points is set in the same file as before).</span>
+<span class="sd">The server computes the path and then publishes the result. In case the process is interrupted due to some signals (a battery low for example), then it returns nothing because of the preemption.</span>
+
+<span class="sd">Servers:</span>
+<span class="sd">    :attr:`motion/planner`: server used to plan the path between the two positions passed as goal input to the server.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># Import constant name defined to structure the architecture.</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2</span> <span class="kn">import</span> <span class="n">name_mapper</span> <span class="k">as</span> <span class="n">nm</span>
+<span class="c1"># Import the ActionServer implementation used.</span>
+<span class="kn">from</span> <span class="nn">actionlib</span> <span class="kn">import</span> <span class="n">SimpleActionServer</span>
+<span class="c1"># Import custom message, actions and services.</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2.msg</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">PlanFeedback</span><span class="p">,</span> <span class="n">PlanResult</span>
+<span class="kn">import</span> <span class="nn">EXPROBLAB_Assignment2</span>  <span class="c1"># This is required to pass the `PlanAction` type for instantiating the `SimpleActionServer`.</span>
+<span class="kn">from</span> <span class="nn">helper</span> <span class="kn">import</span> <span class="n">Helper</span>
+<span class="kn">from</span> <span class="nn">armor_api.armor_client</span> <span class="kn">import</span> <span class="n">ArmorClient</span>
+
+
+<span class="c1"># A tag for identifying logs producer.</span>
+<span class="n">LOG_TAG</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">NODE_PLANNER</span>
+
+
+<span class="c1"># An action server to simulate motion planning.</span>
+<div class="viewcode-block" id="PlaningAction"><a class="viewcode-back" href="../../scripts.html#scripts.planner.PlaningAction">[docs]</a><span class="k">class</span> <span class="nc">PlaningAction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is used to initialize the Planner server</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Instantiate and start the action server based on the `SimpleActionServer` class.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_as</span> <span class="o">=</span> <span class="n">SimpleActionServer</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">ACTION_PLANNER</span><span class="p">,</span> 
+                                        <span class="n">EXPROBLAB_Assignment2</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">PlanAction</span><span class="p">,</span> 
+                                        <span class="n">execute_cb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">execute_callback</span><span class="p">,</span> 
+                                        <span class="n">auto_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1"># Log information.</span>
+        <span class="n">log_msg</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;`</span><span class="si">{</span><span class="n">nm</span><span class="o">.</span><span class="n">ACTION_PLANNER</span><span class="si">}</span><span class="s1">` Action Server initialised. It will create random path with a number of point &#39;</span>
+                   <span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">nm</span><span class="o">.</span><span class="n">NUMBER_OF_POINTS_PATH</span><span class="si">}</span><span class="s1">). Each point will be generated with a fixed delay.&#39;</span><span class="p">)</span>
+      
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+<div class="viewcode-block" id="PlaningAction.execute_callback"><a class="viewcode-back" href="../../scripts.html#scripts.planner.PlaningAction.execute_callback">[docs]</a>    <span class="k">def</span> <span class="nf">execute_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">goal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The function is executed every time the machine needs to compute a plan from two locations.</span>
+<span class="sd">        The callback is invoked when a client set a goal to the :mod:`planner` server.</span>
+<span class="sd">        This function will return a list of points (the plan) where the first point is the current robot position (passed as goal.start parameter), while the last point is the *target* position (passed as :attr:`goal.target` parameter).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            none</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get the input parameters to compute the plan, i.e., the start (or current) and target positions from the client goal fields.</span>
+        <span class="n">start_point</span> <span class="o">=</span> <span class="n">goal</span><span class="o">.</span><span class="n">start</span>
+        <span class="n">target_point</span> <span class="o">=</span> <span class="n">goal</span><span class="o">.</span><span class="n">target</span>
+
+        <span class="c1"># Initialise the `feedback` with the starting point of the plan.</span>
+        <span class="n">feedback</span> <span class="o">=</span> <span class="n">PlanFeedback</span><span class="p">()</span>
+        <span class="n">feedback</span><span class="o">.</span><span class="n">via_points</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">feedback</span><span class="o">.</span><span class="n">via_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">start_point</span><span class="p">)</span>
+
+        <span class="c1"># Log message to publish the number of points in the plan</span>
+        <span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Server is planning </span><span class="si">{</span><span class="n">nm</span><span class="o">.</span><span class="n">NUMBER_OF_POINTS_PATH</span><span class="si">}</span><span class="s1"> points...&#39;</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+        
+        <span class="c1"># computing the linspace for the x and y coordinates</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start_point</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">target_point</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">NUMBER_OF_POINTS_PATH</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start_point</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">target_point</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">NUMBER_OF_POINTS_PATH</span><span class="p">)</span>
+
+        <span class="c1"># Generate the points of the plan.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">NUMBER_OF_POINTS_PATH</span><span class="p">):</span>
+            <span class="c1"># Check that the client did not cancel this service.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">is_preempt_requested</span><span class="p">():</span>
+                <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="s1">&#39;Server has been cancelled by the client!&#39;</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+                <span class="c1"># Actually cancel this service.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">set_preempted</span><span class="p">()</span>  
+                <span class="k">return</span>
+            <span class="c1"># Generate a new random point of the plan.</span>
+            <span class="n">new_point</span> <span class="o">=</span> <span class="n">Point</span><span class="p">()</span>
+            <span class="n">new_point</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">new_point</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">feedback</span><span class="o">.</span><span class="n">via_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_point</span><span class="p">)</span>
+
+            <span class="c1"># Wait to simulate computation.</span>
+            <span class="n">delay</span> <span class="o">=</span> <span class="mf">0.25</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+            
+            <span class="c1"># Publish the new random point as feedback to the client.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">publish_feedback</span><span class="p">(</span><span class="n">feedback</span><span class="p">)</span>
+
+        <span class="c1"># Publish the results to the client.        </span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">PlanResult</span><span class="p">()</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">via_points</span> <span class="o">=</span> <span class="n">feedback</span><span class="o">.</span><span class="n">via_points</span>
+        <span class="n">log_msg</span> <span class="o">=</span> <span class="s1">&#39;Motion plan succeeded with plan: &#39;</span>
+        <span class="n">log_msg</span> <span class="o">+=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;), &#39;</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">via_points</span><span class="p">)</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">log_msg</span><span class="p">,</span> <span class="n">LOG_TAG</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_as</span><span class="o">.</span><span class="n">set_succeeded</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span>  <span class="c1"># Succeeded.</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># Initialise the node, its action server, and wait.    </span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="n">nm</span><span class="o">.</span><span class="n">NODE_PLANNER</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">rospy</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">PlaningAction</span><span class="p">()</span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

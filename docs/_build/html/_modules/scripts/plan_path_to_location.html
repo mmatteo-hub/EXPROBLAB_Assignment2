@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scripts.plan_path_to_location &mdash; EXPROBLAB_Assignment2 1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> EXPROBLAB_Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../scripts.html">scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utilities.html">utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EXPROBLAB_Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>scripts.plan_path_to_location</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scripts.plan_path_to_location</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: plan_path_to_location</span>
+<span class="sd">	:platform: ROS</span>
+<span class="sd">	:synopsis: Class for the PlanPathToLocation state of the sub-finite state machine</span>
+
+<span class="sd">.. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it</span>
+
+<span class="sd">This class is a state of the sub-state machine *move random*. This class aim to compute a plan of *n* points from the actual position of the robot to the target location given by the reasoner.</span>
+<span class="sd">The number of points is a parameter specified in the :mod:`name_mapper` file.</span>
+<span class="sd">The class calls the :func:`plan_location` function from the helper object, previously initialized, which uses the :mod:`planner` server to compute the path.</span>
+<span class="sd">As soon as the server gives the client the response with the result of the path the sub-machine passes to the next state.</span>
+<span class="sd">The client is taken from the helper object.</span>
+
+<span class="sd">Clients:</span>
+<span class="sd">	:attr:`planner_client`: client that makes the request to the respective server to take the path from the starting to the end position for the robot</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">roslib</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">import</span> <span class="nn">actionlib</span>
+<span class="kn">import</span> <span class="nn">smach</span>
+<span class="kn">import</span> <span class="nn">smach_ros</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2.msg</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">PlanAction</span><span class="p">,</span> <span class="n">PlanGoal</span><span class="p">,</span> <span class="n">ControlAction</span>
+<span class="kn">from</span> <span class="nn">actionlib_msgs.msg</span> <span class="kn">import</span> <span class="n">GoalStatus</span>
+<span class="kn">from</span> <span class="nn">EXPROBLAB_Assignment2</span> <span class="kn">import</span> <span class="n">name_mapper</span> <span class="k">as</span> <span class="n">nm</span>
+
+<div class="viewcode-block" id="PlanPathToLocation"><a class="viewcode-back" href="../../scripts.html#scripts.plan_path_to_location.PlanPathToLocation">[docs]</a><span class="k">class</span> <span class="nc">PlanPathToLocation</span><span class="p">(</span><span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">helper</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The function is used to initialize the state of the sub-machine.</span>
+<span class="sd">		In this step, there is also the declaration of all the outcomes that the state can have.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			helper(Helper): helper object that allows the user to use shared elements among the scripts.</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			none</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span> <span class="o">=</span> <span class="n">helper</span>
+		<span class="c1"># initialisation function, it should not wait</span>
+		<span class="n">smach</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+								<span class="n">outcomes</span><span class="o">=</span><span class="p">[</span><span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_OK</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOADED_ONTOLOGY</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">REASONED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">LOCATION_REACHED</span><span class="p">,</span> <span class="n">nm</span><span class="o">.</span><span class="n">MOVE_RANDOM</span><span class="p">],</span>
+								<span class="n">input_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;plan_path_to_location_counter_in&#39;</span><span class="p">],</span>
+								<span class="n">output_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;plan_path_to_location_counter_out&#39;</span><span class="p">])</span>
+		
+<div class="viewcode-block" id="PlanPathToLocation.execute"><a class="viewcode-back" href="../../scripts.html#scripts.plan_path_to_location.PlanPathToLocation.execute">[docs]</a>	<span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">userdata</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		The function is executed every time the machine enters the state.</span>
+<span class="sd">		It is responsible for returning a state and transitioning to change the state.</span>
+<span class="sd">		It uses the mutex instantiated in the helper to manage the variable access.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			userdata: pointer to pass the data among the states of a State Machine</span>
+<span class="sd">			</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			transition(String): string containing the label of the action performed and used to change state in the sub-machine.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># function called when exiting from the node, it can be blacking</span>
+		<span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s1">&#39;Executing state &#39;</span> <span class="o">+</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLAN_PATH_TO_LOCATION</span> <span class="o">+</span> <span class="s1">&#39; (users = </span><span class="si">%f</span><span class="s1">)&#39;</span><span class="o">%</span><span class="n">userdata</span><span class="o">.</span><span class="n">plan_path_to_location_counter_in</span><span class="p">)</span>
+		<span class="n">userdata</span><span class="o">.</span><span class="n">plan_path_to_location_counter_out</span> <span class="o">=</span> <span class="n">userdata</span><span class="o">.</span><span class="n">plan_path_to_location_counter_in</span> <span class="o">+</span> <span class="mi">1</span>
+		<span class="c1"># take the _goal position the robot has to reach</span>
+		<span class="n">_goal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">plan_location</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">choice</span><span class="p">)</span>
+		<span class="c1"># gives the client the goal to allow the server computing the path</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">planner_client</span><span class="o">.</span><span class="n">send_goal</span><span class="p">(</span><span class="n">_goal</span><span class="p">)</span>
+		<span class="c1"># waiting the client to finish the computation</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">planner_client</span><span class="o">.</span><span class="n">wait_for_result</span><span class="p">()</span>
+		
+		<span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">==</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">planner_client</span><span class="o">.</span><span class="n">cancel_goal</span><span class="p">()</span>
+					<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">BATTERY_LOW</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">planner_client</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="o">==</span> <span class="n">GoalStatus</span><span class="o">.</span><span class="n">SUCCEEDED</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">action_for_change</span> <span class="o">=</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span>  
+					<span class="k">return</span> <span class="n">nm</span><span class="o">.</span><span class="n">PLANNED_PATH</span>
+			<span class="k">finally</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+			<span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Maragliano.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

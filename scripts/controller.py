@@ -69,7 +69,7 @@ class ControllingAction(object):
 
     def execute_callback(self, goal):
         """
-        Function that is executed every time the machine needs to simulate the movement of the robot between two locations.
+        The function is executed every time the machine needs to simulate the movement of the robot between two locations.
         The callback is invoked when a client sets a goal to the :mod:`controller` server.
         This function requires a list of via points (the plan), and it simulates a movement through each point with a fixed delay.
 
@@ -127,7 +127,7 @@ class ControllingAction(object):
 
     def active_callback(self):
         """
-        Function that is executed when the communication starts.
+        The function that is executed when the communication starts.
         It simply increments a goal counter
 
         Args:
@@ -141,7 +141,7 @@ class ControllingAction(object):
 
     def feedback_callback(self, feedback):
         """
-        Function that is executed when a feedback is received.
+        The function that is executed when a feedback is received.
         It simply increments a feedback counter
 
         Args:
@@ -156,7 +156,7 @@ class ControllingAction(object):
 
     def done_callback(self, status, result):
         """
-        Function executed when the communication ends.
+        The function is executed when the communication ends.
         It checks the status of the action client and it prints a message relating to the status.
 
         Args:

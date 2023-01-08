@@ -8,17 +8,17 @@
 .. moduleauthor:: Matteo Maragliano 4636216@studenti.unitge.it
 
 This class represents the initial state of the state machine. It is the first state the program is into and it is not executed any longer during its entire execution.
-It is responsible of instantiating a type helper to use the useful functions there provided. Then it use a private function to start modifying the ontology given as reference.
-It retrieves the parameters from the `list passed through the helper and then it adds all the parameters to the locations, doors, so that the reasoner will be able to know which one communicates with.
-it has to wait that the list is not empty, which means that the previous node has finished the monitoring action and has published.
+It is responsible for instantiating a type helper to use the useful functions there provided. Then it uses a private function to start modifying the ontology given as a reference.
+It retrieves the parameters from the list passed through the helper and then it adds all the parameters to the locations, and doors so that the reasoner will be able to know which one communicates with.
+it has to wait until the list is not empty, which means that the previous node has finished the monitoring action and has published.
 It later sets that all the elements are different so that there cannot be ambiguities.
-At the end of this process it is also retrieve the actual time in the execution and it is add among the properties of the entities so that it can be modified later when necessary.
+At the end of this process, it also retrieves the actual time in the execution and it is added to the properties of the entities so that it can be modified later when necessary.
 The execution ends with a return that allows the main program to pass to the next state of the finite state machine.
-The steps are computed thanks to the use of the aRMOR client that provides query to the respective server to modify and use the parameters.
+The steps are computed thanks to the use of the aRMOR client that provides a query to the respective server to modify and use the parameters.
 The client is taken from the helper object.
 
 Clients:
-	:attr:`client`: aRMOR client used from the helper entity to send request to the respective server
+	:attr:`client`: aRMOR client used from the helper entity to send a request to the respective server
 
 """
 
@@ -38,8 +38,8 @@ from armor_api.armor_client import ArmorClient
 class InitState(smach.State):
 	def __init__(self, helper):
 		"""
-		Function used to initialize the state of the machine.
-		In this step there is also the declaration of all the outcomes that the state can have.
+		The function is used to initialize the state of the machine.
+		In this step, there is also the declaration of all the outcomes that the state can have.
 		
 		Args:
 			helper(Helper): helper object that allows the user to use shared elements among the scripts.
@@ -56,15 +56,15 @@ class InitState(smach.State):
 								
 	def execute(self, userdata):
 		"""
-		Function that is executed every time the machine enters the state.
-		It is responsible of returning a state transitioning to change the state.
+		The function is executed every time the machine enters the state.
+		It is responsible for returning a state and transitioning to change the state.
 		It uses the mutex instantiated in the helper to manage the variable access.
 		
 		Args:
 			userdata: pointer to pass the data among the states of a State Machine
 			
 		Returns:
-			transition(String): string containing the label of the action performed and used to change state in the machine.
+			transition(String): string containing the label of the action performed and used to change the state in the machine.
 		"""
 		# function called when exiting from the node, it can be blacking
 		rospy.loginfo('Executing state ' + nm.INIT_STATE + ' (users = %f)'%userdata.init_state_counter_in)
@@ -84,9 +84,9 @@ class InitState(smach.State):
 			
 	def _ontology_initialization(self):
 		"""
-		Function used to store all the request to the aRMOR server, through the client, to modifiy the onotlogy.
-		In particular it uses the information taken from the list stored in the array and it continues by adding entities and properties.
-		It adds entities, it adds them properties, doors and it adds the timestamp.
+		The function is used to store all the requests to the aRMOR server, through the client, to modify the ontology.
+		In particular, it uses the information taken from the list stored in the array and it continues by adding entities and properties.
+		It adds entities, it adds them properties, doors and it adds timestamp.
 		When it ends it returns to the execute function and it changes state.
 				
 		Args:
@@ -112,10 +112,10 @@ class InitState(smach.State):
 
 	def _server_request(self, lst):
 		"""
-		Function used to send the request to the server to retrieve information from the ArUco ID detected.
-		The function sends a request for each elements of the list, it connects it through the aRMOR by adding the doors and it stores the name and the coordinates
-		in two different list with a one-to-to relationship between them
-		Then it sets the initial position of the robot as the E room and it perfomrs the disjoint function to distinguish all the entities and sets the timestamp
+		The function is used to send the request to the server to retrieve information from the ArUco ID detected.
+		The function sends a request for each element of the list, connects it through the aRMOR by adding the doors and stores the name and the coordinates
+		in two different lists with a one-to-to relationship between them
+		Then it sets the initial position of the robot as the E room and it performs the disjoint function to distinguish all the entities and sets the timestamp
 		for the first visit at the actual time for each room.
 				
 		Args:
