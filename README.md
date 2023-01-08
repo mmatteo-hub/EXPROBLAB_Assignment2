@@ -89,6 +89,9 @@ The same for the surveillance policy adopted and the
 The marker detection is performed using the [OpenCV](https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html) library for the ArUco markers. <br>
 The node, [detect_markers.cpp](/src/detect_marker.cpp), is composed of a class responsible of detecting the markers. It uses the RGB-D camera the robot is provided with. The node prints on the terminal the ID detected and it is not ended till the end of the entire program.
 
+### ArUco marker
+In computer vision, an ArUco marker is a square barcode that is used to identify things specifically. Each marker has a different pattern made up of a series of black and white squares placed in a square grid. Robotics, augmented reality, and other applications use arco markers to swiftly and precisely identify objects.
+
 ## <img src="https://user-images.githubusercontent.com/62358773/211190209-1f59a5e2-8aa0-4224-80ae-04e567b378a8.png" width="5%" height="5%"> Mapping
 For the mapping solution I used the Gmapping algorithm which is a SLAM (simultaneous localization and mapping) algorithm that allows a robot to create a map of its environment and to simultaneously localize itself within that map. It does this by using sensor data from laser rangefinders or cameras to generate a map and then using that map to determine its own location within the environment. <br>
 The Gmapping algorithm uses a filtering approach to map the environment and localize the robot. Specifically, it uses a particle filter to track the robot's pose (i.e., its position and orientation) over time. As the robot moves through the environment, it takes measurements with its sensors and updates the filter using these measurements. The filter maintains a distribution over the possible poses of the robot, and this distribution is updated at each time step based on the sensor measurements and the motion of the robot. By using a filtering approach, the Gmapping algorithm is able to handle uncertainty and noise in the sensor measurements, which is important for reliable operation in real-world environments.
@@ -115,7 +118,19 @@ The resultant ontology of the in this assignment is the following:
     width="40%" height="40%">
 
 The environment is built according to the information taken by the robot. <br>
-Rooms' name and their coordinates are stored in two different arrays with a one-to-one relationship thus allowing the program to find them easily during the execution.
+Rooms' name and their coordinates are stored in two different arrays with a one-to-one relationship thus allowing the program to find them easily during the execution. <br><br>
+
+At the beginning of the program execution, the robot does not anything about the environment and it has to detect some markers to build the ontology. The markers are placed as shown in the figure:
+
+<img
+  src="images/markers.png"
+  title="markers"
+  width="60%" height="60%">
+
+The red X indicates the robot's spawning position. <br>
+The robot has to detect them with its camera and then store the value to build the ontology later. <br>
+<br>
+To perform a scan of the total room the program start by making the arm turn around the base and looking at the ground. In this way, all the ground markers, 12 14 16 17, are correctly detected. Later the same operation is performed with the robot facing to the top of the walls thus detecting 11 13 and 15 markers. Once the monitoring action is finished the robot is put back into its "home" position and the FSM starts.
 
 ## <img src="https://user-images.githubusercontent.com/62358773/211192186-68e2c7ec-1588-4ad5-8a04-0e72d53747d1.png" width="5%" height="5%"> Robot
 The robot is an assembly of different existing urdf re-adapted to this task. In particular, there are two robots:
@@ -163,20 +178,6 @@ In the picture it can be seen:
  - the global path of the robot;
  - the local path of the robot;
  - the map mapped till that moment by the robot.
-
-## ArUco marker
-In computer vision, an ArUco marker is a square barcode that is used to identify things specifically. Each marker has a different pattern made up of a series of black and white squares placed in a square grid. Robotics, augmented reality, and other applications use arco markers to swiftly and precisely identify objects. <br>
-At the beginning of the program execution, the robot does not anything about the environment and it has to detect some markers to build the ontology. The markers are placed as shown in the figure:
-
-<img
-  src="images/markers.png"
-  title="markers"
-  width="60%" height="60%">
-
-The red X indicates the robot's spawning position. <br>
-The robot has to detect them with its camera and then store the value to build the ontology later. <br>
-<br>
-To perform a scan of the total room the program start by making the arm turn around the base and looking at the ground. In this way, all the ground markers, 12 14 16 17, are correctly detected. Later the same operation is performed with the robot facing to the top of the walls thus detecting 11 13 and 15 markers. Once the monitoring action is finished the robot is put back into its "home" position and the FSM starts.
 
 ## <img src="https://user-images.githubusercontent.com/62358773/201371845-425ed89b-00c0-4e46-b7f5-b22daf8b50ff.png" width="5%" height="5%"> System Features 
 The modularity of the architecture already implemented in Assignment #1 allowed me to make very few changes to the existing nodes. I was able to adapt the new node for detecting the marker by just modifying the coordinates passed to the `controller.py`.
