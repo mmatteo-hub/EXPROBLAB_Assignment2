@@ -62,13 +62,19 @@ For checking the Software Architecture used and the relative components used we 
  - [Software Architecture](https://github.com/mmatteo-hub/EXPROBLAB_Assignment1#-software-architecture)
  - [Software components](https://github.com/mmatteo-hub/EXPROBLAB_Assignment1#-software-components)
 
+The architecture was only re-adapted. In particular, the only component that has been modified is the controller:
+ - from the request of the planner it is only taken the last point, the target, which is sent to the *move_base* thus driving there the robot;
+ - the controller finishes its execution as soon as the robot reaches the goal.
+
 ### Temporal Diagram
 The temporal diagram has been a little bit changed according to the new nodes introduced. The resultant one is:
 
+<p align="center">
 <img
     src="/images/diagram.png" 
     title="diagram"
-    width="40%" height="40%">
+    width="85%" height="85%">
+</p>
 
 The changes are related to:
  - detect_marker with ArUco: this is the initial node of the architecture. In particular it is run and as soon as all the markers are detected it publishes the list on the */topic_list* topic.
@@ -117,10 +123,12 @@ The robot is an assembly of different existing urdf re-adapted to this task. In 
  - [KUKA](https://www.kuka.com/it-it/prodotti-servizi/sistemi-robot/robot-industriali), from which it was only taken the arm.
 The resultant robot is the following:
 
-<img align="center"
+<p align="center">
+<img
   src="images/robot.png"
   title="robot"
   width="25%" height="25%">
+</p>
 
 Since the original urdf of the two different robots were different in dimensions, then I decided to maintain the ROSbot with its original dimensions and to scale the KUKA such that it is proportional to the entire assembly.
 
@@ -182,7 +190,8 @@ Moreover, the robot is an assembly of two pre-existing ones so when the base is 
  A possible improvement could be the possibility to have a monitoring phase as general as possible, thus not having problems in detecting markers put in different locations. Possibility of tuning the parameters to make the robot faster thus avoiding too long simulations. <br>
 - Exploration phase: <br>
  There is an algorithm that can be used to make the robot explore a map. In particular, the *Explore-Lite* algorithm provides greedy frontier-based exploration. When the node is running, the robot will greedily explore its environment until no frontiers could be found, by sending goals to the Move Base server
-
+- Planner and Controller: <br>
+Implement a planner that takes into account the wall presence and a controller that takes each point planned and drives the robot to the goal through these points. Of course, it would be needed a planning algorithm to make the planner plan all the points correctly.
 
 ## <img src="https://user-images.githubusercontent.com/62358773/158238810-c5dcb486-ba24-4b35-87de-39a54e88f36b.png" width="5%" height="5%"> Authors and Contacts
 [Matteo Maragliano](https://github.com/mmatteo-hub) (S4636216) <br>
