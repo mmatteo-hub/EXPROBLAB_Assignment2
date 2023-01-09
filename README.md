@@ -130,7 +130,8 @@ At the beginning of the program execution, the robot does not anything about the
 The red X indicates the robot's spawning position. <br>
 The robot has to detect them with its camera and then store the value to build the ontology later. <br>
 <br>
-To perform a scan of the total room the program start by making the arm turn around the base and looking at the ground. In this way, all the ground markers, 12 14 16 17, are correctly detected. Later the same operation is performed with the robot facing to the top of the walls thus detecting 11 13 and 15 markers. Once the monitoring action is finished the robot is put back into its "home" position and the FSM starts.
+To perform a scan of the total room the program start by making the arm turn around the base and looking at the ground. In this way, all the ground markers, 12 14 16 17, are correctly detected. Later the same operation is performed with the robot facing to the top of the walls thus detecting 11 13 and 15 markers. Once the monitoring action is finished the robot is put back into its "home" position and the FSM starts. <br>
+Since in the beginning, the camera had problems detecting the markers I modified the worlds settings of the ArUco, in particular, the marker's box is set to white. In this way, the ArUco library can easily detect the corners thus detecting the ID correctly.
 
 ## <img src="https://user-images.githubusercontent.com/62358773/211192186-68e2c7ec-1588-4ad5-8a04-0e72d53747d1.png" width="5%" height="5%"> Robot
 The robot is an assembly of different existing urdf re-adapted to this task. In particular, there are two robots:
