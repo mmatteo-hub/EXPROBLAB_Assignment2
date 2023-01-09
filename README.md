@@ -78,8 +78,14 @@ The temporal diagram has been a little bit changed according to the new nodes in
 
 The changes are related to:
  - detect_marker with ArUco: this is the initial node of the architecture. In particular it is run and as soon as all the markers are detected it publishes the list on the */topic_list* topic.
- - FSM: the FSM has a subscriber to the topic to wait for the information coming and processe them when available.
- - Controller server: it sends a request to the *move_base* Action Clientto move the robot. It waits until the robot has reached the location chosen by the planner.
+ - FSM: the FSM has a subscriber to the topic to wait for the information coming and processe them when available. The *init_state* sends a request to the server and builds the ontology according to the information retrieved:
+   - id of the room;
+   - connection to which room;
+   - the door which connects the two rooms.
+ 
+ Thanks to a for loop all this information is stored in the aRMOR server thus building the ontology.
+ 
+ - Controller server: it sends a request to the *move_base* Action Client to move the robot. It waits until the robot has reached the location chosen by the planner.
  - SLAM: it works in collaboration with the *move_base* and each time the robot is moved the map is updated and save on the server. In this way, with a lot of iteration the path the *move_base* will compute will be more and more accurate.
 
 The same for the surveillance policy adopted and the 
